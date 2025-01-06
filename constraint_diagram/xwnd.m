@@ -50,6 +50,8 @@ sigma=rho./rho0;
 % Specify line style, angle, aspect ratio, spacing, and length
 linespec = 'r-';       % Red solid line
 theta = 45  * pi / 180; % 45-degree hatch angle
+theta2 = -45  * pi / 180; % 45-degree hatch angle
+
 ar = 1;                % Aspect ratio
 spc = -0.02;           % Hatch spacing (fraction of x-range)
 len = 1.2;             % Shorter hatch length relative to spacing
@@ -88,9 +90,9 @@ P_W_TOground = ( (k1 * (W_S)) / (s_TOGround * rho * Cl_maxTO) + mu_G + 0.72 * C_
 %%% Graph %%%
 figure(1)
 % Takeoff Distance
-plot(Range,WP(Range),'b'); hatchedline(Range,WP(Range),'b',(300-180)*pi/180); hold on;
+plot(Range,WP(Range),'b'); hatchedline(Range,WP(Range),'b',(300-180)*pi/180,ar,-0.015,.01); hold on;
 
-plot(W_S,P_W_TOground_med,'b'); hatchedline(W_S,P_W_TOground_med,'b',(300-180)*pi/180); hold on; % Friction for ground
+plot(W_S,P_W_TOground_med,'b'); hatchedline(W_S,P_W_TOground_med,'b',(300-180)*pi/180,ar,-0.015,.01); hold on; % Friction for ground
 %plot(W_S,P_W_TOground,'b');
 %hatchedline(W_S,P_W_TOground,'b',(300-180)*pi/180); hold on; % Friction
 %for ground wrst case
@@ -108,8 +110,9 @@ V_S=sqrt(S_LG/RoskamSpeed2Dist); % knots
 V_a= knots2ftperS(1.3 * V_S); % Calc V_S & convert knots to ft/s
 Cl_maxL=2.4;
 WS= ((rho*Cl_maxL*V_a^2)/2)/WeightRatio;
+
 %%% Graph %%% 
-plot(WS*ones(1,100),linspace(0,1.4,100)); hatchedline(WS*ones(1,100),linspace(0,1.4,100),'r-'); hold on;
+plot(WS*ones(1,100),linspace(0,1.4,100)); hatchedline(WS*ones(1,100),linspace(0,1.4,100),'r-',(300-180)*pi/180); hold on;
 
 
 %competetitor
@@ -123,7 +126,10 @@ V_a= knots2ftperS(1.3 * V_S); % Calc V_S & convert knots to ft/s
 Cl_maxL=2.4;
 WS= ((rho*Cl_maxL*V_a^2)/2)/WeightRatio;
 %%% Graph %%% 
-plot(WS*ones(1,100),linspace(0,1.4,100)); hatchedline(WS*ones(1,100),linspace(0,1.4,100),'r-'); hold on;
+plot(WS*ones(1,100),linspace(0,1.4,100)); hatchedline(WS*ones(1,100),linspace(0,1.4,100),'r-',(300-180)*pi/180); hold on;
+
+
+
 
 %% speed requirement 
 % min cruise speed should be greater than 280 knotts
@@ -165,6 +171,13 @@ Psh_Wceil = P_wceil(W_S);
 %%% Graph %%%
 plot(W_S,Psh_Wceil,'k'); hatchedline(W_S,Psh_Wceil,'k',theta,ar,-0.015,.02);hold on
 
+%% Plot wingloading at different P/W curve  porps
+
+w_analysisprop=[2];
+
+P_Wcurve = 1600/w_analysisprop;
+
+
 
 
 
@@ -175,13 +188,13 @@ for i =1: 2
     W=MTOW(i);
     WS=W/S(i);
     PW=P(i)/W;
-    plot(WS,PW,'k*'); hold on;
+    plot(WS,PW,'k*', 'MarkerSize', 9); hold on;
 end
 
  
 
 % Graph Parameters
-xlim([30,100]); xlabel("W / S","FontSize",26); ylabel("P/ W","FontSize",26); grid on; ylim([0,.4]);
+xlim([30,100]); xlabel("W / S [ lb / ft^{2} ] ","FontSize",26); ylabel("P/ W [ Shp / lb ] ","FontSize",26); grid on; ylim([0,.3]);
 % text(78,.3,'Takeoff Distance',"FontSize",28); text(82,.05,'Ceiling',"FontSize",28); 
 % text(78,.78,"Landing Distance","FontSize",28); text(21,.6,'Min Cruise Speed',"FontSize",28);
 set(gca, 'FontSize', 26);
@@ -189,16 +202,21 @@ set(gca, 'FontSize', 26);
 
 
 
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% %% %% %% %% %% %% %% %% %% %% JETS %% %% %% %% %% %% %% %% %% %% %% %%
 AR_jet=7.0; % average of comp asses
-Cl_maxL=2.5;
-Cl_maxTO=2;
+Cl_maxL=2.5;%2.4
+Cl_maxTO=2.0;%1.8
 
 %% Takeoff
 % TOP_jet=WS/(sigma*Cl_maxTO*(TW));
 S_TOFL=2250; % [ft] - from comp assesment no ground constant 
-TOPNUM=37.5;2
+TOPNUM=37.5;
 TOP=S_TOFL/ TOPNUM;
 
 TW_TO= @(WS) WS/(sigma*Cl_maxTO*TOP);
@@ -211,7 +229,6 @@ s_TOGround = 2250;         % Takeoff ground run distance with grounf constant
 k1 =.0447;              % Constant k1
 lambda = 1.5;%engine bypass ratio
 k2 = 0.75*((5+lambda)/(4+lambda)) ;    %proppeller disk loading range from 10-30  
-Cl_maxTO = 2.0; % Maximum lift coefficient at takeoff
 mu_G = .08;     % Ground friction coefficient soft ground worst case
 mu_G2 = .02;     % Ground friction coefficient soft ground worst case
 
@@ -223,8 +240,8 @@ T_W_TOground2 = ( (k1 * (W_S)) / (s_TOGround * rho * Cl_maxTO) + mu_G2 + 0.72 * 
 figure(2)
 
 %jet non ground
-plot(Range,T_W_TOground2,'b'); hatchedline(Range,T_W_TOground2,'r'); hold on;
-plot(Range,T_W_TOground8,'b' ); hatchedline(Range,T_W_TOground8,'b');hold on;
+plot(Range,T_W_TOground2,'b'); hatchedline(Range,T_W_TOground2,'b',theta,ar,-0.015,.02); hold on;
+plot(Range,T_W_TOground8,'b' ); hatchedline(Range,T_W_TOground8,'b',theta,ar,-0.015,.02);hold on;
 %ground
 
 % takoff using ground friction for props
@@ -247,7 +264,17 @@ V_a=sqrt(S_FL/.3);
 V_s=V_a/1.3;
 V_s=knots2ftperS(V_s);
 WS=((V_s^2 *rho * Cl_maxL)/2)/.84;
-plot(WS*ones(1,100),linspace(0,1.4,100),'r'); hatchedline(WS*ones(1,100),linspace(0,1.4,100),'r-'); hold on;
+plot(WS*ones(1,100),linspace(0,1.4,100),'r'); hatchedline(WS*ones(1,100),linspace(0,1.4,100),'r-',(300-180)*pi/180); hold on;
+
+%competeitilanddist
+S_L=2900;%2700; % [ft] - from comp assesment
+S_FL=S_L/.6;
+V_a=sqrt(S_FL/.3); 
+V_s=V_a/1.3;
+V_s=knots2ftperS(V_s);
+WS=((V_s^2 *rho * Cl_maxL)/2)/.84;
+plot(WS*ones(1,100),linspace(0,1.4,100),'r'); hatchedline(WS*ones(1,100),linspace(0,1.4,100),'r-',(300-180)*pi/180); hold on;
+
 
 %% Cruise Speed
 %cruise speed at sea level
@@ -261,7 +288,15 @@ plot(WS, T_Wcruise,'g'); hatchedline(W_S, T_Wcruise, 'g',theta,ar,-0.015,.02); h
 k = 1./(pi*A*e);
 T_Wce = @(W_S) (Vv./(sqrt(((2/rhoceil).*(W_S)).*sqrt(k/(3*CDmin))))) + (4*sqrt((k*CDmin)/3));
 T_Wceiling = T_Wce(W_S);
+
 plot(W_S,T_Wceiling,'k'); hatchedline(W_S, T_Wceiling, 'k',theta,ar,-0.015,.02);
+
+%% Plot wingloading at different T/W curve jet
+
+w_analysisjet=[2];
+
+T_Wcurve = 1600/w_analysisjet;
+
 
 %% PLot competitors
 % TurboJet
@@ -270,11 +305,11 @@ for i =1: height(planeData)
     W=MTOWJ(i);
     WS=W/SJ(i);
     TW=Thrust(i)/W;
-    plot(WS,TW,'k*'); hold on;
+    plot(WS,TW,'k*', 'MarkerSize', 9); hold on;
 end
 
 grid on;
-xlim([10,100]); xlabel("W / S","FontSize",26); ylabel("T/ W","FontSize",26); grid on; ylim([0,.8]);
+xlim([15,100]); xlabel("W / S [ lb / ft^{2} ] ","FontSize",26); ylabel("T / W [ lbf / lb] ","FontSize",26); grid on; ylim([0,.6]);
 % text(45,.05,'Takeoff Distance'); text(80,.37,'Ceiling'); 
 % text(65,1.25,"Landing Distance"); text(13,.6,'Min Cruise Speed');
 set(gca, 'FontSize', 26);
@@ -286,6 +321,11 @@ set(gca, 'FontSize', 26);
 % CHt = (SHt*LHt)/(SW*Cmac);
 % 
 % CVt = S
+
+
+
+
+
 
 
 
