@@ -1,11 +1,13 @@
+
+
 % AERO 443
 % David Harris
-% 
+
 % clear
 % close all
 % format short
 % clc
-function W_TO = Q2_WS_Check(WS)
+
 %% Aerodynamic Values
     
     % Payload Weight (maximum payload capability of at least 3500)
@@ -24,7 +26,7 @@ function W_TO = Q2_WS_Check(WS)
         LDlt = linspace( 7.94824503, 14.9197245, 5);
 
     % Loiter Velocity
-        %WS = 150;                 % lb/ft^2
+        WS = 48;                 % lb/ft^2
         rho_lt = 0.002378;       % slugs/ft^3, sea level   
         rho_cr = 0.001496;       % slugs/ft^3, 15000ft
         
@@ -62,7 +64,7 @@ function W_TO = Q2_WS_Check(WS)
     % Propeller Efficiency
         etap = 0.85;                        % Propeller Efficiency, approximate from research
     % Empty Weight Fraction
-        EWF = -0.0032*WS + 0.7146;  % depends on WS                         % slightly lower than ST and AT6, optimistic but achievable?   
+        EWF = 0.52;                         % slightly lower than ST and AT6, optimistic but achievable?   
         % EWF = linspace(0.42, 0.6, 19);      % EWF from comparison table
     % Reserve Fuel Factor
         RFF = 1;
@@ -112,17 +114,10 @@ function W_TO = Q2_WS_Check(WS)
             Q2_WS_check.W_f(j, i) = solutions(3);   % Fuel Weight
         end
     end
-
-W_TO = Q2_WS_check.W_to(j, i);
-
 %end
 
 %DragIndexPlot = flip([0 0.25 0.5 0.75 1]);
-%[X1, X2] = meshgrid (W_pl, R_cr);
-
-
-
-
+[X1, X2] = meshgrid (W_pl, R_cr);
 %% Plots
 % figure; hold on; grid on;
 % ylims = [4000 22000];
@@ -152,4 +147,3 @@ W_TO = Q2_WS_check.W_to(j, i);
 % % Lines
 %         yline(16179, '--', Color = 'k', LineWidth = 1)
 %         text(8300, 16179-450, 'W_T_O: 16179 lb', FontSize=18)
-

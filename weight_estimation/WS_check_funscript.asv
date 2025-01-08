@@ -1,0 +1,36 @@
+clear
+close all
+format short
+clc
+
+WS = [20 30 40 48 50 52 54 56 58 60 62 64 66 68 70 80 90 100 110 120 130 140 150];
+W_TO = [];
+for i = 1:length(WS)
+    W_TO(i) = Q2_WS_Check(WS(i));
+end  
+hold on; grid minor
+plot(WS,W_TO, 'b', LineWidth=2)
+plot(WS,W_TO, 'o', Color='b')
+title("W_t_o vs W/S")
+xlabel("W/S [lb/ft^2]")
+ylabel("W_t_o [lb]")
+%% Weight_fractions_2_turboprop
+
+SFC = 0.5; c_j = SFC;
+W = 
+W_pl = 3820;
+Range = [300 300];
+E = 4;
+V = 
+L_D = 
+EWF = 0.52;
+RFF = 1;
+initial_guess = 
+p = 1;      % profile
+
+
+
+[W_TO, W_E, W_F,MFF] = Weight_fractions_2_turboprop(c_j, W, W_pl, Range, E, V, L_D, EWF, RFF, initial_guess,p)
+
+
+
