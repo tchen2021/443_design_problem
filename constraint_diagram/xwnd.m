@@ -173,9 +173,20 @@ plot(W_S,Psh_Wceil,'k'); hatchedline(W_S,Psh_Wceil,'k',theta,ar,-0.015,.02);hold
 
 %% Plot wingloading at different P/W curve  porps
 
-w_analysisprop=[2];
 
-P_Wcurve = 1600/w_analysisprop;
+P_W_jetdata = load('WTO_vs_WS_turboprop_profile1.mat');
+P_Wjet_data= P_W_jetdata.WTO_vs_WS_turboprop_profile1;
+
+
+W_S_prop5 = P_Wjet_data(:,1);
+
+P_Wpropnew = 1900./(P_Wjet_data(:,2));
+
+
+plot(W_S_prop5,P_Wpropnew,'m','LineWidth',1.2); hold on
+
+% plot(1600/WTO_vs_WS_turboprop_profile1(:,1),WTO_vs_WS_turboprop_profile1(:,2));hold on
+
 
 
 
@@ -293,9 +304,17 @@ plot(W_S,T_Wceiling,'k'); hatchedline(W_S, T_Wceiling, 'k',theta,ar,-0.015,.02);
 
 %% Plot wingloading at different T/W curve jet
 
-w_analysisjet=[2];
+T_W_jetdata = load('T_W_jet.mat');
+T_Wjet_data= T_W_jetdata.T_W_jet;
 
-T_Wcurve = 1600/w_analysisjet;
+
+W_S_jetdata = load('W_S_jet.mat');
+
+W_Sjet_data= W_S_jetdata.W_S_jet;
+
+plot(W_Sjet_data,T_Wjet_data ,'m','LineWidth',1.2); hold on
+
+
 
 
 %% PLot competitors
