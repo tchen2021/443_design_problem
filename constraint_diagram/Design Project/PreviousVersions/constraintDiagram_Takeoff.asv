@@ -1,0 +1,78 @@
+% Constraint Diagram
+clc;clear;close all;
+%% Roskan CL Assumptions
+% type=1;
+% if type==1
+%     % Assume Roskan pg 91 MILITARY TRAINERS 
+%     Cl_max= 1.5; % 1.2-1.8
+%     Cl_maxTO=1.4:.2:2.0; % CL MAX TO FROM 1.4-2.0 in iterations of .2
+%     Cl_maxL=2.6; % range of 1.6-2.2
+%     info=["CL=1.4","CL=1.6","CL=1.8","CL=2.0"];\
+% elseif type==2
+%     % Assume Roskan pg 91 MILITARY Patrol 
+%     Cl_max= 1.5; % 1.2-1.8
+%     Cl_maxTO=1.6:.2:2.2; % CL MAX TO FROM 1.6-2.2 in iterations of .2
+%     Cl_maxL=2.6; % range of 1.8-3.0
+%     info=["CL=1.6","CL=1.8","CL=2.0","CL=2.2"];
+% end
+
+%% Assumptions cont
+% e= .8; %oswald efficiency factor from range of .7-.85 from wikipedia
+% P=1600; % From engine page on wikipedia
+h=0;
+
+%% Input data values
+%%%%%% SUPER TOCANO VALUES %%%%%%
+S=37.40157480314961; %ft^2
+V_s=83; % [ft/s]
+W=11904.962158; % [lb]
+P=1600; % [hp]
+e=.8; 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Standard Atmo Values %%%
+% Calculate standard atmosphere values at sea level
+[p0, T0, rho0, a0] = atmosphere(0);
+% Calculate standard atmosphere values at variable height
+[p, T, rho, a] = atmosphere(h);
+% Correct for non standard atmosphere
+sigma=rho./rho0;
+
+%%% Calculate Cl_max values at max speed and stall speed %%%
+Cl_max= (2*W)/(rho*S*V^2);
+Cl_maxL= (2*W)/(rho*S*V_s^2); 
+
+CD_0=.05;
+CD= CD_0 + Cl^2/(pi*S*e);
+
+plot(Cl_maxL,)
+
+
+
+%%% Calculate TOP (Takeoff Parameters) %%%
+TOP= (W/S)/(P/W *Cl_maxTO*sigma)
+
+
+%%% Takeoff Values %%%
+S_TOFL=1500; % [ft] IN ACCORDANCE WITH STOL DEFINITION FOR MILITARY
+TOP25=1/37.5; % sourced from Roskam pg 
+
+
+
+WingloadRange=linspace(0,100,101); % Set W/S range to 100
+h=0; % altitude range [ft]
+%% Calculate the CL_max from the V_s
+Cl_max=(2*W)/(rho*S*V_s^2);
+
+%% Calculate the takeoff distance
+for i =1: length(Cl_maxTO)
+    TW_TO= @(WS) (WS/ (sigma.*Cl_maxTO(i)*TOP25*S_TOFL) );
+    % Plot the takoff distance
+    plot(WingloadRange,TW_TO(WingloadRange)); hold on;
+end
+%% Graph constraints
+grid on; xlabel("W / S"); ylabel("T / W");
+text(73,.43,'Takeoff Distance'); 
+ylim([0,2]); xlim([0,100]); legend(info)
+
+%hatchedline(WingloadRange,TW_TO(WingloadRange)); 
