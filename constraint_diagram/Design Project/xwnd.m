@@ -4,7 +4,7 @@ clc;clear;close all;format short;
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Constraint Diagram %%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Pick which loading Method you desire
     % load planeData
-    fileLocation="C:\Users\olive\Documents\Aero\Aero433\planeData.xlsx";
+    fileLocation="C:\Users\jqlib\Documents\GitHub\433_design_problem\constraint_diagram\Design Project\planeData.xlsx";
     planeData = importplaneData(fileLocation, "Sheet1", [2, Inf]);
     jetplaneData = importplaneData(fileLocation, "Jet", [2, Inf]);
     %%% Classify Data  %%%
