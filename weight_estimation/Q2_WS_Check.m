@@ -5,7 +5,7 @@
 % close all
 % format short
 % clc
-function W_TO = Q2_WS_Check(WS)
+function [W_TO, EWF] = Q2_WS_Check(WS)
 %% Aerodynamic Values
     
     % Payload Weight (maximum payload capability of at least 3500)
