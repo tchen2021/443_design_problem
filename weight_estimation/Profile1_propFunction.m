@@ -1,32 +1,35 @@
-% AERO 443
-% David Harris
-% 
-% clear
-% close all
-% format short
-% clc
-function [W_TO, EWF] = Q2_WS_Check(WS)
+%% Profile1_propFunction
+%{
+Inputs: WS      Wing Loadings
+        W_PL    Weapons Payload Weight
+        VFRRT   VFR Reserve Time
+        Rcr     Operational Radius
+
+Outputs: W_TO   Takeoff Weight
+         W_E    Empty Weight
+         W_F    Fuel Weight
+         EWF    Empty Weight Fraction
+         Vcr    Cruise Velocity
+
+Units:  Weight      lb
+        Distance    nautical miles
+        Speed       kts
+        Time        hours
+        SFC         lb / hp*hr
+%}
+function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr)
 %% Aerodynamic Values
-    
-    % Payload Weight (maximum payload capability of at least 3500)
-        %Wpl = linspace(1000,4500, 8);       % new rough values    % comparison table; (3500 from requirments) + (440 estimated crew); include optional sensors/avionics later
-        
-        % Baseline w cannons = 800 lb
-            % Two pilots = 220 * 2  = 440 lb
-            % Optional Sensors/Avionics = 40 + 20 = 60 lb
-            % Cannons (non-removable?) = 160 lb
-                % Rounds = 140
- 
+ extradrag = 0.0050;
     % Cruise L/D
-        LDcr = linspace(9.17199982, 17.3167353, 5);     % bad (1) to good (0)
+        LDcr = linspace(9.17199982/(1+extradrag), 17.3167353/(1+extradrag), 5);     % bad (1) to good (0)
 
     % Loiter L/D
-        LDlt = linspace( 7.94824503, 14.9197245, 5);
+        LDlt = linspace( 7.94824503/(1+extradrag), 14.9197245/(1+extradrag), 5);
 
     % Loiter Velocity
         %WS = 150;                 % lb/ft^2
-        rho_lt = 0.002378;       % slugs/ft^3, sea level   
-        rho_cr = 0.001496;       % slugs/ft^3, 15000ft
+        rho_lt = 0.001066;       % slugs/ft^3, 25000ft   
+        rho_cr = 0.001066;       % slugs/ft^3, 25000ft
         
         Cl_lt_0 = 0.666667;     % CL_Endurance_0;                     % Cl loiter at lowest drag configuration
         Cl_lt_1 = 0.666667;     % CL_Endurance_1;                     % Cl loiter at highest drag configuration
@@ -35,7 +38,7 @@ function [W_TO, EWF] = Q2_WS_Check(WS)
 
         Vlt = (linspace(Vlt_0,Vlt_1, length(LDlt)))* 0.592484;  % knots
 
-        Vcr = 0.592484 * sqrt((2*WS) / (rho_cr*0.378788))       % knots
+        Vcr = 0.592484 * sqrt((2*WS) / (rho_cr*0.4));       % knots0.378788
 
 %% Mission Profile 1: Full Operational Radius + Full Loiter Time (Constant Payload) 
  
@@ -52,30 +55,21 @@ function [W_TO, EWF] = Q2_WS_Check(WS)
     W109 = 0.995;
  
     W_ratios = W1TO*W21*W32*W43*W87*W98*W109;   % combine constant weight ratios for simplicity
-
-    % Loiter Time
-        E = 4;                              % Endurance from requirements[hours]
+    
+    % Operational Radius [nm]
+        Rcr = Rcr;
+    % Loiter Time [hrs]
+        E = 4;
+%% Engine & Propeller Variables
     % Cruise & Loiter Specific Fuel Consumption
-        SFC_cr = 0.5;                       % SFC of PT6A from comparison table
-        SFCcr = SFC_cr;
-        SFC_lt = SFC_cr;
+        SFCcr = 0.5; SFClt = SFCcr;
     % Propeller Efficiency
-        etap = 0.85;                        % Propeller Efficiency, approximate from research
+        etap = 0.85;
+%% EWF as a function of WS
     % Empty Weight Fraction
-        EWF = -0.0032*WS + 0.7146;  % depends on WS                         % slightly lower than ST and AT6, optimistic but achievable?   
-        % EWF = linspace(0.42, 0.6, 19);      % EWF from comparison table
-    % Reserve Fuel Factor
-        RFF = 1;
+        EWF = -0.0032*WS + 0.7146;  % depends on WS  
 
-%% 
-
-% Varied Values
-    % Payload Weight
-        % W_pl = linspace(1500, 4500, 7);
-        W_pl = 3820;
-    % Operational Radius
-        %R_cr = linspace(160,320, 9);
-        R_cr = 300;                    % hold constant for W/S checking
+%% System of Equations
     % Drag Polar
         DragPolarResolution = length(LDcr); % 
 % Structure for each calculated weight
@@ -84,6 +78,7 @@ function [W_TO, EWF] = Q2_WS_Check(WS)
     % "Pages" -> Sensitivy Analysis Variable
     % (rows, cols, pages)
         Q2_WS_check.W_to = [];
+        Q2_WS_check.W_e = [];
         Q2_WS_check.W_f = [];
 
 %%for DragPolarIndex = 1:DragPolarResolution
@@ -94,26 +89,29 @@ function [W_TO, EWF] = Q2_WS_Check(WS)
     % Set Drag Index
         k = 4;
 
-    for j = 1:length(R_cr )         % Calculate weights at every range
-        for  i= 1:length(W_pl)                      % Calculate weights at every W_PL
-            equations = @(x) [ -x(1) + x(2) + x(3) + W_pl(i);
+    for j = 1:length(Rcr )         % Calculate weights at every range
+        for  i= 1:length(W_PL)                      % Calculate weights at every W_PL
+
+            MFF = W_ratios * ((1 / (exp((Rcr(j) * SFCcr)          /(LDcr(k) * etap * 325)))) * ...
+                              (1 / (exp(((E+VFRRT) * Vlt(k) * SFClt)/(LDlt(k) * etap * 325)))) * ...
+                              (1 / (exp((Rcr(j) * SFCcr)          /(LDcr(k) * etap * 325)))));
+
+            equations = @(x) [ -x(1) + x(2) + x(3) + W_PL(i) + 500; % 500 for pilots and sensors
                                -x(1) + (1/EWF)*x(2);
-                               x(1)*(1 - W_ratios * (...
-                                                     (1 / (exp((R_cr(j) * SFCcr)          /(LDcr(k) * etap * 325)))) * ...
-                                                     (1 / (exp(((E+0.5) * Vlt(k) * SFC_lt)/(LDlt(k) * etap * 325)))) * ...
-                                                     (1 / (exp((R_cr(j) * SFCcr)          /(LDcr(k) * etap * 325)))) ...
-                                                    )...
-                                     ) ...
-                                - x(3)];
+                               x(1)*(1 - MFF) - x(3)];
     
             solutions = fsolve(equations, initial_guess, options);
 
             Q2_WS_check.W_to(j, i) = solutions(1);  % Takeoff Weight
+            Q2_WS_check.W_e(j, i) = solutions(2);  % Empty Weight
             Q2_WS_check.W_f(j, i) = solutions(3);   % Fuel Weight
         end
     end
 
-W_TO = Q2_WS_check.W_to(j, i);
+% Results
+    W_TO = Q2_WS_check.W_to(j, i);
+    W_E = Q2_WS_check.W_e(j, i);
+    W_F = Q2_WS_check.W_f(j, i);
 
 %end
 

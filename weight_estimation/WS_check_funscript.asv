@@ -20,23 +20,18 @@ clc
 
 % Inputs
     % Wing Loading
-        %WS = linspace(30, 100,36);
-        WSLowerLimit = 30;
-        WSUpperLimit = 100;
-        WSInterval = 1;
-
-            nWS = 1 + (WSUpperLimit-WSLowerLimit)/WSInterval;
-            WS = linspace(WSLowerLimit, WSUpperLimit, nWS)';
-
+        WS = linspace(30, 100,36);
+        %WS = 66;
     % Weapons Payload Weight
         % Baseline (no payload) = 500 lb (2 pilots + optical sensors)
-        
-        PayloadLowerLimit = 2000;
-        PayloadUpperLimit = 3500;
-        PayloadInterval = 250;
+        %W_PL = [2000 2500 3000 3500];
 
+        PayloadUpperLimit = 3500;
+        PayloadLowerLimit = 2000;
+        PayloadInterval = 250;
+        
             nPayload = 1 + (PayloadUpperLimit-PayloadLowerLimit)/PayloadInterval;
-            W_PL = linspace(PayloadLowerLimit, PayloadUpperLimit, nPayload);
+        W_PL = linspace(PayloadLowerLimit, PayloadUpperLimit, nPayload)
         %%
     % Operational Radius
         Rcr = 300;
@@ -81,51 +76,52 @@ title("Power/Weight vs WS")
 
 %% WPL and Rcr
 
-% % Inputs
-%     % Wing Loading
-%         WS = 66;
-%     % Weapons Payload Weight
-%         % Baseline (no payload) = 500 lb (2 pilots + optical sensors)
-%         W_PL = [2500 3000 3500];
-%     % Operational Radius
-%         Rcr = 300;
-%     % VFR reserve time (VFRRT)
-%         VFRRT = 0.5;        % 30 minutes of reserve flight time (at endurance conditions)
-% 
-% % Storage
-%     Rcr_WPL.WS = WS;
-%     Rcr_WPL.W_PL = W_PL;
-% 
-%     Rcr_WPL.W_TO = [];
-%     Rcr_WPL.W_E = [];
-%     Rcr_WPL.W_F = [];
-% 
-%     Rcr_WPL.EWF = [];
-%     Rcr_WPL.Vcr = [];
-% 
-% for i = 1:length(Rcr)
-%     for j = 1:length(W_PL)
-%         [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL(j), VFRRT, Rcr(i));
-% 
-%         Rcr_WPL.W_TO(i,j) = W_TO;
-%         Rcr_WPL.W_E(i,j) = W_E;
-%         Rcr_WPL.W_f(i,j) = W_F;
-% 
-%         Rcr_WPL.EWF(i,j) = EWF;
-%         Rcr_WPL.Vcr(i,j) = Vcr;
-%     end
-% end
+% Inputs
+    % Wing Loading
+        WS = 66;
+    % Weapons Payload Weight
+        % Baseline (no payload) = 500 lb (2 pilots + optical sensors)
+        W_PL = [2500 3000 3500];
+    % Operational Radius
+        Rcr = 300;
+    % VFR reserve time (VFRRT)
+        VFRRT = 0.5;        % 30 minutes of reserve flight time (at endurance conditions)
+
+% Storage
+    Rcr_WPL.WS = WS;
+    Rcr_WPL.W_PL = W_PL;
+
+    Rcr_WPL.W_TO = [];
+    Rcr_WPL.W_E = [];
+    Rcr_WPL.W_F = [];
+
+    Rcr_WPL.EWF = [];
+    Rcr_WPL.Vcr = [];
+
+for i = 1:length(Rcr)
+    for j = 1:length(W_PL)
+        [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL(j), VFRRT, Rcr(i));
+
+        Rcr_WPL.W_TO(i,j) = W_TO;
+        Rcr_WPL.W_E(i,j) = W_E;
+        Rcr_WPL.W_f(i,j) = W_F;
+    
+        Rcr_WPL.EWF(i,j) = EWF;
+        Rcr_WPL.Vcr(i,j) = Vcr;
+    end
+end
 
 
 %% Plots
 offset = 0;
-nref = 1;
+nref = 4;
 % WS and WPL Carpet Plot
 [X1,X2] = meshgrid(WS_WPL.W_PL, WS_WPL.WS);
 figure; grid on;
 carpet(X1,X2, WS_WPL.W_TO, 0, nref, 'b', 'r')
 carpetlabel(X1,X2, WS_WPL.W_TO, offset, nref, 1, 0, 0, 0)
 carpetlabel(X1,X2, WS_WPL.W_TO, offset, nref, 0, 1, 0, 0)
+
 
 %xlim(xlims)
 %ylim(ylims)
