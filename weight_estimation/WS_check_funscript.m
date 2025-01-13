@@ -61,7 +61,7 @@ for i = 1:length(WS)
 
         WS_WPL.W_TO(i,j) = W_TO;
         WS_WPL.W_E(i,j) = W_E;
-        WS_WPL.W_f(i,j) = W_F;
+        WS_WPL.W_F(i,j) = W_F;
     
         WS_WPL.EWF(i,j) = EWF;
         WS_WPL.Vcr(i,j) = Vcr;
