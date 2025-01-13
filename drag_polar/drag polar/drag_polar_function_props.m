@@ -9,9 +9,9 @@ function [Range_LD_0, Range_LD_1, Endurance_LD_0, Endurance_LD_1, CL_Endurance_0
 
 %% load data and L/D from competitive asssessment
 dragpolar_data = load('dragpolar_data.mat');
-CL_market = dragpolar_data.ComparisionTablenov4S2.CL; %CL data
-CD_market = dragpolar_data.ComparisionTablenov4S2.CD; %CD data
-Market_names = dragpolar_data.ComparisionTablenov4S2.Name;
+%CL_market = dragpolar_data.ComparisionTablenov4S2.CL; %CL data
+%CD_market = dragpolar_data.ComparisionTablenov4S2.CD; %CD data
+%Market_names = dragpolar_data.ComparisionTablenov4S2.Name;
 % i think the range should be about 8 to 13 - from sam 
 
 
