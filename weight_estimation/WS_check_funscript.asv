@@ -61,7 +61,7 @@ for i = 1:length(WS)
 
         WS_WPL.W_TO(i,j) = W_TO;
         WS_WPL.W_E(i,j) = W_E;
-        WS_WPL.W_F(i,j) = W_F;
+        WS_WPL.W_f(i,j) = W_F;
     
         WS_WPL.EWF(i,j) = EWF;
         WS_WPL.Vcr(i,j) = Vcr;
@@ -104,7 +104,7 @@ carpet(X1,X2, WS_WPL.W_TO, 0, nref, 'b', 'r')
     % Weapons Payload Weight (Baseline Weight = 500)
         PayloadLowerLimit = 2500;
         PayloadUpperLimit = 3500;
-        PayloadInterval = 100;
+        PayloadInterval = 250;
 
             nPayload = 1 + (PayloadUpperLimit-PayloadLowerLimit)/PayloadInterval;
             W_PL = linspace(PayloadLowerLimit, PayloadUpperLimit, nPayload);
@@ -113,29 +113,29 @@ carpet(X1,X2, WS_WPL.W_TO, 0, nref, 'b', 'r')
     % VFR reserve time (VFRRT)
         VFRRT = 0.5;        % 30 minutes of reserve flight time (at endurance conditions)
 
-% Storage
-    Rcr_WPL.WS = WS;
-    Rcr_WPL.W_PL = W_PL;
-
-    Rcr_WPL.W_TO = [];
-    Rcr_WPL.W_E = [];
-    Rcr_WPL.W_F = [];
-
-    Rcr_WPL.EWF = [];
-    Rcr_WPL.Vcr = [];
-
-for i = 1:length(Rcr)
-    for j = 1:length(W_PL)
-        [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL(j), VFRRT, Rcr(i));
-
-        Rcr_WPL.W_TO(i,j) = W_TO;
-        Rcr_WPL.W_E(i,j) = W_E;
-        Rcr_WPL.W_f(i,j) = W_F;
-
-        Rcr_WPL.EWF(i,j) = EWF;
-        Rcr_WPL.Vcr(i,j) = Vcr;
-    end
-end
+% % Storage
+%     Rcr_WPL.WS = WS;
+%     Rcr_WPL.W_PL = W_PL;
+% 
+%     Rcr_WPL.W_TO = [];
+%     Rcr_WPL.W_E = [];
+%     Rcr_WPL.W_F = [];
+% 
+%     Rcr_WPL.EWF = [];
+%     Rcr_WPL.Vcr = [];
+% 
+% for i = 1:length(Rcr)
+%     for j = 1:length(W_PL)
+%         [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL(j), VFRRT, Rcr(i));
+% 
+%         Rcr_WPL.W_TO(i,j) = W_TO;
+%         Rcr_WPL.W_E(i,j) = W_E;
+%         Rcr_WPL.W_f(i,j) = W_F;
+% 
+%         Rcr_WPL.EWF(i,j) = EWF;
+%         Rcr_WPL.Vcr(i,j) = Vcr;
+%     end
+% end
 
 
 
