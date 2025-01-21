@@ -22,7 +22,7 @@ clc
 %% Validation Test
 
 %% Wing Weight
-
+S_Csw
 % Fighter/Attack
 % Define the variables Embraer
     Embraer.K_dw = 1; % Wing design factor
@@ -71,14 +71,11 @@ clc
 %% Cargo/ Transport
 %W_wing_cargo = calculateWingWeightCargo(Embraer.W_dg, Embraer.Nz, Embraer.S_w, Embraer.A, Embraer.t_c_root, Embraer.lambda, Embraer.Lambda, Embraer.S_csw);
 % General Aviation
-W_wing_GA_EMB = calculateWingWeightGA(Embraer);
+W_wing_GA_EMB = calculateWingWeightGA(Embraer.S_w, Embraer.W_fw, Embraer.A, Embraer.Lambda, Embraer.q, Embraer.lambda, Embraer.t_c_root, Embraer.Nz, Embraer.W_dg);
 W_wing_simple_EMB = 2.5*Embraer.S_w;
 
-W_wing_GA_CSN172 = calculateWingWeightGA(Cessna172);
+W_wing_GA_CSN172 = calculateWingWeightGA(Cessna172.S_w, Cessna172.W_fw, Cessna172.A, Cessna172.Lambda, Cessna172.q, Cessna172.lambda, Cessna172.t_c_root, Cessna172.Nz, Cessna172.W_dg);
 W_wing_simple_CSN172 = 2.5*Cessna172.S_w;
-
-W_wing_GA_CSN180 = calculateWingWeightGA(Cessna180);
-W_wing_simple_CSN180 = 2.5*Cessna180.S_w;
 %% Simplified method
 
 
@@ -151,7 +148,7 @@ function W_wing = calculateWingWeightCargo(W_dg, Nz, S_w, A, t_c_root, lambda, L
     W_wing = 0.0051 * (W_dg * Nz)^0.557 * S_w^0.649 * A^0.5 * (t_c_root)^-0.4 ...
              * (1 + lambda)^0.1 * (cos(Lambda))^-1.0 * S_csw^0.1;
 end
-function W_wing = calculateWingWeightGA(Plane)
+function W_wing = calculateWingWeightGA(S_w, W_fw, A, Lambda, q, lambda, t_c, Nz, W_dg)
     % Function to calculate wing weight for a general aviation aircraft
     % Inputs:
     %   S_w    - Wing reference area
@@ -168,7 +165,7 @@ function W_wing = calculateWingWeightGA(Plane)
     %   W_wing - Calculated wing weight
 
     % Calculate the wing weight using the given formula
-    W_wing = 0.036 * Plane.S_w^0.758 * Plane.W_fw^0.0035 * (Plane.A / cos(Plane.Lambda)^2)^0.6 ...
-             * Plane.q^0.006 * Plane.lambda^0.04 * (100 * Plane.t_c_root / cos(Plane.Lambda))^-0.3 ...
-             * (Plane.Nz * Plane.W_dg)^0.49;
+    W_wing = 0.036 * S_w^0.758 * W_fw^0.0035 * (A / cos(Lambda)^2)^0.6 ...
+             * q^0.006 * lambda^0.04 * (100 * t_c / cos(Lambda))^-0.3 ...
+             * (Nz * W_dg)^0.49;
 end
