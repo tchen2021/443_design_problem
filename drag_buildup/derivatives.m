@@ -19,14 +19,17 @@ clc; clear; close all;
 %% inputting wing geometric parameters
 %wing
 S = 121;               %area [ft^2]
-cbar = ;            %mean geometric chord [ft]
-cbarbar = ;         %mean aerodynamic chord [ft]
+cbar = 5.45;            %mean geometric chord [ft]
+C_tip = 3.5;            %wingtip chord [ft]
+C_root = 7.4;           %root chord [ft]
+lambda = C_tip/C_root;  %taper ratio
+cbarbar = (2/3) * ((C_root+C_tip-((C_root*C_tip)/(C_root+C_tip))) / (1 + lamdba)); %mean aerodynamic chord [ft]
 xbar = ;            %position of m.a.c [ft]
 ybar = ;            %position of m.a.c [ft]
-Lambda_0 = ;          %sweep angle at the l.e 
-Lambda_quarter = ;   %sweep angle at 1/4c
-Lambda_half = ;      %sweep angle at 1/2c
-Lambda_te = ;        %sweep angle at t.e
+Lambda_0 = 8.776;          %sweep angle at the l.e [deg]
+Lambda_quarter = 8.776;   %sweep angle at 1/4c
+Lambda_half = 8.776;      %sweep angle at 1/2c
+Lambda_te = 8.776;        %sweep angle at t.e
 %control surfaces
 S_aileron = ;               %area of aileron [ft^2]
 cbar_aileron = ;            %mean geometric chord [ft]
@@ -41,9 +44,9 @@ i_T = ;                     %tail incidence
 
 %fuselage
 lf = 20.333;              %length of fuselage [ft]
-la = ;              %length of nose [ft]
-lb = ;              %length of cylindrical portion [ft]
-lc = ;              %length of tail [ft]
+la = 7.3025;              %length of nose [ft]
+lb = 13.2958;              %length of cylindrical portion [ft]
+lc = 14.1866;              %length of tail [ft]
 
 D = ;               %max diameter of the EBR
 
@@ -128,4 +131,41 @@ C_D0T = 2.* ((sum(C_DTi.*S_Ti)) /(sum(S_Ti))) * (S_Te/S);   %subscript T refers 
 delta3_f1 = ;          %interpolated from figure flap 1
 delta3_f2 = ;          %interpolated from figure flat 2
 
-delta_C_D0T = delta1 * delta2 * (delta3_f1 - delta3_2);
+delta_C_D0T = delta1 * delta2 * (delta3_f1 - delta3_2); %additional drag caused by a plain flap (elevator)
+
+C_DiT = ((C_LT^2) / (pi * A_T)) * (1+delta1+delta2) * (S_T/S); %induced drag of the horizontal tail
+
+%% Fuselage and Nacelles
+
+C_D0A = C_f * F * S_A_wet / S;                          %drag in region A
+C_D0B = C_f * S_a_wet / S;                              %drag in region B
+C_D0C = C_f * F *S_C_wet / S;                           %drag in region C
+deltaC_D0LambdaF = K * C_D0C / 100;                     %additional drag due to tail up-sweep angle of the fuselage
+deltaC_D0CAB = deltaC_DS * (S_CAB/S);                   %additional drag due to cabin/cockpit protuburance.
+C_D0F = C_D0A + C_D0B + C_D0C + C_D0LambdaF + C_D0CAB; %fuselage parasitic drag
+
+C_DiB = C_LB*(alpha-alpha_0B);          %induced drag coefficient of the fuselage w/ alpha in radians
+
+
+%% Interference Drag
+
+%wing-fuselage
+deltaC_DWf = 0.05 * (C_D0F + C_DiF); 
+
+%wing-nacelle
+n = ;   %number of nacelles
+deltaC_Dwn = 0.05 * (C_D0N + C_DiN) * n;
+
+%Tail-Fuselage
+n_c = ;     %number of corners between tail and fuselage
+c_j = ;     %chord of the tail at the junction
+deltaC_Dtf = n_c * (0.8 * (t/c)^3 - 0.0005) * (c_j^2/S);
+
+deltaC_Dtt = (n_c/2) * (17*(t/c)^4 - 0.05*(t/c)^2) * (c_j^2/S);
+
+%cooling and air intake
+mdot = ;        %mass flow rate of air inside the intake
+q = ;           %dynamic pressure
+deltaV =  ;     %variation of the velocity between the intake and the outlet
+C_D_cooling = (mdot*deltaV)/(q*S);
+
