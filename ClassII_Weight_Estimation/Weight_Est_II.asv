@@ -78,14 +78,16 @@ end
 AircraftNames = {Aircraft.Name}';
 RaymerGAMethod = [Aircraft.W_wingGARaymer]';
 RaymerAttackMethod = [Aircraft.W_wingAttackRaymer]';
+USAF_GAMethod = [Aircraft.W_wingGA_USAF]';
 ActualWingWeight = [Aircraft.WingGroup]';
 
 % Create a table
-ResultsTable = table(AircraftNames, RaymerGAMethod, RaymerAttackMethod, ActualWingWeight, ...
-    'VariableNames', {'Aircraft', 'Raymer_GA_Method_lbs', 'Raymer_Attack_Method_lbs', 'Actual_Wing_Weight_lbs'});
+WingResultsTable = table(AircraftNames, RaymerGAMethod, RaymerAttackMethod, USAF_GAMethod, ActualWingWeight, ...
+    'VariableNames', {'Aircraft', 'Raymer_GA_Method_lbs', 'Raymer_Attack_Method_lbs', 'USAF_GA_ Method', 'Actual_Wing_Weight_lbs'});
 
 % Display the table
-disp(ResultsTable);
+disp(WingResultsTable);
+
 %% Function Definitions
 function q = calculateDynamicPressure(velocity)
     % Calculate dynamic pressure based on velocity
