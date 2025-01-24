@@ -3,7 +3,7 @@ clear
 clc
 
 %% Weight Estimation Raymer Methods
-% Date Edited: 01/22/25
+% Date Edited: 01/24/25
 
 % Authors: Michael Chen
 %          Jacob Quiray
