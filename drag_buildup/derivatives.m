@@ -18,29 +18,29 @@ clc; clear; close all;
 
 %% inputting wing geometric parameters
 %wing
-S = 121;               %area [ft^2]
+S = 121;                %area [ft^2]
 cbar = 5.45;            %mean geometric chord [ft]
 C_tip = 3.5;            %wingtip chord [ft]
 C_root = 7.4;           %root chord [ft]
 lambda = C_tip/C_root;  %taper ratio
-cbarbar = (2/3) * ((C_root+C_tip-((C_root*C_tip)/(C_root+C_tip))) / (1 + lamdba)); %mean aerodynamic chord [ft]
-xbar = ;            %position of m.a.c [ft]
-ybar = ;            %position of m.a.c [ft]
-Lambda_0 = 8.776;          %sweep angle at the l.e [deg]
+cbarbar = (((2/3) * ((C_root+C_tip-((C_root*C_tip)/(C_root+C_tip))) / (1 + lambda))) + cbar)/2; %mean aerodynamic chord [ft]
+%xbar = ;                 %position of m.a.c [ft]
+%ybar = ;                 %position of m.a.c [ft]
+Lambda_0 = 8.776;         %sweep angle at the l.e [deg]
 Lambda_quarter = 8.776;   %sweep angle at 1/4c
 Lambda_half = 8.776;      %sweep angle at 1/2c
 Lambda_te = 8.776;        %sweep angle at t.e
 %control surfaces
-S_aileron = ;               %area of aileron [ft^2]
-cbar_aileron = ;            %mean geometric chord [ft]
-cbarbar_aileron = ;         %mean aerodynamic chord [ft]
-S_elevator = ;              %area of elevator [ft^2]
-cbar_elevator = ;           %mean geometric chord [ft]
-cbarbar_elevator = ;        %mean aerodynamic chord [ft]
-S_rudder = ;                %area of rudder [ft^2]
-cbar_rudder = ;             %mean geometric chord [ft]
-cbarbar_rudder = ;          %mean aerodynamic chord [ft]
-i_T = ;                     %tail incidence 
+S_aileron = 0.25 * 0.225 * S;               %area of aileron [ft^2] rough estimation b_a ~ 0.25b c_a ~ 0.225c
+cbar_aileron = 0.225 * cbar;                %mean geometric chord [ft]
+cbarbar_aileron = 0.225 * cbarbar;          %assume to taper mean aerodynamic chord [ft]
+S_elevator = 22.93844;      %area of elevator [ft^2]
+cbar_elevator = (38.39/12) * 0.25;           %mean geometric chord [ft]
+cbarbar_elevator = cbar_elevator;            % assume no taper mean aerodynamic chord [ft]
+S_rudder = 19.69203;        %area of rudder [ft^2]
+cbar_rudder = (48.58/12) * 0.25;             %mean geometric chord [ft]
+cbarbar_rudder = cbar_rudder;          %mean aerodynamic chord [ft]
+i_T = 0;                     %tail incidence 
 
 %fuselage
 lf = 20.333;              %length of fuselage [ft]
@@ -48,7 +48,9 @@ la = 7.3025;              %length of nose [ft]
 lb = 13.2958;              %length of cylindrical portion [ft]
 lc = 14.1866;              %length of tail [ft]
 
-D = ;               %max diameter of the EBR
+%% fuselage EBR
+
+%D =;               %max diameter of the EBR
 
 
 %need to calculate max diameter, location of max diameter, wetted area of
@@ -95,7 +97,7 @@ C_LWB = C_LB + (k_wb-k_bw).*a_w.*(alpha-alpha_0W).*(Se./S);     %total lfit of w
 
 %horizontal tail lift
 a1 = ;          %lift slope of the tail
-C_LT = a1 .* (alpha.*(1-delepsilondelalpha) - (epsilon_0 + i_t)) .* (S_T/S);
+C_LT = a1 .* (alpha.*(1-delepsilondelalpha) - (epsilon_0 + i_T)) .* (S_T/S);
 
 %total lift
 C_L = C_LW + C_LT;
@@ -138,7 +140,7 @@ C_DiT = ((C_LT^2) / (pi * A_T)) * (1+delta1+delta2) * (S_T/S); %induced drag of 
 %% Fuselage and Nacelles
 
 C_D0A = C_f * F * S_A_wet / S;                          %drag in region A
-C_D0B = C_f * S_a_wet / S;                              %drag in region B
+C_D0B = C_f * S_B_wet / S;                              %drag in region B
 C_D0C = C_f * F *S_C_wet / S;                           %drag in region C
 deltaC_D0LambdaF = K * C_D0C / 100;                     %additional drag due to tail up-sweep angle of the fuselage
 deltaC_D0CAB = deltaC_DS * (S_CAB/S);                   %additional drag due to cabin/cockpit protuburance.
