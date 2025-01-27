@@ -1,4 +1,4 @@
-%% Class 2 Weight Estimation
+v%% Class 2 Weight Estimation
 clear
 clc
 
