@@ -18,7 +18,7 @@ clc; clear; close all;
 
 %% inputting wing geometric parameters
 %wing
-S = 121;                %area [ft^2]
+S = 190;                %area [ft^2]
 cbar = 5.45;            %mean geometric chord [ft]
 C_tip = 3.5;            %wingtip chord [ft]
 C_root = 7.4;           %root chord [ft]
@@ -30,6 +30,7 @@ Lambda_0 = 8.776;         %sweep angle at the l.e [deg]
 Lambda_quarter = 8.776;   %sweep angle at 1/4c
 Lambda_half = 8.776;      %sweep angle at 1/2c
 Lambda_te = 8.776;        %sweep angle at t.e
+AR = 6.25;
 %control surfaces
 S_aileron = 0.25 * 0.225 * S;               %area of aileron [ft^2] rough estimation b_a ~ 0.25b c_a ~ 0.225c
 cbar_aileron = 0.225 * cbar;                %mean geometric chord [ft]
@@ -45,21 +46,22 @@ i_T = 0;                     %tail incidence
 %fuselage
 lf = 20.333;              %length of fuselage [ft]
 la = 7.3025;              %length of nose [ft]
-lb = 13.2958;              %length of cylindrical portion [ft]
-lc = 14.1866;              %length of tail [ft]
+lb = 13.2958;             %length of cylindrical portion [ft]
+lc = 14.1866;             %length of tail [ft]
 
 %% fuselage EBR
 
 %D =;               %max diameter of the EBR
+S_A_wet = 27.09;    %wetted area of the nose area [ft^2]
+S_B_wet = 101.23;   %wetted area of the center area [ft^2]
+S_C_wet = 53.73;    %wetted area of the tail area [ft]^2]
 
-
-%need to calculate max diameter, location of max diameter, wetted area of
-%nose, cylindrical portion, and the tail
+%need to calculate max diameter, location of max diameter (optional)
 
 %% lift slope
 M = ;                       %Mach number
 phiprime_TE = ;             %typical airfoil trailing edge angle
-K = ;                       %from interpolation of fig. B.1.1(a)
+K = 0.83;                       %from interpolation of fig. B.1.1(a)
 C_l_alpha_theory = ;        %interpolate from fig. B.1.1(b)
 beta = sqrt(1-M.^2);        %sideslip angle 
 C_l_alpha = (1.05./beta).*K.*C_l_alpha_theory;  %
