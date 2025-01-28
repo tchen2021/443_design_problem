@@ -33,6 +33,9 @@ Aircraft(1).velocity = 374;     % Cruise velocity (ft/s)
 Aircraft(1).q = calculateDynamicPressure(Aircraft(1).velocity); % Dynamic pressure (lb/ft^2)
 Aircraft(1).WingGroup = Aircraft(1).W_dg * 0.120;               % Actual wing group weight (lbs)
 Aircraft(1).FuseGroup = Aircraft(1).W_dg * 0.108;               % Actual fuselage group weight (lbs)
+Aircraft(1).EmpennGroup = Aircraft(1).W_dg * 0.036;
+Aircraft(1).NacelleGroup = Aircraft(1).W_dg * 0.016; 
+Aircraft(1).LG = Aircraft(1).W_dg * 0.043;
 
 Aircraft(2).Name = 'Cessna172';
 Aircraft(2).K_dw = 1;
@@ -46,9 +49,20 @@ Aircraft(2).lambda = 0.75;
 Aircraft(2).Lambda = 0;
 Aircraft(2).W_fw = 252;
 Aircraft(2).velocity = 249.333; % ft/s
+Aircraft(2).S_h = 14.53; 
+Aircraft(2).l_h = 13.1; 
+Aircraft(2).b_h = 10.76;   
+Aircraft(2).t_r_h = 0.36; 
+Aircraft(2).S_v = 11.19; 
+Aircraft(2).l_v = 11.1;  
+Aircraft(2).b_v = 3.48;   
+Aircraft(2).t_r_v = 0.23; 
 Aircraft(2).q = calculateDynamicPressure(Aircraft(2).velocity);
 Aircraft(2).WingGroup = Aircraft(2).W_dg * 0.103;
 Aircraft(2).FuseGroup = Aircraft(2).W_dg * 0.160;
+Aircraft(2).EmpennGroup = Aircraft(2).W_dg * 0.026;
+Aircraft(2).NacelleGroup = Aircraft(2).W_dg * 0.012; 
+Aircraft(2).LG = Aircraft(2).W_dg * 0.050;
 
 Aircraft(3).Name = 'Cessna180';
 Aircraft(3).K_dw = 1;
@@ -65,14 +79,21 @@ Aircraft(3).velocity = 249.333; % ft/s
 Aircraft(3).q = calculateDynamicPressure(Aircraft(3).velocity);
 Aircraft(3).WingGroup = Aircraft(3).W_dg * 0.089;
 Aircraft(3).FuseGroup = Aircraft(3).W_dg * 0.152;
+Aircraft(3).EmpennGroup = Aircraft(3).W_dg * 0.023;
+Aircraft(3).NacelleGroup = Aircraft(3).W_dg * 0.012; 
+Aircraft(3).LG = Aircraft(3).W_dg * 0.042;
 
 %% Calculate Wing Weight for Each Aircraft
 for i = 1:length(Aircraft)
     Aircraft(i).W_wingGARaymer = WingWeightGARaymer(Aircraft(i));
     Aircraft(i).W_wingGA_USAF = WingWeightGA_USAf(Aircraft(i));
     Aircraft(i).W_wingAttackRaymer = WingWeightAttackRaymer(Aircraft(i));
-
 end
+
+%% Calculate Empannage Weight for Each Aircraft
+%for i = 1:length(Aircraft)
+    Aircraft(2).W_EmpUSAF = WeightEmpUSAF(Aircraft(2));
+%end
 
 %% Display Results in Table
 AircraftNames = {Aircraft.Name}';
