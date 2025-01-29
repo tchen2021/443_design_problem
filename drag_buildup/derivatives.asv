@@ -1,5 +1,5 @@
 %% Longitudinal Aerodybamic Deviatives Calculator 
-%Tyson Chen
+%Tyson Chen, Roman Niemic
 
 
 %takes geometric data of the wing and fuel as specified in drag buildup
@@ -16,6 +16,8 @@
 %houskeeping
 clc; clear; close all;
 
+%adding derivatives functions and data
+addpath derivatives;
 %% inputting wing geometric parameters
 %wing
 S = 190;                %area [ft^2]
@@ -69,17 +71,15 @@ kappa = beta*C_l_alpha/(2*pi);
 C_L_alpha = ;               %interpolate from fig. B.1.2
 
 %% zero-lift angle of attack
-alpha_0W_root = ; %zero lift angle of attack, 2D, at the wing root
-iprime_r = ;      %geometric incidence of the wing at the root
-J = ;             %empirical factor
-epsilon = ;       %aerodynamic twist of the wing
-lambda = ;        %taper ratio c_t/c_s
-alpha_0W = alpha_0W_root - iprime_r + J*epsilon; %zero-lift angle of attack
+alpha_0W_root = deg2rad(-3); %zero lift angle of attack, 2D, at the wing root
+iprime_r = deg2rad(2);      %geometric incidence of the wing at the root
+%J = ;             %empirical factor
+epsilon = 0;       %aerodynamic twist of the wing
+alpha_0W = zeroliftalpha(iprime_r, epsilon, alpha_0W_root, AR, lambda);
+%alpha_0W = alpha_0W_root - iprime_r + J*epsilon; %zero-lift angle of attack
 
 %% Downwash
-K_A = ;     %wing-aspect-ratio factor obtained from fig B.5.1 
-K_lambda = ;%wing-taper-ratio factor obtained from fig B.5.2
-K_H = ;     %horizontal-tail-location factor from fig B.5.3
+
 delepsilondelalpha = 4.44.*(K_A.*K_lambda.*K_H.*cos(Lambda_quarter).^0.5).^1.19;
 
 %% Fuselage Lift
