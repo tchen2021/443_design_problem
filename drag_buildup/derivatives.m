@@ -89,19 +89,30 @@ delepsilondelalpha = downwash(Lambda_quarter, AR, lambda, tailfactor, armfactor)
 
 
 %% Fuselage Lift
-alpha = ;       %angle of attack of the airplane 
-alpha_0B = ;    %zero lift angle of fuselage
-K_fuse = ;      %apparent mass function, interpolated from figure
-eta =    ;      %relation between drag of an infinity cylinder and finite cylinder
-C_DC = ;        % drag coefficient for inclined flow over an infinity cylinder
-S_p_x0 = ;      %planform area of the EBR behind a point x0, definied as point where fuselage starts to have shedding vortex
-C_LB = *(alpha-alpha_0B) ./ S) .* ( ((K.*pi.*D.^2) / (2)) + eta.*C_DC .*(alpha-alpha_0B).*S_p_x0 ); %lift of a fuse
+%largest fuse area 9786.86
+% 2786.86
+A = 2786.86 / 144;
+D = sqrt(4*A/pi);
+S_P_x0 = 934.73 / 144;
+alpha = 5;       %angle of attack of the airplane 
+alpha_0B = 0;    %zero lift angle of fuselage
+lf_D = lf / D;
+% K_fuse = ;      %apparent mass function, interpolated from figure
+% eta =    ;      %relation between drag of an infinity cylinder and finite cylinder
+% C_DC = ;        % drag coefficient for inclined flow over an infinity cylinder
+% S_p_x0 = ;      %planform area of the EBR behind a point x0, definied as point where fuselage starts to have shedding vortex
+% C_LB = (alpha-alpha_0B) ./ S) .* ( ((K.*pi.*D.^2) / (2)) + eta.*C_DC .*(alpha-alpha_0B).*S_p_x0 ); %lift of a fuse
+C_LB = fuselift(lf_D, alpha, alpha_0B, S, D, S_P_x0, M, la, lf);
 
 %wing body lift
-k_wb = ;        %factor of interference of wing-body for lift coefficient obtained from fig
-k_bw = ;        %factor of interference of wing-body for lift coefficient obtained from fig
-Se = ;          %wing area not covered by fuselage [ft^2]
-C_LWB = C_LB + (k_wb-k_bw).*a_w.*(alpha-alpha_0W).*(Se./S);     %total lfit of wing-body system, alpha in rad
+Se_S = 0.8;     %ratio of wing not covered by the fuselage to the total wing area, estimation from online
+D_b = D/b;
+alpha_W = ;
+C_LWB = wingbodylift(C_LB, alpha_W, alpha, alpha_0W, Se_S, D_b);
+% k_wb = ;        %factor of interference of wing-body for lift coefficient obtained from fig
+% k_bw = ;        %factor of interference of wing-body for lift coefficient obtained from fig
+% Se = ;          %wing area not covered by fuselage [ft^2]
+%C_LWB = C_LB + (k_wb-k_bw).*a_w.*(alpha-alpha_0W).*(Se./S);     %total lfit of wing-body system, alpha in rad
 
 %horizontal tail lift
 a1 = ;          %lift slope of the tail

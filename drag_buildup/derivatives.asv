@@ -33,6 +33,8 @@ Lambda_quarter = 8.776;   %sweep angle at 1/4c
 Lambda_half = 8.776;      %sweep angle at 1/2c
 Lambda_te = 8.776;        %sweep angle at t.e
 AR = 6.25;
+b = 35.35;                %wing span [ft]
+l_H = 14.59404;           %wing m.a.c to horizontal tail m.a.c [ft]
 %control surfaces
 S_aileron = 0.25 * 0.225 * S;               %area of aileron [ft^2] rough estimation b_a ~ 0.25b c_a ~ 0.225c
 cbar_aileron = 0.225 * cbar;                %mean geometric chord [ft]
@@ -43,8 +45,10 @@ cbarbar_elevator = cbar_elevator;            % assume no taper mean aerodynamic 
 S_rudder = 19.69203;        %area of rudder [ft^2]
 cbar_rudder = (48.58/12) * 0.25;             %mean geometric chord [ft]
 cbarbar_rudder = cbar_rudder;          %mean aerodynamic chord [ft]
-i_T = 0;                     %tail incidence 
+i_T = 0;  %tail incidence 
 
+%wing-tail
+h_H = 31.5/12;      %vertical distance between wing mac and tail mac
 %fuselage
 lf = 20.333;              %length of fuselage [ft]
 la = 7.3025;              %length of nose [ft]
@@ -79,17 +83,26 @@ alpha_0W = zeroliftalpha(iprime_r, epsilon, alpha_0W_root, AR, lambda);
 %alpha_0W = alpha_0W_root - iprime_r + J*epsilon; %zero-lift angle of attack
 
 %% Downwash
+armfactor = 2*l_H / b;
+tailfactor = abs(2*h_H/b);
+delepsilondelalpha = downwash(Lambda_quarter, AR, lambda, tailfactor, armfactor);
 
-delepsilondelalpha = 4.44.*(K_A.*K_lambda.*K_H.*cos(Lambda_quarter).^0.5).^1.19;
 
 %% Fuselage Lift
-alpha = ;       %angle of attack of the airplane 
-alpha_0B = ;    %zero lift angle of fuselage
-K_fuse = ;      %apparent mass function, interpolated from figure
-eta =    ;      %relation between drag of an infinity cylinder and finite cylinder
-C_DC = ;        % drag coefficient for inclined flow over an infinity cylinder
-S_p_x0 = ;      %planform area of the EBR behind a point x0, definied as point where fuselage starts to have shedding vortex
-C_LB = *(alpha-alpha_0B) ./ S) .* ( ((K.*pi.*D.^2) / (2)) + eta.*C_DC .*(alpha-alpha_0B).*S_p_x0 ); %lift of a fuse
+%largest fuse area 9786.86
+% 2786.86
+A = 2786.86 / 144;
+D = sqrt(4*A/pi);
+S_P_x0 = 934.73 / 144;
+alpha = 5;       %angle of attack of the airplane 
+alpha_0B = 0;    %zero lift angle of fuselage
+lf_D = lf / D;
+% K_fuse = ;      %apparent mass function, interpolated from figure
+% eta =    ;      %relation between drag of an infinity cylinder and finite cylinder
+% C_DC = ;        % drag coefficient for inclined flow over an infinity cylinder
+% S_p_x0 = ;      %planform area of the EBR behind a point x0, definied as point where fuselage starts to have shedding vortex
+% C_LB = (alpha-alpha_0B) ./ S) .* ( ((K.*pi.*D.^2) / (2)) + eta.*C_DC .*(alpha-alpha_0B).*S_p_x0 ); %lift of a fuse
+C_LB = fuselift(lf_D, alpha, alpha_0B, S, D, S_P_x0, M, la, lf);
 
 %wing body lift
 k_wb = ;        %factor of interference of wing-body for lift coefficient obtained from fig
