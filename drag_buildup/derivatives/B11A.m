@@ -26,7 +26,4 @@ if Re> 1E6 && Re<1E7
     [~,Index107] = min(abs(tand(halfPhiPrime)-B111AE7(:,1))); % Find location along 10E7 line from LE Angle
     K=-(((1E7-Re)/(1E7-1E6))*(B111AE7(Index107,2)-B111AE6(Index106,2)) - B111AE7(Index107,2)); % Linear interpolation
 end
-
-% Solve for other inputs
-
 end % end of function
