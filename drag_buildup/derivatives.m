@@ -133,25 +133,29 @@ C_LT = a1 .* (alpha.*(1-delepsilondelalpha) - (epsilon_0 + i_T)) .* (S_T/S);
 C_L = C_LWB + C_LT;
 
 %% Wing Drag
-V = 
+% V = 
+% 
+% Re = (V .* rho .* MAC) ./ mu;                   %calculate Reynold's number depending on flight conditions (speed,alittude, etc)
+% 
+% alpha_local = alpha + iprime_r + epsilon_i;     %calculate local angle of attack of each section
+% 
+% %given CL calculated above and Re, CD can be obtained using airfoil data
+% %from Theory of Wing Sections or airfoiltoolbox
+% 
+% %%%%%%%%%%%%%%%
+% %organize and export a table of CD depending on section, speed, weight, CG
+% %position, configuration, altitude, assuming elliptical lift distribution
+% 
+% %%%%%%%%%%%%%%%
+% C_D0W = 2.* ((sum(C_Di.*S_i)) /(sum(S_i))) * (S_e/S);   %total drag coefficient
 
-Re = (V .* rho .* MAC) ./ mu;                   %calculate Reynold's number depending on flight conditions (speed,alittude, etc)
+C_D0W = iterator(airfoil,alpha,iprime_r, epsilon,cbarbar, S_arr,V,rho,mu,Se, S);
+C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LWB-C_LB, AR);
 
-alpha_local = alpha + iprime_r + epsilon_i;     %calculate local angle of attack of each section
 
-%given CL calculated above and Re, CD can be obtained using airfoil data
-%from Theory of Wing Sections or airfoiltoolbox
-
-%%%%%%%%%%%%%%%
-%organize and export a table of CD depending on section, speed, weight, CG
-%position, configuration, altitude, assuming elliptical lift distribution
-
-%%%%%%%%%%%%%%%
-C_D0W = 2.* ((sum(C_Di.*S_i)) /(sum(S_i))) * (S_e/S);   %total drag coefficient
-
-delta1 = ;          %interpolated from figure
-delta2 = ;          %interpolated from figure
-C_DiW = ((C_LW.^2) ./ (pi.*S)) .* (1+delta1+delta2);    %induced drag coefficient of wing
+% delta1 = ;          %interpolated from figure
+% delta2 = ;          %interpolated from figure
+% C_DiW = ((C_LW.^2) ./ (pi.*S)) .* (1+delta1+delta2);    %induced drag coefficient of wing
 
 
 %Tail
@@ -160,10 +164,10 @@ alpha_T = alpha + iprime_T - delepsilondelalpha .* alpha;   %the angle of attack
 alpha_V = 0;        %alpha on the vertical tail is 0 for straight leveled flight
 C_D0T = 2.* ((sum(C_DTi.*S_Ti)) /(sum(S_Ti))) * (S_Te/S);   %subscript T refers to the tail (horizontal or vertical)
 
-delta3_f1 = ;          %interpolated from figure flap 1
-delta3_f2 = ;          %interpolated from figure flat 2
-
-delta_C_D0T = delta1 * delta2 * (delta3_f1 - delta3_2); %additional drag caused by a plain flap (elevator)
+% delta3_f1 = ;          %interpolated from figure flap 1
+% delta3_f2 = ;          %interpolated from figure flat 2
+% 
+% delta_C_D0T = delta1 * delta2 * (delta3_f1 - delta3_2); %additional drag caused by a plain flap (elevator)
 
 C_DiT = ((C_LT^2) / (pi * A_T)) * (1+delta1+delta2) * (S_T/S); %induced drag of the horizontal tail
 
