@@ -58,6 +58,7 @@ i_T = 0;  %tail incidence
 
 %wing-tail
 h_H = 31.5/12;      %vertical distance between wing mac and tail mac
+c_C = ;             %ratio between chord of the flap and chord of the tail when flap is deflected
 %fuselage
 lf = 20.333;              %length of fuselage [ft]
 la = 7.3025;              %length of nose [ft]
@@ -169,7 +170,8 @@ C_D0T = 2.* ((sum(C_DTi.*S_Ti)) /(sum(S_Ti))) * (S_Te/S);   %subscript T refers 
 % 
 % delta_C_D0T = delta1 * delta2 * (delta3_f1 - delta3_2); %additional drag caused by a plain flap (elevator)
 
-C_DiT = ((C_LT^2) / (pi * A_T)) * (1+delta1+delta2) * (S_T/S); %induced drag of the horizontal tail
+C_DiT = C_DiTfun(C_LT, A_T, S, S_T, t_c, beta, c_C);
+%C_DiT = ((C_LT^2) / (pi * A_T)) * (1+delta1+delta2) * (S_T/S); %induced drag of the horizontal tail
 
 %% Fuselage and Nacelles
 
