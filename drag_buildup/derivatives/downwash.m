@@ -6,7 +6,7 @@ function [deltaepsilon_deltaalpha] = downwash(Lambda,AR,lambda, tailfactor, armf
 %interpolate figure to get K_A
 data_K_A = importfileB51("B51.csv");
  % Check that lambda is within the valid range
-    if AR <=10  || AR >= 0
+    if AR >= 10  || AR <= 0
         error('Aspect ratio must be between 0 and 10.');
     end
     
