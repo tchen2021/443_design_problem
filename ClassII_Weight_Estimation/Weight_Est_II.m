@@ -49,8 +49,11 @@ Aircraft(2).lambda = 0.75;
 Aircraft(2).Lambda = 0;
 Aircraft(2).W_fw = 252;
 Aircraft(2).velocity = 249.333; % ft/s
-Aircraft(2).S_h = 14.53; 
-Aircraft(2).l_h = 13.1; 
+Aircraft(2).w_f = 3.28084 * 1.2;
+Aircraft(2).h_f = 3.28084 * 1.33;
+Aircraft(2).l_f = 3.28084 * 7.56;
+Aircraft(2).S_h = 21.5278; 
+Aircraft(2).l_h = 14.1; 
 Aircraft(2).b_h = 10.76;   
 Aircraft(2).t_r_h = 0.36; 
 Aircraft(2).S_v = 11.19; 
@@ -95,6 +98,10 @@ end
     Aircraft(2).W_EmpUSAF = WeightEmpUSAF(Aircraft(2));
 %end
 
+%% Calculate Fuselage Weight for Each Aircraft
+    Aircraft(2).W_FusUSAF = WeightFuselageUSAF(Aircraft(2));
+%%
+
 %% Display Results in Table
 AircraftNames = {Aircraft.Name}';
 RaymerGAMethod = [Aircraft.W_wingGARaymer]';
@@ -102,15 +109,31 @@ RaymerAttackMethod = [Aircraft.W_wingAttackRaymer]';
 USAF_GAMethod = [Aircraft.W_wingGA_USAF]';
 ActualWingWeight = [Aircraft.WingGroup]';
 
+USAF_Emp = [Aircraft(2).W_EmpUSAF]';
+ActualEmpWeight = [Aircraft(2).EmpennGroup]';
+
+USAF_Fuse = [Aircraft(2).W_FusUSAF]';
+ActualFuseWeight = [Aircraft(2).FuseGroup]';
+
 % Create a wing table
 WingResultsTable = table(AircraftNames, RaymerGAMethod, RaymerAttackMethod, USAF_GAMethod, ActualWingWeight, ...
     'VariableNames', {'Aircraft', 'Raymer_GA_Method_lbs', 'Raymer_Attack_Method_lbs', 'USAF_GA_ Method', 'Actual_Wing_Weight_lbs'});
 
-% Display the table
-disp(WingResultsTable);
 
-%Create a fuselage table
-% FuselageResultsTable = table(AircraftNames)
+% Create a Empannage table
+EmpResultsTable = table({'Cessna 172'}, USAF_Emp, ActualEmpWeight, ...
+    'VariableNames', {'Aircraft', 'USAF_GA_ Method', 'Actual_Empannage_Weight_lbs'});
+
+FuseResultsTable = table({'Cessna 172'}, USAF_Fuse, ActualFuseWeight, ...
+    'VariableNames', {'Aircraft', 'USAF_GA_ Method', 'Actual_Fuselage_Weight_lbs'});
+
+%Display tables
+disp(WingResultsTable);
+disp(EmpResultsTable);
+disp(FuseResultsTable);
+
+
+%FuselageResultsTable = table(AircraftNames(2), USAF)
 
 %% Function Definitions
 function q = calculateDynamicPressure(velocity)
@@ -185,7 +208,7 @@ function W_wing = WingWeightCargoRaymer(Plane)
              * (1 + Plane.lambda)^0.1 * (cos(Plane.Lambda))^-1.0;
 end
 
-function W_fuselageUSAF = FuselageWeightUSAF(Plane)
+function W_fuselageUSAF = WeightFuselageUSAF(Plane)
     %Calculate wing weight for light and utility type airplanes with
     %performance up to 300 kts
     % Inputs:
@@ -195,7 +218,7 @@ function W_fuselageUSAF = FuselageWeightUSAF(Plane)
     %   h_f: maximum fuselage height in feet
     %   V_C: design cruise speed in KEAS = Velocity
 
-    W_fuselageUSAF = 200 * ( (Plane.W_TO * Plane.Nz/10e5)^0.286 * (Plane.l_f/10)^0.857 ...
+    W_fuselageUSAF = 200 * ( (Plane.W_dg * Plane.Nz/10e5)^0.286 * (Plane.l_f/10)^0.857 ...
         * ((Plane.w_f + Plane.h_f)/10 *(Plane.velocity/100)^0.338) )^1.1;
 
 end
