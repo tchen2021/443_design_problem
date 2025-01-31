@@ -42,7 +42,8 @@ AR = 6.25;
 b = 35.35;                %wing span [ft]
 l_H = 14.59404;           %wing m.a.c to horizontal tail m.a.c [ft]
 t_root = 0.15 * cbar;                %thickness of the root, assumed 0.15c 
-t_tail = 0.10 * ;                 %thickness of the tail                                        
+t_tail = 0.10 * ;                 %thickness of the tail           
+S_e = S * (1-AR^-1);            %effective wing area that contributes to downwash
 %control surfaces
 S_aileron = 0.25 * 0.225 * S;               %area of aileron [ft^2] rough estimation b_a ~ 0.25b c_a ~ 0.225c
 cbar_aileron = 0.225 * cbar;                %mean geometric chord [ft]
@@ -129,28 +130,32 @@ a1 = ;          %lift slope of the tail
 C_LT = a1 .* (alpha.*(1-delepsilondelalpha) - (epsilon_0 + i_T)) .* (S_T/S);
 
 %total lift
-C_L = C_LW + C_LT;
+C_L = C_LWB + C_LT;
 
 %% Wing Drag
-V = 
+% V = 
+% 
+% Re = (V .* rho .* MAC) ./ mu;                   %calculate Reynold's number depending on flight conditions (speed,alittude, etc)
+% 
+% alpha_local = alpha + iprime_r + epsilon_i;     %calculate local angle of attack of each section
+% 
+% %given CL calculated above and Re, CD can be obtained using airfoil data
+% %from Theory of Wing Sections or airfoiltoolbox
+% 
+% %%%%%%%%%%%%%%%
+% %organize and export a table of CD depending on section, speed, weight, CG
+% %position, configuration, altitude, assuming elliptical lift distribution
+% 
+% %%%%%%%%%%%%%%%
+% C_D0W = 2.* ((sum(C_Di.*S_i)) /(sum(S_i))) * (S_e/S);   %total drag coefficient
 
-Re = (V .* rho .* MAC) ./ mu;                   %calculate Reynold's number depending on flight conditions (speed,alittude, etc)
+C_D0W = iterator(airfoil,alpha,iprime_r, epsilon,cbarbar, S_arr,V,rho,mu,Se, S);
+C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LWB-C_LB, AR);
 
-alpha_local = alpha + iprime_r + epsilon_i;     %calculate local angle of attack of each section
 
-%given CL calculated above and Re, CD can be obtained using airfoil data
-%from Theory of Wing Sections or airfoiltoolbox
-
-%%%%%%%%%%%%%%%
-%organize and export a table of CD depending on section, speed, weight, CG
-%position, configuration, altitude, assuming elliptical lift distribution
-
-%%%%%%%%%%%%%%%
-C_D0W = 2.* ((sum(C_Di.*S_i)) /(sum(S_i))) * (S_e/S);   %total drag coefficient
-
-delta1 = ;          %interpolated from figure
-delta2 = ;          %interpolated from figure
-C_DiW = ((C_LW.^2) ./ (pi.*S)) .* (1+delta1+delta2);    %induced drag coefficient of wing
+% delta1 = ;          %interpolated from figure
+% delta2 = ;          %interpolated from figure
+% C_DiW = ((C_LW.^2) ./ (pi.*S)) .* (1+delta1+delta2);    %induced drag coefficient of wing
 
 
 %Tail
