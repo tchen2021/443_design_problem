@@ -130,7 +130,7 @@ a1 = ;          %lift slope of the tail
 C_LT = a1 .* (alpha.*(1-delepsilondelalpha) - (epsilon_0 + i_T)) .* (S_T/S);
 
 %total lift
-C_L = C_LW + C_LT;
+C_L = C_LWB + C_LT;
 
 %% Wing Drag
 V = 
