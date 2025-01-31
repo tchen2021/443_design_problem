@@ -28,5 +28,5 @@ if Re> 1E6 && Re<1E7
 end
 
 % Solve for other inputs
-beta=
+
 end % end of function
