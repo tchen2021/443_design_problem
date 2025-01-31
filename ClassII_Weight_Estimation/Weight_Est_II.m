@@ -86,6 +86,20 @@ Aircraft(3).EmpennGroup = Aircraft(3).W_dg * 0.023;
 Aircraft(3).NacelleGroup = Aircraft(3).W_dg * 0.012; 
 Aircraft(3).LG = Aircraft(3).W_dg * 0.042;
 
+Aircraft(4).Name = 'Design'; % trap. wing assumption
+Aircraft(4).K_dw = 1;
+Aircraft(4).K_vs = 1;
+Aircraft(4).W_dg = 12900; % Check this
+Aircraft(4).Nz = 7;     % On par with A29, maybe less
+Aircraft(4).S_w = 142.972;  
+Aircraft(4).A = 6.4;
+Aircraft(4).t_c_root = 0.18;
+Aircraft(4).lambda = 0.47;
+Aircraft(4).Lambda = deg2rad(4.37); % rad
+Aircraft(4).W_fw = 390; % no ideaaaaaa need to estimate this
+Aircraft(4).velocity = 472.587; % ft/s
+Aircraft(4).q = calculateDynamicPressure(Aircraft(4).velocity);
+
 %% Calculate Wing Weight for Each Aircraft
 for i = 1:length(Aircraft)
     Aircraft(i).W_wingGARaymer = WingWeightGARaymer(Aircraft(i));
