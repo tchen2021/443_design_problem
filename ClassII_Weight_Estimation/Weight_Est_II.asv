@@ -123,9 +123,8 @@ for i = 1:length(Aircraft)
     Aircraft(i).W_wingGARaymer = WingWeightGARaymer(Aircraft(i));
     Aircraft(i).W_wingGA_USAF = WingWeightGA_USAf(Aircraft(i));
     Aircraft(i).W_wingAttackRaymer = WingWeightAttackRaymer(Aircraft(i));
-    Aircraft(i).W_wingCargoRaymer = WingWeightCargoRaymer(Aircraft(i));
 end
-W_wing = WingWeightCargoRaymer(Aircraft(2));
+
 %% Calculate Empannage Weight for Each Aircraft
 %for i = 1:length(Aircraft)
     Aircraft(2).W_EmpUSAF = WeightEmpUSAF(Aircraft(2));
@@ -148,7 +147,6 @@ AircraftNames = {Aircraft.Name}';
 RaymerGAMethod = [Aircraft.W_wingGARaymer]';
 RaymerAttackMethod = [Aircraft.W_wingAttackRaymer]';
 USAF_GAMethod = [Aircraft.W_wingGA_USAF]';
-RaymerCargoMethod = [Aircraft.W_wingCargoRaymer]';
 ActualWingWeight = [Aircraft.WingGroup]';
 
 USAF_Emp = [Aircraft(2).W_EmpUSAF]';
@@ -158,8 +156,8 @@ USAF_Fuse = [Aircraft(2).W_FusUSAF]';
 ActualFuseWeight = [Aircraft(2).FuseGroup]';
 
 % Create a wing table
-WingResultsTable = table(AircraftNames, RaymerCargoMethod,RaymerGAMethod, RaymerAttackMethod, USAF_GAMethod, ActualWingWeight, ...
-    'VariableNames', {'Aircraft', 'Raymer Cargo','Raymer_GA_Method_lbs', 'Raymer_Attack_Method_lbs', 'USAF_GA_ Method', 'Actual_Wing_Weight_lbs'});
+WingResultsTable = table(AircraftNames, RaymerGAMethod, RaymerAttackMethod, USAF_GAMethod, ActualWingWeight, ...
+    'VariableNames', {'Aircraft', 'Raymer_GA_Method_lbs', 'Raymer_Attack_Method_lbs', 'USAF_GA_ Method', 'Actual_Wing_Weight_lbs'});
 
 %{
 % Create a Empannage table
