@@ -4,9 +4,9 @@ function [deltaepsilon_deltaalpha] = downwash(Lambda,AR,lambda, tailfactor, armf
 
 %%
 %interpolate figure to get K_A
-data_K_A = importfileK_A("B51.csv");
+data_K_A = importfileB51("B51.csv");
  % Check that lambda is within the valid range
-    if AR <=10  || AR >= 0
+    if AR >= 10  || AR <= 0
         error('Aspect ratio must be between 0 and 10.');
     end
     
@@ -24,7 +24,7 @@ data_K_A = importfileK_A("B51.csv");
 
 %% interpolate figure to get K_B
 %interpolate figure to get K_A
-data_K_lambda = importfileK_A("B52.csv");
+data_K_lambda = importfileB52("B52.csv");
  % Check that lambda is within the valid range
     if lambda <=1  || lambda >= 0
         error('Taper ratio must be between 0 and 1.');
@@ -40,7 +40,7 @@ data_K_lambda = importfileK_A("B52.csv");
 
 %%
 %interpolate figure to get K_H
-data_K_H = importfileK_A("B53.csv");
+data_K_H = importfileB53("B53.csv");
  % Check that tail factor abs(2h_H/b) is within the valid range
     if tailfactor <=1  || tailfactor >= 0
         error('Tail Factor must be between 0 and 1.');

@@ -18,6 +18,12 @@ clc; clear; close all;
 
 %adding derivatives functions and data
 addpath derivatives;
+%% importing flight conditions
+h = 3e4;                    %to be parameterized
+V = 280 * 1.68781;          %knots to ft/s
+[~, T, rho, a] = atmosphere(h);                    %30,000 ft cruise
+M = V/a;                       %Mach number
+
 %% inputting wing geometric parameters
 %wing
 S = 190;                %area [ft^2]
@@ -35,6 +41,9 @@ Lambda_te = 8.776;        %sweep angle at t.e
 AR = 6.25;
 b = 35.35;                %wing span [ft]
 l_H = 14.59404;           %wing m.a.c to horizontal tail m.a.c [ft]
+t_root = 0.15 * cbar;                %thickness of the root, assumed 0.15c 
+t_tail = 0.10 * ;                 %thickness of the tail           
+S_e = S * (1-AR^-1);            %effective wing area that contributes to downwash
 %control surfaces
 S_aileron = 0.25 * 0.225 * S;               %area of aileron [ft^2] rough estimation b_a ~ 0.25b c_a ~ 0.225c
 cbar_aileron = 0.225 * cbar;                %mean geometric chord [ft]
@@ -49,6 +58,7 @@ i_T = 0;  %tail incidence
 
 %wing-tail
 h_H = 31.5/12;      %vertical distance between wing mac and tail mac
+c_C = ;             %ratio between chord of the flap and chord of the tail when flap is deflected
 %fuselage
 lf = 20.333;              %length of fuselage [ft]
 la = 7.3025;              %length of nose [ft]
@@ -65,14 +75,16 @@ S_C_wet = 53.73;    %wetted area of the tail area [ft]^2]
 %need to calculate max diameter, location of max diameter (optional)
 
 %% lift slope
-M = ;                       %Mach number
+
 phiprime_TE = ;             %typical airfoil trailing edge angle
-K = 0.83;                       %from interpolation of fig. B.1.1(a)
+K = 0.83;
+C_L_alpha = 
+%from interpolation of fig. B.1.1(a)
 C_l_alpha_theory = ;        %interpolate from fig. B.1.1(b)
 beta = sqrt(1-M.^2);        %sideslip angle 
 C_l_alpha = (1.05./beta).*K.*C_l_alpha_theory;  %
 kappa = beta*C_l_alpha/(2*pi);
-C_L_alpha = ;               %interpolate from fig. B.1.2
+C_L_alpha = C_L_alpha(t_root,t_tail,C_root,C_tip,h,V, M,AR,Lambda_half);               %interpolate from fig. B.1.2
 
 %% zero-lift angle of attack
 alpha_0W_root = deg2rad(-3); %zero lift angle of attack, 2D, at the wing root
@@ -119,28 +131,32 @@ a1 = ;          %lift slope of the tail
 C_LT = a1 .* (alpha.*(1-delepsilondelalpha) - (epsilon_0 + i_T)) .* (S_T/S);
 
 %total lift
-C_L = C_LW + C_LT;
+C_L = C_LWB + C_LT;
 
 %% Wing Drag
-V = 
+% V = 
+% 
+% Re = (V .* rho .* MAC) ./ mu;                   %calculate Reynold's number depending on flight conditions (speed,alittude, etc)
+% 
+% alpha_local = alpha + iprime_r + epsilon_i;     %calculate local angle of attack of each section
+% 
+% %given CL calculated above and Re, CD can be obtained using airfoil data
+% %from Theory of Wing Sections or airfoiltoolbox
+% 
+% %%%%%%%%%%%%%%%
+% %organize and export a table of CD depending on section, speed, weight, CG
+% %position, configuration, altitude, assuming elliptical lift distribution
+% 
+% %%%%%%%%%%%%%%%
+% C_D0W = 2.* ((sum(C_Di.*S_i)) /(sum(S_i))) * (S_e/S);   %total drag coefficient
 
-Re = (V .* rho .* MAC) ./ mu;                   %calculate Reynold's number depending on flight conditions (speed,alittude, etc)
+C_D0W = iterator(airfoil,alpha,iprime_r, epsilon,cbarbar, S_arr,V,rho,mu,Se, S);
+C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LWB-C_LB, AR);
 
-alpha_local = alpha + iprime_r + epsilon_i;     %calculate local angle of attack of each section
 
-%given CL calculated above and Re, CD can be obtained using airfoil data
-%from Theory of Wing Sections or airfoiltoolbox
-
-%%%%%%%%%%%%%%%
-%organize and export a table of CD depending on section, speed, weight, CG
-%position, configuration, altitude, assuming elliptical lift distribution
-
-%%%%%%%%%%%%%%%
-C_D0W = 2.* ((sum(C_Di.*S_i)) /(sum(S_i))) * (S_e/S);   %total drag coefficient
-
-delta1 = ;          %interpolated from figure
-delta2 = ;          %interpolated from figure
-C_DiW = ((C_LW.^2) ./ (pi.*S)) .* (1+delta1+delta2);    %induced drag coefficient of wing
+% delta1 = ;          %interpolated from figure
+% delta2 = ;          %interpolated from figure
+% C_DiW = ((C_LW.^2) ./ (pi.*S)) .* (1+delta1+delta2);    %induced drag coefficient of wing
 
 
 %Tail
@@ -149,12 +165,13 @@ alpha_T = alpha + iprime_T - delepsilondelalpha .* alpha;   %the angle of attack
 alpha_V = 0;        %alpha on the vertical tail is 0 for straight leveled flight
 C_D0T = 2.* ((sum(C_DTi.*S_Ti)) /(sum(S_Ti))) * (S_Te/S);   %subscript T refers to the tail (horizontal or vertical)
 
-delta3_f1 = ;          %interpolated from figure flap 1
-delta3_f2 = ;          %interpolated from figure flat 2
+% delta3_f1 = ;          %interpolated from figure flap 1
+% delta3_f2 = ;          %interpolated from figure flat 2
+% 
+% delta_C_D0T = delta1 * delta2 * (delta3_f1 - delta3_2); %additional drag caused by a plain flap (elevator)
 
-delta_C_D0T = delta1 * delta2 * (delta3_f1 - delta3_2); %additional drag caused by a plain flap (elevator)
-
-C_DiT = ((C_LT^2) / (pi * A_T)) * (1+delta1+delta2) * (S_T/S); %induced drag of the horizontal tail
+C_DiT = C_DiTfun(C_LT, A_T, S, S_T, t_c, beta, c_C);
+%C_DiT = ((C_LT^2) / (pi * A_T)) * (1+delta1+delta2) * (S_T/S); %induced drag of the horizontal tail
 
 %% Fuselage and Nacelles
 
