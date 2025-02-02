@@ -40,4 +40,6 @@ opts.EmptyLineRule = "read";
 % Import the data
 fuseliftx0lf = readtable(filename, opts);
 
+%% Convert to output type
+fuseliftx0lf = table2array(fuseliftx0lf);
 end

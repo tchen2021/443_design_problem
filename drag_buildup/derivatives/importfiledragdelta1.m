@@ -40,4 +40,6 @@ opts.EmptyLineRule = "read";
 % Import the data
 dragdelta1 = readtable(filename, opts);
 
+%% Convert to output type
+dragdelta1 = table2array(dragdelta1);
 end

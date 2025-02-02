@@ -5,7 +5,7 @@ function C_LWB = wingbodylift(C_LB, a_W, alpha, alpha_0W, Se_S, D_b)
 %% interpolate figure to get K_W and K_B
 data = importfilewingbodylift("wingbody_lift.csv");
  % Check that lambda is within the valid range
-    if  D_b< 0 || lf_D >1
+    if  D_b < 0 || D_b >1
         error('the fuse diameter/wing span ratio must be between 0 and 1.');
     end
     
@@ -23,6 +23,6 @@ data = importfilewingbodylift("wingbody_lift.csv");
 
 %%    
 
-C_LWB = C_LB + (K_W-K_B).*a_W.*(alpha-alpha_0W).*(Se_S);     %total lfit of wing-body system, alpha in rad
+C_LWB = C_LB + (K_W-K_B).*a_W.*((alpha*pi/180)-(alpha_0W*pi/180)).*(Se_S);     %total lfit of wing-body system, alpha in rad
 
 
