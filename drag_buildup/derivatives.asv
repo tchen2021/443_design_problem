@@ -71,7 +71,6 @@ lc = 14.1866;             %length of tail [ft]
 S_A_wet = 27.09;    %wetted area of the nose area [ft^2]
 S_B_wet = 101.23;   %wetted area of the center area [ft^2]
 S_C_wet = 53.73;    %wetted area of the tail area [ft]^2]
-Lambda_f = 6.31;    %degrees 
 
 %need to calculate max diameter, location of max diameter (optional)
 
@@ -110,7 +109,11 @@ S_P_x0 = 934.73 / 144;
 alpha = 5;       %angle of attack of the airplane 
 alpha_0B = 0;    %zero lift angle of fuselage
 lf_D = lf / D;
-
+% K_fuse = ;      %apparent mass function, interpolated from figure
+% eta =    ;      %relation between drag of an infinity cylinder and finite cylinder
+% C_DC = ;        % drag coefficient for inclined flow over an infinity cylinder
+% S_p_x0 = ;      %planform area of the EBR behind a point x0, definied as point where fuselage starts to have shedding vortex
+% C_LB = (alpha-alpha_0B) ./ S) .* ( ((K.*pi.*D.^2) / (2)) + eta.*C_DC .*(alpha-alpha_0B).*S_p_x0 ); %lift of a fuse
 C_LB = fuselift(lf_D, alpha, alpha_0B, S, D, S_P_x0, M, la, lf);
 
 %wing body lift
@@ -118,6 +121,10 @@ Se_S = 0.8;     %ratio of wing not covered by the fuselage to the total wing are
 D_b = D/b;
 alpha_W = ;
 C_LWB = wingbodylift(C_LB, alpha_W, alpha, alpha_0W, Se_S, D_b);
+% k_wb = ;        %factor of interference of wing-body for lift coefficient obtained from fig
+% k_bw = ;        %factor of interference of wing-body for lift coefficient obtained from fig
+% Se = ;          %wing area not covered by fuselage [ft^2]
+%C_LWB = C_LB + (k_wb-k_bw).*a_w.*(alpha-alpha_0W).*(Se./S);     %total lfit of wing-body system, alpha in rad
 
 %horizontal tail lift
 a1 = ;          %lift slope of the tail
@@ -147,6 +154,9 @@ C_D0W = iterator(airfoil,alpha,iprime_r, epsilon,cbarbar, S_arr,V,rho,mu,Se, S);
 C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LWB-C_LB, AR);
 
 
+% delta1 = ;          %interpolated from figure
+% delta2 = ;          %interpolated from figure
+% C_DiW = ((C_LW.^2) ./ (pi.*S)) .* (1+delta1+delta2);    %induced drag coefficient of wing
 
 
 %Tail
@@ -162,11 +172,20 @@ C_D0T = 2.* ((sum(C_DTi .* S_Ti)) / (sum(S_Ti))) * (S_Te/S);   %subscript T refe
 
 
 C_DiT = C_DiTfun(C_LT, A_T, S, S_T, t_c, beta, c_C);
-
+%C_DiT = ((C_LT^2) / (pi * A_T)) * (1+delta1+delta2) * (S_T/S); %induced drag of the horizontal tail
 
 %% Fuselage and Nacelles
-C_D0F = C_D0Ffun(Re, S, S_A_wet, S_B_wet, S_C_wet, S_CAB, 't', l_f, D, Lambda_f);       %assumes smooth surface turbulent flow
+C_D0F = C_D0Ffu
+
+C_D0A = C_f * F * S_A_wet / S;                          %drag in region A
+C_D0B = C_f * S_B_wet / S;                              %drag in region B
+C_D0C = C_f * F *S_C_wet / S;                           %drag in region C
+deltaC_D0LambdaF = K * C_D0C / 100;                     %additional drag due to tail up-sweep angle of the fuselage
+deltaC_D0CAB = deltaC_DS * (S_CAB/S);                   %additional drag due to cabin/cockpit protuburance.
+C_D0F = C_D0A + C_D0B + C_D0C + C_D0LambdaF + C_D0CAB; %fuselage parasitic drag
+
 C_DiB = C_LB*(alpha-alpha_0B);          %induced drag coefficient of the fuselage w/ alpha in radians
+
 
 %% Interference Drag
 
