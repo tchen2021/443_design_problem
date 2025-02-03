@@ -1,4 +1,4 @@
-function [K] = B11A(h,V,C_root)
+function [K,Re] = B11A(h,V,C_root)
 %Code figures out linear interpolation of graph B11A
 % Starting with sutherlands then solving for Re, the code uses that value
 % and the linear interpolation between Re #s from 1,000,000 - 10,000,000 Re

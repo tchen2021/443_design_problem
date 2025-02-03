@@ -1,6 +1,7 @@
-function C_LWB = wingbodylift(C_LB, CL_alpha_Wing, alpha, alpha_0W, Se_S, D_b)
+function C_LWB = wingbodylift(C_LB, a_W, alpha, alpha_0W, Se_S, D_b)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
+
 %% interpolate figure to get K_W and K_B
 data = importfilewingbodylift("wingbody_lift.csv");
  % Check that lambda is within the valid range
@@ -22,6 +23,6 @@ data = importfilewingbodylift("wingbody_lift.csv");
 
 %%    
 
-C_LWB = C_LB + (K_W-K_B)*CL_alpha_Wing*(deg2rad(alpha)-deg2rad(alpha_0W))*(Se_S);     %total lfit of wing-body system, alpha in rad
+C_LWB = C_LB + (K_W-K_B).*a_W.*(deg2rad(alpha)-deg2rad(alpha_0W).*(Se_S);     %total lfit of wing-body system, alpha in rad
 
 

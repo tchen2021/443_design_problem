@@ -50,6 +50,6 @@ data_K = importfilefuseliftK("fuselift_K.csv");
     
 %%    
 
-C_LB = ((alpha-alpha_0B) ./ S) .* ( ((K.*pi.*D.^2) / (2)) + eta.*cdc .*(alpha-alpha_0B).*S_P_x0 ); %lift of a fuse
+C_LB = (deg2rad(alpha-alpha_0B) ./ S) .* ( ((K.*pi.*D.^2) / (2)) + eta.*cdc .*(deg2rad(alpha)-deg2rad(alpha_0B)).*S_P_x0 ); %lift of a fuse
 end
 

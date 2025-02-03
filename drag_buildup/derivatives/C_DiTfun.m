@@ -1,4 +1,4 @@
-function [C_DiT] = C_DiTfun(C_LT, A_T, S, S_T, t_c, beta, c_C)
+function [C_DiT] = C_DiTfun(C_LT, A_T, S, S_T, t_c, beta, cf_C)
 %
     % Import data sets
     data1 = importfiledrag_tail_delta1("drag_tail_delta1.csv"); % Call function to get first data set
@@ -19,9 +19,9 @@ function [C_DiT] = C_DiTfun(C_LT, A_T, S, S_T, t_c, beta, c_C)
     y2_3 = data2(:, 4); % Fourth column is y data for curve 3
 
     % Perform interpolation for the first data set using C_LT as the query point
-    y1_1_interp = interp1(x1, y1_1, c_C, 'linear', 'extrap');
-    y1_2_interp = interp1(x1, y1_2, c_C, 'linear', 'extrap');
-    y1_3_interp = interp1(x1, y1_3, c_C, 'linear', 'extrap');
+    y1_1_interp = interp1(x1, y1_1, cf_C, 'linear', 'extrap');
+    y1_2_interp = interp1(x1, y1_2, cf_C, 'linear', 'extrap');
+    y1_3_interp = interp1(x1, y1_3, cf_C, 'linear', 'extrap');
 
     % Linearly interpolate between the three curves based on t_c
 

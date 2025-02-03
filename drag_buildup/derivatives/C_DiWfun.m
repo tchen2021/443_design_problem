@@ -17,13 +17,13 @@ function C_DiW = C_DiWfun(lambda, Delta_quarter, C_LW, AR)
     y1_6_interp = interp1(x1, y1_6, lambda, 'linear', 'extrap');
     y1_8_interp = interp1(x1, y1_8, lambda, 'linear', 'extrap');
 
-    % Linearly interpolate between the three curves based on curve_interp
-    if curve_interp <= 5
+    % Linearly interpolate between the three curves based on AR
+    if AR <= 5
         % Interpolate between curve 4 and curve 6
-        delta1 = y1_4_interp + (y1_6_interp - y1_4_interp) * (curve_interp - 4) / 2;
+        delta1 = y1_4_interp + (y1_6_interp - y1_4_interp) * (AR - 4) / 2;
     else
         % Interpolate between curve 6 and curve 8
-        delta1 = y1_6_interp + (y1_8_interp - y1_6_interp) * (curve_interp - 6) / 2;
+        delta1 = y1_6_interp + (y1_8_interp - y1_6_interp) * (AR - 6) / 2;
     end
     % Perform interpolation for the second data set using Delta_quarter as the query point
     delta2 = interp1(x2, y2, Delta_quarter, 'linear', 'extrap');
