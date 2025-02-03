@@ -20,8 +20,9 @@ data = importfilewingbodylift("wingbody_lift.csv");
     
     % Compute the interpolated y value based on lf_D
 
-%%    
+%%      
 
-C_LWB = C_LB + (K_W-K_B)*CL_alpha_Wing*(deg2rad(alpha)-deg2rad(alpha_0W))*(Se_S);     %total lfit of wing-body system, alpha in rad
+C_LWB = C_LB + (K_B-K_W)*CL_alpha_Wing*(deg2rad(alpha)-deg2rad(alpha_0W))*(Se_S);     %total lfit of wing-body system, alpha in rad
+
 
 

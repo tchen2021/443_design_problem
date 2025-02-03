@@ -48,10 +48,12 @@ Cl_alpha_Wing=(1.05/beta_Wing)*K_Wing*Cl_alpha_theory_Wing;
 k_Wing=(beta_Wing*Cl_alpha_Wing)/(2*pi);
 
 %%% 7. Find CL_alpha
-% xaxis=(A/K_Wing)*sqrt(beta_Wing^2 + tand(Lambda_half)^2);
+% xaxis=(A/K_Wing)*sqrt(beta_Wing^2 + tand(Lambda_half)^2);% xaxis=(A/k_Wing)*sqrt(beta_Wing^2+tand(Lambda_half)^2)
 % [CL_alpha_Wing] = B12(xaxis)/A;
 % CL_alpha_Wing= ( (2*pi)/(2+sqrt( ((A^2 * beta_Wing^2)/2)*(1+ (tand(Lambda_half)^2)/beta_Wing^2 )+4))) *A; % Function mentioned on graph 
-CL_alpha_Wing= (A*2*pi) / (2+ sqrt( ((A^2)*(beta_Wing^2))/k_Wing^2 *(1+(tand(Lambda_half)^2)/beta_Wing^2)+4))
+CL_alpha_Wing= (A*2*pi) / (2+ sqrt( ((A^2)*(beta_Wing^2))/k_Wing^2 *(1+(tand(Lambda_half)^2)/beta_Wing^2)+4));
+
+
 
 %% Lift slope - TAIL SECTION %%
 % Solve Graph B11A for K value
@@ -76,8 +78,8 @@ k_Horiz=(beta_Horiz*Cl_alpha_Horiz)/(2*pi);
 CL_alpha_Horiz= ( (2*pi)/(2+sqrt( ((A^2 * beta_Horiz^2)/2)*(1+ (tand(Lambda_Tail_half)^2)/beta_Horiz^2 )+4))) *A; % Function mentioned on graph 
 
 %% zero-lift angle of attack
-% alpha_0W_root = deg2rad(-3); %zero lift angle of attack, 2D, at the wing root
-% iprime_r = deg2rad(-5);      %geometric incidence of the wing at the root
+% alpha_0W_root = deg2rad(-5); %zero lift angle of attack, 2D, at the wing root
+% iprime_r = deg2rad(-3);      %geometric incidence of the wing at the root
 %J = ;             %empirical factor
 epsilon = 0;       %aerodynamic twist of the wing
 alpha_0W = zeroliftalpha(iprime_r, epsilon, alpha_0W_root, AR, lambda);
@@ -123,24 +125,9 @@ C_L(j) = C_LW + C_LT;
 % For loop to iterate through 4 sections of our wing
 S_i=[S1,S2,S3,S4];
 cbarbari=[cbarbar1,cbarbar2,cbarbar3,cbarbar4];
-% 
-% for i =1; i<=4; 
-% %     [mu] = SutherlandsEquation(h);
-% %     %calculate local Reynold's number
-% %     Re_local(i) = (V* rho * cbarbari(i) )/ mu;                 
-% %     %calculate local angle of attack of each section
-% %     alpha_local(i) = alpha + iprime_r + epsilon_i;
-% 
-% %     % Local Drag
-% %     C_Di= ;
-%      
-% end % end of for loop
 
 C_D0W = iterator(airfoil,alpha,iprime_r, epsilon,cbarbari, S_i,V,rho,Se, S,h);
 C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LB-C_LB, AR);
-
-
-
 
 %Tail
 iprime_T = 0;        %geometric incidence of the horizontal tail assume 0
@@ -163,32 +150,44 @@ C_DiB = C_LB*(deg2rad(alpha)-(deg2rad(alpha_0B)));          %induced drag coeffi
 
 C_D(j)=C_DiB+C_DiT+C_D0T+C_DiW+C_D0W + C_D0F;
 
-% % %% Interference Drag
-% % 
-% % %wing-fuselage
-% % deltaC_DWf = 0.05 * (C_D0F + C_DiF); 
-% % 
-% % %wing-nacelle
-% % n = ;   %number of nacelles
-% % deltaC_Dwn = 0.05 * (C_D0N + C_DiN) * n;
-% % 
-% % %Tail-Fuselage
-% % n_c = ;     %number of corners between tail and fuselage
-% % c_j = ;     %chord of the tail at the junction
-% % deltaC_Dtf = n_c * (0.8 * (t/c)^3 - 0.0005) * (c_j^2/S);
-% % 
-% % deltaC_Dtt = (n_c/2) * (17*(t/c)^4 - 0.05*(t/c)^2) * (c_j^2/S);
-% % 
-% % %cooling and air intake
-% % mdot = ;        %mass flow rate of air inside the intake
-% % q = ;           %dynamic pressure
-% % deltaV =  ;     %variation of the velocity between the intake and the outlet
-% % C_D_cooling = (mdot*deltaV)/(q*S);
-% % 
+%% Interference Drag
+
+%wing-fuselage
+deltaC_DWf = 0.05 * (C_D0F + C_DiB); 
+
+%wing-nacelle
+%n = ;   %number of nacelles
+%deltaC_Dwn = 0.05 * (C_D0N + C_DiN) * n;
+deltaC_Dwn = 20e-4;             %clean configurations 20 drag counts
+%Tail-Fuselage
+% n_c = ;     %number of corners between tail and fuselage
+% c_j = ;     %chord of the tail at the junction
+% deltaC_Dtf = n_c * (0.8 * (t/c)^3 - 0.0005) * (c_j^2/S);
+deltaC_Dtf = 10e-4;                %streamlined tail design 10 drag counts
+
+%deltaC_Dtt = (n_c/2) * (17*(t/c)^4 - 0.05*(t/c)^2) * (c_j^2/S); %for two
+%tails
+
+%cooling and air intake
+% mdot = ;        %mass flow rate of air inside the intake
+% q = ;           %dynamic pressure
+% deltaV =  ;     %variation of the velocity between the intake and the outlet
+% C_D_cooling = (mdot*deltaV)/(q*S);
+C_D_cooling = 30e-4;      %air intake and cooling 30 drag counts
+
+
+% Update the CD with interferance drag
+C_D_Interferance=deltaC_DWf+deltaC_Dwn+deltaC_Dtf+C_D_cooling;
+
+
+C_D(j)+C_D_Interferance;
 j=j+1;
 end % end of for loop through
 
 
 % Check the data
 % Plot CL vs Alpha
-plot(begin:ending,C_L); xlabel("Alpha");ylabel("CL");grid on;
+% plot(begin:ending,C_L); xlabel("Alpha");ylabel("CL");grid on;
+
+%PLOT THE MUTHAFUCKIN DRAG POLA
+plot(C_D,C_L); xlabel("C_D");ylabel("C_L");grid on;
