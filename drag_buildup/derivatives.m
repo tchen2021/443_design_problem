@@ -143,7 +143,7 @@ C_L = C_LWB + C_LT;
 % %%%%%%%%%%%%%%%
 % C_D0W = 2.* ((sum(C_Di.*S_i)) /(sum(S_i))) * (S_e/S);   %total drag coefficient
 
-C_D0W = iterator(airfoil,alpha,iprime_r, epsilon,cbarbar, S_arr,V,rho,mu,Se, S);
+C_D0W = iterator(airfoil,alpha,iprime_r, epsilon,cbarbar, S_arr,V,rho,mu,Se,S);
 C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LWB-C_LB, AR);
 
 
