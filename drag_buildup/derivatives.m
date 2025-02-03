@@ -171,22 +171,24 @@ C_DiB = C_LB*(alpha-alpha_0B);          %induced drag coefficient of the fuselag
 %% Interference Drag
 
 %wing-fuselage
-deltaC_DWf = 0.05 * (C_D0F + C_DiF); 
+deltaC_DWf = 0.05 * (C_D0F + C_DiB); 
 
 %wing-nacelle
-n = ;   %number of nacelles
-deltaC_Dwn = 0.05 * (C_D0N + C_DiN) * n;
-
+%n = ;   %number of nacelles
+%deltaC_Dwn = 0.05 * (C_D0N + C_DiN) * n;
+deltaC_Dwn = 20e-4;             %clean configurations 20 drag counts
 %Tail-Fuselage
-n_c = ;     %number of corners between tail and fuselage
-c_j = ;     %chord of the tail at the junction
-deltaC_Dtf = n_c * (0.8 * (t/c)^3 - 0.0005) * (c_j^2/S);
+% n_c = ;     %number of corners between tail and fuselage
+% c_j = ;     %chord of the tail at the junction
+% deltaC_Dtf = n_c * (0.8 * (t/c)^3 - 0.0005) * (c_j^2/S);
+deltaC_Dtf = 10e-4;                %streamlined tail design 10 drag counts
 
-deltaC_Dtt = (n_c/2) * (17*(t/c)^4 - 0.05*(t/c)^2) * (c_j^2/S);
+%deltaC_Dtt = (n_c/2) * (17*(t/c)^4 - 0.05*(t/c)^2) * (c_j^2/S); %for two
+%tails
 
 %cooling and air intake
-mdot = ;        %mass flow rate of air inside the intake
-q = ;           %dynamic pressure
-deltaV =  ;     %variation of the velocity between the intake and the outlet
-C_D_cooling = (mdot*deltaV)/(q*S);
-
+% mdot = ;        %mass flow rate of air inside the intake
+% q = ;           %dynamic pressure
+% deltaV =  ;     %variation of the velocity between the intake and the outlet
+% C_D_cooling = (mdot*deltaV)/(q*S);
+C_D_cooling = 30e-4;      %air intake and cooling 30 drag counts
