@@ -40,4 +40,6 @@ opts.EmptyLineRule = "read";
 % Import the data
 B51 = readtable(filename, opts);
 
+%% Convert to output type
+B51 = table2array(B51);
 end

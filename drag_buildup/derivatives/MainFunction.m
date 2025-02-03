@@ -103,6 +103,30 @@ k_Wing=(beta_Wing*Cl_alpha_Wing)/(2*pi);
 % [CL_alpha_Wing] = B12(xaxis)/A;
 Cl_alpha_Wing= ( (2*pi)/(2+sqrt( ((A^2 * beta_Wing^2)/2)*(1+ (tand(Lambda_half)^2)/beta_Wing^2 )+4))) /A; % Function mentioned on graph 
 
+%% Lift slope - TAIL SECTION %%
+% Solve Graph B11A for K value
+[K_Horiz] = B11A(h,V,C_Vert_root);
+
+% Solve Graph B11B for Cl_alpha_theory
+% Calc wing thickness ratio
+[Cl_alpha_theory_Horiz] = B11B(t_Vert_root,t_Vert_tip,C_Vert_root,C_Vert_tip);
+
+%%% 5. Calculate beta
+[M_Horiz] = machCalc(V,h);
+beta_Horiz=sqrt(1-M_Horiz^2);
+
+%%% 4. Calculate Cl_alpha
+Cl_alpha_Horiz=(1.05/beta_Horiz)*K_Horiz*Cl_alpha_theory_Horiz;
+
+%%% 6. Calculate k
+k_Horiz=(beta_Horiz*Cl_alpha_Horiz)/(2*pi);
+
+%%% 7. Find CL_alpha
+% xaxis=(A/K_Wing)*sqrt(beta_Wing^2 + tand(Lambda_half)^2);
+% [CL_alpha_Wing] = B12(xaxis)/A;
+Cl_alpha_Horiz= ( (2*pi)/(2+sqrt( ((A^2 * beta_Horiz^2)/2)*(1+ (tand(Lambda_Tail_half)^2)/beta_Horiz^2 )+4))) /A % Function mentioned on graph 
+
+
 
 %% zero-lift angle of attack
 alpha_0W_root = deg2rad(-3); %zero lift angle of attack, 2D, at the wing root
@@ -113,9 +137,9 @@ alpha_0W = zeroliftalpha(iprime_r, epsilon, alpha_0W_root, AR, lambda);
 %alpha_0W = alpha_0W_root - iprime_r + J*epsilon; %zero-lift angle of attack
 
 %% Downwash
-armfactor = 2*l_H / b;
+armfactor = 2*l_H / b; % Ratio of mac distance over area
 tailfactor = abs(2*h_H/b);
-delepsilondelalpha = downwash(Lambda_quarter, AR, lambda, tailfactor, armfactor);
+delepsilondelalpha = downwash(Lambda_quarter, AR, lambda, tailfactor, armfactor,h_H,b,l_H); % how the wake effects of the wing affect the flow of the tail
 
 
 %% Fuselage Lift
@@ -131,19 +155,20 @@ lf_D = lf / D;
 
 C_LB = fuselift(lf_D, alpha, alpha_0B, S, D, S_P_x0, M, la, lf);
 
-%wing body lift
+%%% Wing body lift %%%
 Se_S = 0.8;     %ratio of wing not covered by the fuselage to the total wing area, estimation from online
 D_b = D/b;
-% alpha_W = ;
-C_LWB = wingbodylift(C_LB, alpha_W, alpha, alpha_0W, Se_S, D_b);
+alpha_W = 1;
+C_LW = wingbodylift(C_LB, alpha_W, alpha, alpha_0W, Se_S, D_b);
 % k_wb = ;        %factor of interference of wing-body for lift coefficient obtained from fig
 % k_bw = ;        %factor of interference of wing-body for lift coefficient obtained from fig
 % Se = ;          %wing area not covered by fuselage [ft^2]
-C_LWB = C_LB + (k_wb-k_bw).*a_w.*(alpha-alpha_0W).*(Se./S);     %total lfit of wing-body system, alpha in rad
+% C_LWB = C_LB + (k_wb-k_bw).*a_w.*(alpha-alpha_0W).*(Se./S);     %total lfit of wing-body system, alpha in rad
 
-%horizontal tail lift
-% a1 = ;          %lift slope of the tail
-C_LT = a1 .* (alpha.*(1-delepsilondelalpha) - (epsilon_0 + i_T)) .* (S_T/S);
+%%% horizontal tail lift %%%
+a1 = Cl_alpha_Horiz;          %lift slope of the tail
+epsilon_0=0;
+C_LT = a1 .* ((alpha*pi/180).*(1-delepsilondelalpha) - (epsilon_0 + i_T)) .* (S_Vert/S); % Calculate with alpha in rads
 
 %total lift
 C_L = C_LW + C_LT;

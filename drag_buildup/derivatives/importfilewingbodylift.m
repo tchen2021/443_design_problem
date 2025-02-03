@@ -39,5 +39,6 @@ opts.EmptyLineRule = "read";
 
 % Import the data
 wingbodylift = readtable(filename, opts);
-
+%% Convert to output type
+wingbodylift = table2array(wingbodylift);
 end
