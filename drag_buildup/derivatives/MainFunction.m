@@ -20,7 +20,7 @@ end
 j=1;
 airfoil='NACA 2412';
 %%% ITERATOR for CL CD 
-for alpha=begin:ending 
+for alpha=begin:1:ending 
 
 % Get variables from Speed and altitude
 [p, T, rho, a] = atmosphere(h); % get temp in [R]
@@ -180,14 +180,126 @@ C_D_cooling = 30e-4;      %air intake and cooling 30 drag counts
 C_D_Interferance=deltaC_DWf+deltaC_Dwn+deltaC_Dtf+C_D_cooling;
 
 
-C_D(j)+C_D_Interferance;
+C_D(j)= C_D(j)+C_D_Interferance;
 j=j+1;
 end % end of for loop through
 
+%% finding max range and endurance CL, CD
+%drag buildup: C_L, C_D    1x13
+%competitive analysis: CL, CD 100x4
+
+load drag_polar_data_initial.mat
+
+%find the max L/D CL point for drag buildup
+[placeholder, idx_max(1)] = max(C_L(:)./C_D(:));
+CL_max(1) = C_L(idx_max(1));
+CD_max(1) = C_D(idx_max(1));
+LD_max(1) = CL_max(1)/CD_max(1);
+
+%find the max L/D CL point for competitive analysis
+[placeholder, idx_max(2)] = max(CL(:,1)./CDtot(:,1));
+CL_max(2) = CL(idx_max(2));
+CD_max(2) = CDtot(idx_max(2));
+LD_max(2) = CL_max(2)/CD_max(2);
+
+%find the max endurance for prop drag buildup
+[placeholder, idx_max_endurance(1)] = max((C_L(:)).^1.5 ./ C_D(:));
+CL_endurance(1) = C_L(idx_max_endurance(1));
+CD_endurance(1) = C_D(idx_max_endurance(1));
+LD_endurance(1) = CL_endurance(1)/CD_endurance(1);
+
+
+%find the max endurance for prop competitive analysis
+[placeholder, idx_max_endurance(2)] = max((CL(:,1)).^1.5 ./ CDtot(:,1))
+CL_endurance(2) = CL(idx_max_endurance(2));
+CD_endurance(2) = CDtot(idx_max_endurance(2));
+LD_endurance(2) = CL_endurance(2)/CD_endurance(2);
+
+
+
+
+
+
+%% plotting
 
 % Check the data
 % Plot CL vs Alpha
 % plot(begin:ending,C_L); xlabel("Alpha");ylabel("CL");grid on;
 
+polarWidth = 4;
+sz = 140;
+linethickness = 4;
+color = 'magenta';
 %PLOT THE MUTHAFUCKIN DRAG POLA
-plot(C_D,C_L); xlabel("C_D");ylabel("C_L");grid on;
+scatter(C_D,C_L, 'o','LineWidth', 4); hold on; plot(C_D,C_L, 'b', 'LineWidth', 4);
+set(groot, 'DefaultAxesFontName', 'Calibri');   % Change axes font
+set(groot, 'DefaultTextFontName', 'Calibri');   % Change text font
+scatter(CD_max(1), CL_max(1), sz, color, 'square', 'LineWidth', linethickness) %plot max range point
+scatter(CD_endurance(1),CL_endurance(1), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
+
+xlabel("C_D");ylabel("C_L");grid on;
+%plot formatting
+fontSize_axes = 26;
+fontSize_text = 28;
+fontSize_subtitles = 28;
+offset = 0.03; %offset from the horizontal line
+yLineWidth = 3;
+
+
+
+hold on
+
+%loading data from old drag polar
+
+
+
+
+plot(CDtot(:,1), CL(:,1), '--', 'Color', 'red', 'LineWidth', polarWidth) %left polar
+scatter(CD_max(2), CL_max(2), sz, color, 'square', 'LineWidth', linethickness) %plot max range point
+scatter(CD_endurance(2),CL_endurance(2), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
+%plot(CDtot(:,2), CL(:,2), '--', 'Color', 'blue', 'LineWidth', polarWidth) %right polar
+
+
+
+%labeling the polars
+%text2 = sprintf('Highest Drag Index = 1\n{C_D}_0 = %.3f\ne = %.2f\nA = %.2f', CD0(2), e(2), A(2)); %for highet drag case
+
+%text(0.1, 0.525, text2, 'FontName', 'Abolition', 'FontSize', fontSize_subtitles)
+
+%text1 = sprintf('Clean Drag Index = 0\n{C_D}_0 = %.3f\ne = %.2f\nA = %.2f', CD0(1), e(1), A(1)); %for clean conditions
+
+%text(0.0025, 0.67, text1, 'FontName', 'Abolition', 'FontSize', fontSize_subtitles)
+
+%plot formatting
+
+xlim([0 0.08]);           % X-axis limit from 0 to 0.2
+ylim([0 1.2]);           % Y-axis limit from 0 to 1.4
+
+% Set major ticks for grid lines
+xticks(0:0.02:0.2);      % Major ticks every 0.02 on X-axis
+yticks(0:0.2:1.4);       % Major ticks every 0.2 on Y-axis
+
+% Enable grid only at major ticks
+grid on;                 % Enable grid lines at major ticks
+ax = gca;                % Get current axes
+ax.GridLineStyle = '-';  % Solid line for major grid
+
+% Set minor ticks without grid lines
+ax.XMinorTick = 'on';           % Enable minor ticks on X-axis
+ax.YMinorTick = 'on';           % Enable minor ticks on Y-axis
+ax.MinorGridLineStyle = 'none'; % Turn off minor grid lines
+
+% Define minor tick intervals
+ax.XAxis.MinorTickValues = 0:0.005:0.2;  % Minor ticks every 0.005 on X-axis
+ax.YAxis.MinorTickValues = 0:0.05:1.4;   % Minor ticks every 0.05 on Y-axis
+
+% Label axes
+xlabel('C_D');           % Label for X-axis
+ylabel('C_L', Rotation= 0);           % Label for Y-axis
+
+% Set font size and other formatting adjustments to match style
+ax.FontSize = fontSize_axes;        % Adjust font size
+ax.LineWidth = 1;        % Set axis line width
+
+%legend('Current','Preliminary (Optimistic)');
+
