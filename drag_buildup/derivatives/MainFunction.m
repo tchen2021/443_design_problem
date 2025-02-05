@@ -10,6 +10,11 @@ clc; clear; close all;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %adding derivatives functions and data
 %addpath derivatives;
+addpath drag
+addpath lift
+addpath downwash
+addpath zeroliftalpha
+addpath lift_slope
 % Import data file
 DragBuildUp = importfileTEST('DragBuildUp.xlsx');
 % Take individual variables from excel sheet
