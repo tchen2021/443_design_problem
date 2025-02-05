@@ -21,7 +21,6 @@ j=1;
 %%% ITERATOR for CL CD 
 airfoil = 'NACA 2412';
 airfoil_tailhorizontal = 'NACA 0012';       %importer tool does not import strings
-airfoil_tailvertical = 'NACA 0012';
 
 for alpha=begin:1:ending 
 
@@ -133,10 +132,7 @@ cbarbari_vertical = [cbarbar1_vertical cbarbar2_vertical cbarbar3_vertical cbarb
 S_i_vertical = [S1_vertical S2_vertical S3_vertical S4_vertical];
 % C_D0T = 2.* ((sum(C_DTi .* S_Ti)) / (sum(S_Ti))) * (S_Te/S);   %subscript T refers to the tail (horizontal or vertical)
 C_D0T= iterator(airfoil_tailhorizontal, alpha, i_T, epsilon_0, cbarbari_horizontal, S_i_horizontal, V,rho, STe, S, h); % drag caused by horizontal tail WE AINT DOING THIS YET
-C_D0TV= iterator(airfoil_tailvertical, 0, 0, 0, cbarbari_vertical, S_i_vertical, V,rho, STe_V, S, h); % drag caused by vertical tail WE AINT DOING THIS YET
-%deltaC_D0T =               %additional drag due to deflection of the
-%elevator not accounted for now
-
+C_D0TV= iterator(airfoil_tailvertical, 0, 0, 0, cbarbari_vertical, S_i_vertical, V,rho, STe, S, h); % drag caused by vertical tail WE AINT DOING THIS YET
 
 % delta3_f1 = ;          %interpolated from figure flap 1
 % delta3_f2 = ;          %interpolated from figure flat 2
@@ -151,7 +147,7 @@ C_DiT = C_DiTfun(C_LT, A_T, S, S_T, t_c, beta_Horiz, cf_C); % UNCOMMENT SOON
 C_D0F = C_D0Ffun(Re, S, S_A_wet, S_B_wet, S_C_wet, S_CAB, 't', lf, D, Lambda_f);       %assumes smooth surface turbulent flow
 C_DiB = C_LB*(deg2rad(alpha)-(deg2rad(alpha_0B)));          %induced drag coefficient of the fuselage w/ alpha in radians
 
-C_D(j)=C_DiB+C_DiT+C_D0T+C_D0TV+C_DiW+C_D0W + C_D0F;
+C_D(j)=C_DiB+C_DiT+C_D0T+C_DiW+C_D0W + C_D0F;
 
 %% Interference Drag
 
