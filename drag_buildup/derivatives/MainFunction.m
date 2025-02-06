@@ -59,7 +59,7 @@ k_Wing=(beta_Wing*Cl_alpha_Wing)/(2*pi);
 % xaxis=(A/K_Wing)*sqrt(beta_Wing^2 + tand(Lambda_half)^2);% xaxis=(A/k_Wing)*sqrt(beta_Wing^2+tand(Lambda_half)^2)
 % [CL_alpha_Wing] = B12(xaxis)/A;
 % CL_alpha_Wing= ( (2*pi)/(2+sqrt( ((A^2 * beta_Wing^2)/2)*(1+ (tand(Lambda_half)^2)/beta_Wing^2 )+4))) *A; % Function mentioned on graph 
-CL_alpha_Wing= (A*2*pi) / (2+ sqrt( ((A^2)*(beta_Wing^2))/k_Wing^2 *(1+(tand(Lambda_half)^2)/beta_Wing^2)+4));
+CL_alpha_Wing= ((A*2*pi) / (2+ sqrt( ((A^2)*(beta_Wing^2))/k_Wing^2 *(1+(tand(Lambda_half)^2)/beta_Wing^2)+4)));
 
 
 
@@ -127,7 +127,7 @@ S_i=[S1,S2,S3,S4];
 cbarbari=[cbarbar1,cbarbar2,cbarbar3,cbarbar4];
 
 C_D0W = iterator(airfoil,alpha,iprime_r, epsilon,cbarbari, S_i,V,rho,Se,S,h);
-C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LB-C_LB, AR);
+C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LW-C_LB, AR);
 
 %Tail
 alpha_T = alpha + i_T - delepsilondelalpha .* alpha;   %the angle of attack of horizontal tail
