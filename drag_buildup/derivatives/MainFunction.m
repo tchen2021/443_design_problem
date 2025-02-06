@@ -197,6 +197,7 @@ end % end of for loop through
 %competitive analysis: CL, CD 100x4
 
 load drag_polar_data_initial.mat
+load dragindex025.mat
 
 %find the max L/D CL point for drag buildup
 [placeholder, idx_max(1)] = max(C_L(:)./C_D(:));
@@ -209,6 +210,13 @@ LD_max(1) = CL_max(1)/CD_max(1);
 CL_max(2) = CL(idx_max(2));
 CD_max(2) = CDtot(idx_max(2));
 LD_max(2) = CL_max(2)/CD_max(2);
+
+%find the max L/D CL point for competitive analysis for the high drag case
+[placeholder, idx_max(3)] = max(CL(:,1)./CDtot_third(:,1));
+CL_max(3) = CL(idx_max(3));
+CD_max(3) = CDtot(idx_max(3));
+LD_max(3) = CL_max(2)/CD_max(3);
+
 
 %find the max endurance for prop drag buildup
 [placeholder, idx_max_endurance(1)] = max((C_L(:)).^1.5 ./ C_D(:));
@@ -223,7 +231,11 @@ CL_endurance(2) = CL(idx_max_endurance(2));
 CD_endurance(2) = CDtot(idx_max_endurance(2));
 LD_endurance(2) = CL_endurance(2)/CD_endurance(2);
 
-
+%find the max endurance for prop competitive analysis for the bad case
+[placeholder, idx_max_endurance(3)] = max((CL_third(:,1)).^1.5 ./ CDtot_third(:,1))
+CL_endurance(3) = CL_third(idx_max_endurance(3));
+CD_endurance(3) = CDtot(idx_max_endurance(3));
+LD_endurance(3) = CL_endurance(3)/CD_endurance(3);
 
 
 
@@ -245,6 +257,8 @@ set(groot, 'DefaultTextFontName', 'Calibri');   % Change text font
 scatter(CD_max(1), CL_max(1), sz, color, 'square', 'LineWidth', linethickness) %plot max range point
 scatter(CD_endurance(1),CL_endurance(1), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
 
+
+
 xlabel("C_D");ylabel("C_L");grid on;
 %plot formatting
 fontSize_axes = 26;
@@ -258,15 +272,16 @@ yLineWidth = 3;
 hold on
 
 %loading data from old drag polar
-
-
-
-
+% Good case
 plot(CDtot(:,1), CL(:,1), '--', 'Color', 'red', 'LineWidth', polarWidth) %left polar
 scatter(CD_max(2), CL_max(2), sz, color, 'square', 'LineWidth', linethickness) %plot max range point
 scatter(CD_endurance(2),CL_endurance(2), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
 %plot(CDtot(:,2), CL(:,2), '--', 'Color', 'blue', 'LineWidth', polarWidth) %right polar
-
+% bad case
+hold on;
+plot(CDtot_third, CL_third, '--', 'Color', 'red', 'LineWidth', polarWidth) %left polar
+scatter(CD_max(3), CL_max(3), sz, color, 'square', 'LineWidth', linethickness) %plot max range point
+scatter(CD_endurance(3),CL_endurance(3), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
 
 
 %labeling the polars
