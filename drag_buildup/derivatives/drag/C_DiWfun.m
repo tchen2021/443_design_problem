@@ -1,4 +1,4 @@
-function C_DiW = C_DiWfun(lambda, Delta_quarter, C_LW, AR)
+function C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LW, AR)
     % Import data sets
     data1 = importfiledragdelta1("drag_delta1"); % Call function to get first data set
     data2 = importfiledragdelta2("drag_delta2"); % Call function to get second data set
@@ -26,7 +26,7 @@ function C_DiW = C_DiWfun(lambda, Delta_quarter, C_LW, AR)
         delta1 = y1_6_interp + (y1_8_interp - y1_6_interp) * (AR - 6) / 2;
     end
     % Perform interpolation for the second data set using Delta_quarter as the query point
-    delta2 = interp1(x2, y2, Delta_quarter, 'linear', 'extrap');
+    delta2 = interp1(x2, y2, Lambda_quarter, 'linear', 'extrap');
 
     % Combine the interpolated results (e.g., sum, average, or other operation)
     C_DiW = ((C_LW^2)/(pi*AR)) * (1+ delta1 + delta2); % Example: sum of the two interpolated values

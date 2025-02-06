@@ -196,8 +196,8 @@ end % end of for loop through
 %drag buildup: C_L, C_D    1x13
 %competitive analysis: CL, CD 100x4
 
-load drag_polar_data_initial.mat
-load dragindex025.mat
+load old_drag_polar.mat
+
 
 %find the max L/D CL point for drag buildup
 [placeholder, idx_max(1)] = max(C_L(:)./C_D(:));
@@ -205,17 +205,17 @@ CL_max(1) = C_L(idx_max(1));
 CD_max(1) = C_D(idx_max(1));
 LD_max(1) = CL_max(1)/CD_max(1);
 
-%find the max L/D CL point for competitive analysis
+%find the max L/D CL point for competitive analysis clean configuration
 [placeholder, idx_max(2)] = max(CL(:,1)./CDtot(:,1));
-CL_max(2) = CL(idx_max(2));
-CD_max(2) = CDtot(idx_max(2));
+CL_max(2) = CL(idx_max(2),1);
+CD_max(2) = CDtot(idx_max(2),1);
 LD_max(2) = CL_max(2)/CD_max(2);
 
 %find the max L/D CL point for competitive analysis for the high drag case
-[placeholder, idx_max(3)] = max(CL(:,1)./CDtot_third(:,1));
-CL_max(3) = CL(idx_max(3));
-CD_max(3) = CDtot(idx_max(3));
-LD_max(3) = CL_max(2)/CD_max(3);
+[placeholder, idx_max(3)] = max(CL(:,2)./CDtot(:,2));
+CL_max(3) = CL(idx_max(3),2);
+CD_max(3) = CDtot(idx_max(3),2);
+LD_max(3) = CL_max(3)/CD_max(3);
 
 
 %find the max endurance for prop drag buildup
@@ -225,16 +225,17 @@ CD_endurance(1) = C_D(idx_max_endurance(1));
 LD_endurance(1) = CL_endurance(1)/CD_endurance(1);
 
 
-%find the max endurance for prop competitive analysis
+%find the max endurance for prop competitive analysis clean configuration
 [placeholder, idx_max_endurance(2)] = max((CL(:,1)).^1.5 ./ CDtot(:,1))
-CL_endurance(2) = CL(idx_max_endurance(2));
-CD_endurance(2) = CDtot(idx_max_endurance(2));
+CL_endurance(2) = CL(idx_max_endurance(2),1);
+CD_endurance(2) = CDtot(idx_max_endurance(2),1);
 LD_endurance(2) = CL_endurance(2)/CD_endurance(2);
 
-%find the max endurance for prop competitive analysis for the bad case
-[placeholder, idx_max_endurance(3)] = max((CL_third(:,1)).^1.5 ./ CDtot_third(:,1))
-CL_endurance(3) = CL_third(idx_max_endurance(3));
-CD_endurance(3) = CDtot(idx_max_endurance(3));
+%find the max endurance for prop competitive analysis for the high drag
+%case
+[placeholder, idx_max_endurance(3)] = max((CL(:,2)).^1.5 ./ CDtot(:,2))
+CL_endurance(3) = CL(idx_max_endurance(3),2);
+CD_endurance(3) = CDtot(idx_max_endurance(3),2);
 LD_endurance(3) = CL_endurance(3)/CD_endurance(3);
 
 
@@ -247,14 +248,15 @@ LD_endurance(3) = CL_endurance(3)/CD_endurance(3);
 % plot(begin:ending,C_L); xlabel("Alpha");ylabel("CL");grid on;
 
 polarWidth = 4;
-sz = 140;
+sz = 160;
 linethickness = 4;
 color = 'magenta';
+color2 = [0.4660 0.6740 0.1880];
 %PLOT THE MUTHAFUCKIN DRAG POLA
-scatter(C_D,C_L, 'o','LineWidth', 4); hold on; plot(C_D,C_L, 'b', 'LineWidth', 4);
+plot(C_D,C_L, 'b', 'LineWidth', 4); hold on; 
 set(groot, 'DefaultAxesFontName', 'Calibri');   % Change axes font
 set(groot, 'DefaultTextFontName', 'Calibri');   % Change text font
-scatter(CD_max(1), CL_max(1), sz, color, 'square', 'LineWidth', linethickness) %plot max range point
+scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', color2, 'LineWidth', linethickness) %plot max range point
 scatter(CD_endurance(1),CL_endurance(1), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
 
 
@@ -274,13 +276,13 @@ hold on
 %loading data from old drag polar
 % Good case
 plot(CDtot(:,1), CL(:,1), '--', 'Color', 'red', 'LineWidth', polarWidth) %left polar
-scatter(CD_max(2), CL_max(2), sz, color, 'square', 'LineWidth', linethickness) %plot max range point
+scatter(CD_max(2), CL_max(2), sz, 'square',  'MarkerEdgeColor', color2, 'LineWidth', linethickness) %plot max range point
 scatter(CD_endurance(2),CL_endurance(2), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
 %plot(CDtot(:,2), CL(:,2), '--', 'Color', 'blue', 'LineWidth', polarWidth) %right polar
 % bad case
 hold on;
-plot(CDtot_third, CL_third, '--', 'Color', 'red', 'LineWidth', polarWidth) %left polar
-scatter(CD_max(3), CL_max(3), sz, color, 'square', 'LineWidth', linethickness) %plot max range point
+plot(CDtot(:,2), CL(:,2), '--', 'Color', 'red', 'LineWidth', polarWidth) %left polar
+scatter(CD_max(3), CL_max(3), sz,  'square',  'MarkerEdgeColor', color2, 'LineWidth', linethickness) %plot max range point
 scatter(CD_endurance(3),CL_endurance(3), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
 
 
@@ -295,7 +297,7 @@ scatter(CD_endurance(3),CL_endurance(3), sz, color, 'diamond', 'LineWidth', line
 
 %plot formatting
 
-xlim([0 0.08]);           % X-axis limit from 0 to 0.2
+xlim([0 0.12]);           % X-axis limit from 0 to 0.2
 ylim([0 1.2]);           % Y-axis limit from 0 to 1.4
 
 % Set major ticks for grid lines
