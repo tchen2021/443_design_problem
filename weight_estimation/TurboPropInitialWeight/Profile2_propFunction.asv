@@ -26,7 +26,7 @@ function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr
     % Loiter L/D
         LDlt = linspace( 7.94824503, 14.9197245, 5);
     % Attack L/D
-        LD_attack = LDcr - 2;
+        LD_attack = LDcr;
     % Loiter Velocity
         %WS = 150;                 % lb/ft^2
         rho_lt = 0.001066;       % slugs/ft^3, 25000ft   
@@ -44,7 +44,7 @@ function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr
 %% Mission Profile 1: Full Operational Radius + Full Loiter Time (Constant Payload) 
  
 % Weight Ratios                
-W1TO = 0.990; 
+W1TO = 1;   %0.990; 
 W21 = 0.990; 
 W32 = 0.990; 
 W43 = 0.980; 
@@ -54,17 +54,17 @@ W76 = 0.99;
 % W87 = 1 / (exp((R_attack * SFC_attack)/(LD_attack * etap * 325))); 
 W98 = 0.97; 
 % W109 = 1 / (exp((R_cr * SFC_cr)/(LD_cr * etap * 325))); 
-W1110 = 0.990; 
+W1110 = 0.99; 
 W1211 = 1; % alternate consideration replaced with +30 min loiter 
-W1312 = 0.995; 
+W1312 = 1;  %0.995; 
     W_ratios = W1TO*W21*W32*W43*W76*W98*W1110*W1211*W1312;   % combine constant weight ratios for simplicity
     
     
     % Operational Radius [nm]
         Rcr = Rcr;
-        R_attack = 30;
+        R_attack = 10;
     % Loiter Time [hrs]
-        E = 0.5;
+        E = 0.33;
 %% Engine & Propeller Variables
     % Cruise & Loiter Specific Fuel Consumption
         SFCcr = 0.5; SFClt = SFCcr; SFCa = SFCcr;

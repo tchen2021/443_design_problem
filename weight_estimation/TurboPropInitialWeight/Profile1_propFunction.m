@@ -17,9 +17,9 @@ Units:  Weight      lb
         Time        hours
         SFC         lb / hp*hr
 %}
-function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr)
+function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr,k)
 %% Aerodynamic Values
- extradrag = 0.0050;
+ extradrag = 0.0000;
     % Cruise L/D
         LDcr = linspace(9.17199982/(1+extradrag), 17.3167353/(1+extradrag), 5);     % bad (1) to good (0)
 
@@ -29,7 +29,7 @@ function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr
     % Loiter Velocity
         %WS = 150;                 % lb/ft^2
         rho_lt = 0.001066;       % slugs/ft^3, 25000ft   
-        rho_cr = 0.001066;       % slugs/ft^3, 25000ft
+        rho_cr = 0.001756; %0.001066;       % slugs/ft^3, 25000ft
         
         Cl_lt_0 = 0.666667;     % CL_Endurance_0;                     % Cl loiter at lowest drag configuration
         Cl_lt_1 = 0.666667;     % CL_Endurance_1;                     % Cl loiter at highest drag configuration
@@ -67,7 +67,23 @@ function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr
         etap = 0.85;
 %% EWF as a function of WS
     % Empty Weight Fraction
-        EWF = -0.0032*WS + 0.7146;  % depends on WS  
+        %EWF = -0.0032*WS + 0.7146;  % depends on WS  
+        %EWF = 0.0038*WS + 0.3584
+        %EWF = -0.0008*WS + 0.6189;
+%Power
+%EWF = 0.7651*WS^-0.072;
+%EWF = 0.6512*WS^-0.033;
+% no tucano
+   EWF =  -0.030 + 1.009*WS^-0.145;
+
+        %EWF = 0.3749*exp(0.0075*WS)
+
+
+% Exponential
+       %EWF = 0.5938*exp-7E-04*WS
+       %y = 0.6228e-0.002x
+
+
 
 %% System of Equations
     % Drag Polar
@@ -87,7 +103,7 @@ function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr
     % Initial Guess
         initial_guess = [15000, 7800, 3380];
     % Set Drag Index
-        k = 4;
+        %k = 4;
 
     for j = 1:length(Rcr )         % Calculate weights at every range
         for  i= 1:length(W_PL)                      % Calculate weights at every W_PL
