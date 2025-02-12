@@ -217,6 +217,12 @@ CL_max(3) = CL(idx_max(3),2);
 CD_max(3) = CDtot(idx_max(3),2);
 LD_max(3) = CL_max(3)/CD_max(3);
 
+%find the max L/D CL point for competitive analysis for the 0.25 drag index
+[placeholder, idx_max(4)] = max(CL_third(:)./CDtot_third(:));
+CL_max(4) = CL_third(idx_max(4));
+CD_max(4) = CDtot_third(idx_max(4));
+LD_max(4) = CL_max(4)/CD_max(4);
+
 
 %find the max endurance for prop drag buildup
 [placeholder, idx_max_endurance(1)] = max((C_L(:)).^1.5 ./ C_D(:));
@@ -238,26 +244,41 @@ CL_endurance(3) = CL(idx_max_endurance(3),2);
 CD_endurance(3) = CDtot(idx_max_endurance(3),2);
 LD_endurance(3) = CL_endurance(3)/CD_endurance(3);
 
+%find the endurance L/D CL point for competitive analysis for the 0.25 drag index
+[placeholder, idx_max_endurance(4)] = max(CL_third(:).^1.5./CDtot_third(:));
+CL_endurance(4) = CL_third(idx_max_endurance(4));
+CD_endurance(4) = CDtot_third(idx_max_endurance(4));
+LD_endurance(4) = CL_endurance(4)/CD_endurance(4);
+
 
 
 
 %% plotting
+
+blue = '#2E5F7F';
+red = '#A03232';
+green = '#33692F';
+orange = '#D97843';
+aqua = '#499CD0';
+cp_gold = '#BD8B13';
+cp_green = '#154734';
+purple = '#ff00ff';
 
 % Check the data
 % Plot CL vs Alpha
 % plot(begin:ending,C_L); xlabel("Alpha");ylabel("CL");grid on;
 
 polarWidth = 4;
-sz = 160;
+sz = 500;
 linethickness = 4;
 color = 'magenta';
 color2 = [0.4660 0.6740 0.1880];
 %PLOT THE MUTHAFUCKIN DRAG POLA
-plot(C_D,C_L, 'b', 'LineWidth', 4); hold on; 
+plot(C_D,C_L, 'Color',green, 'LineWidth', 6); hold on; 
 set(groot, 'DefaultAxesFontName', 'Calibri');   % Change axes font
 set(groot, 'DefaultTextFontName', 'Calibri');   % Change text font
-scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', color2, 'LineWidth', linethickness) %plot max range point
-scatter(CD_endurance(1),CL_endurance(1), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
+scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
+scatter(CD_endurance(1),CL_endurance(1), sz, 'o','MarkerEdgeColor', purple,  'LineWidth', linethickness) %plot max endurance point
 
 
 
@@ -275,15 +296,19 @@ hold on
 
 %loading data from old drag polar
 % Good case
-plot(CDtot(:,1), CL(:,1), '--', 'Color', 'red', 'LineWidth', polarWidth) %left polar
-scatter(CD_max(2), CL_max(2), sz, 'square',  'MarkerEdgeColor', color2, 'LineWidth', linethickness) %plot max range point
-scatter(CD_endurance(2),CL_endurance(2), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
+plot(CDtot(:,1), CL(:,1), '--', 'Color', red, 'LineWidth', polarWidth) %left polar
+%scatter(CD_max(2), CL_max(2), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
+%scatter(CD_endurance(2),CL_endurance(2), sz, 'circle','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
 %plot(CDtot(:,2), CL(:,2), '--', 'Color', 'blue', 'LineWidth', polarWidth) %right polar
 % bad case
 hold on;
-plot(CDtot(:,2), CL(:,2), '--', 'Color', 'red', 'LineWidth', polarWidth) %left polar
-scatter(CD_max(3), CL_max(3), sz,  'square',  'MarkerEdgeColor', color2, 'LineWidth', linethickness) %plot max range point
-scatter(CD_endurance(3),CL_endurance(3), sz, color, 'diamond', 'LineWidth', linethickness) %plot max endurance point
+plot(CDtot(:,2), CL(:,2), '--', 'Color', blue, 'LineWidth', polarWidth) %left polar
+%scatter(CD_max(3), CL_max(3), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
+%scatter(CD_endurance(3),CL_endurance(3), sz, 'circle','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+
+plot(CDtot_third, CL_third,'--', 'Color', orange, 'LineWidth', polarWidth) %drag index 0.25 polar
+scatter(CD_max(4), CL_max(4), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
+scatter(CD_endurance(4),CL_endurance(4), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
 
 
 %labeling the polars
