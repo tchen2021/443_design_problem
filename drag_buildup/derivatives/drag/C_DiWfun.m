@@ -18,10 +18,10 @@ function C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LW, AR)
     y1_8_interp = interp1(x1, y1_8, lambda, 'linear', 'extrap');
 
     % Linearly interpolate between the three curves based on AR
-    if AR <= 5
+    if AR <= 6  %assume AR between 4 and 6
         % Interpolate between curve 4 and curve 6
         delta1 = y1_4_interp + (y1_6_interp - y1_4_interp) * (AR - 4) / 2;
-    else
+    else        %assume AR between 6 and 8
         % Interpolate between curve 6 and curve 8
         delta1 = y1_6_interp + (y1_8_interp - y1_6_interp) * (AR - 6) / 2;
     end

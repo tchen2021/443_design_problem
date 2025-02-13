@@ -15,6 +15,7 @@ addpath lift
 addpath downwash
 addpath zeroliftalpha
 addpath lift_slope
+addpath XFoil Results
 % Import data file
 DragBuildUp = importfileTEST('DragBuildUp.xlsx');
 % Take individual variables from excel sheet

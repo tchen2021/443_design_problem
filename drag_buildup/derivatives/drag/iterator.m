@@ -14,7 +14,7 @@ function [CD0W] = iterator(airfoil,alpha,iprime_r, epsilon,cbarbari, S_arr,V,rho
 % 
 %     error('dimensions of either alpha, incidence angle, or wing section areas not equal in length!');
 % end
-
+V = V * 1.68781;        %convert knots to ft/s
 CD0W_arr = zeros(length(S_arr));
 
 mu = SutherlandsEquation(h);
@@ -28,7 +28,7 @@ if strcmpi(lookup_type, 'alpha')
     
     for i=1:length(S_arr)
     Re_i = (V* rho * cbarbari(i) )/ mu;
-    alpha_i = alpha + iprime_r(i) + epsilon(i);
+    alpha_i = alpha + iprime_r(i) + epsilon(i);     %should be in degrees
     [~, CD0W_arr(i)] = process_XFoil_data(airfoil, alpha_i, Re_i, 'alpha');
     %disp(['Closest CL: ', num2str(CD0W(i)), ', Closest CD: ', num2str(result2)]);
     end
