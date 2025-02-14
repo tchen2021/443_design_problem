@@ -186,10 +186,18 @@ C_D_cooling = 30e-4;      %air intake and cooling 30 drag counts
 
 
 % Update the CD with interferance drag
-C_D_Interferance=deltaC_DWf+deltaC_Dwn+deltaC_Dtf+C_D_cooling;
+C_D_Interferance = deltaC_DWf+deltaC_Dwn+deltaC_Dtf+C_D_cooling;
 
 
 C_D(j)= C_D(j)+C_D_Interferance;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%                                                                                                                                             %%%%%%%%%%
+%%%%%%%%%%                                                          Landing gear, external armaments, flaps                                                                       %%%%%%%%%%
+%%%%%%%%%%                                                                                                                                             %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 j=j+1;
 end % end of for loop through
 
