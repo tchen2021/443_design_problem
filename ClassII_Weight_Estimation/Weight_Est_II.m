@@ -118,6 +118,25 @@ Aircraft(4).velocity = 472.587; % ft/s
 Aircraft(4).q = calculateDynamicPressure(Aircraft(4).velocity);
 Aircraft(4).WingGroup = Aircraft(4).W_dg * 0.05;  % FILLER VALUE NOT REAL WEIGHT
 
+Aircraft(5).Name = 'Rockwell T39';
+Aircraft(5).K_dw = 1;
+Aircraft(5).K_vs = 1;
+Aircraft(5).W_dg = 16316;
+Aircraft(5).Nz = 6;
+Aircraft(5).S_w = 175;
+Aircraft(5).A = 7.428;
+Aircraft(5).t_c_root = 0.12;
+Aircraft(5).lambda = 0.75;
+Aircraft(5).Lambda = 0;
+Aircraft(5).W_fw = 390;
+Aircraft(5).velocity = 249.333; % ft/s
+Aircraft(5).q = calculateDynamicPressure(Aircraft(3).velocity);
+Aircraft(5).WingGroup = Aircraft(3).W_dg * 0.089;
+Aircraft(5).FuseGroup = Aircraft(3).W_dg * 0.152;
+Aircraft(5).EmpennGroup = Aircraft(3).W_dg * 0.023;
+Aircraft(5).NacelleGroup = Aircraft(3).W_dg * 0.012; 
+Aircraft(5).LG = Aircraft(3).W_dg * 0.042;
+
 %% Calculate Wing Weight for Each Aircraft
 for i = 1:length(Aircraft)
     Aircraft(i).W_wingGARaymer = WingWeightGARaymer(Aircraft(i));
