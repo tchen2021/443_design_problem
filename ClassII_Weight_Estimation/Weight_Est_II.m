@@ -60,6 +60,7 @@ Aircraft(2).S_v = 11.19;
 Aircraft(2).l_v = 11.1;  
 Aircraft(2).b_v = 3.48;   
 Aircraft(2).t_r_v = 0.23; 
+Aircraft(2).W_eng = 258;
 Aircraft(2).q = calculateDynamicPressure(Aircraft(2).velocity);
 Aircraft(2).WingGroup = Aircraft(2).W_dg * 0.103;
 Aircraft(2).FuseGroup = Aircraft(2).W_dg * 0.160;
@@ -89,63 +90,115 @@ Aircraft(3).LG = Aircraft(3).W_dg * 0.042;
 Aircraft(4).Name = 'Design'; % trap. wing assumption
 Aircraft(4).K_dw = 1;
 Aircraft(4).K_vs = 1;
-Aircraft(4).W_dg = 12410; % Check this
-Aircraft(4).Nz = 7;     % On par with A29, maybe less
-Aircraft(4).S_w = 189;  
+Aircraft(4).W_dg = 12900; % Check this
+Aircraft(4).Nz = 8;     % On par with A29, maybe less
+%Aircraft(2).W_fw = 3.3333;
+Aircraft(4).S_w = 196.4;  
 Aircraft(4).A = 6.4;
 Aircraft(4).t_c_root = 0.18;
 Aircraft(4).lambda = 0.47;
-Aircraft(4).Lambda = deg2rad(4.37); % rad
+Lambda_av = (142.972*4.37 + 53.688)/Aircraft(4).S_w; 
+Aircraft(4).Lambda = deg2rad(Lambda_av); % rad
+Aircraft(4).velocity = 249.333; % ft/s
+Aircraft(4).w_f = 3.3333;
+Aircraft(4).h_f = 6.42;
+Aircraft(4).l_f = 32.67;
+Aircraft(4).S_h = 40.892; 
+Aircraft(4).l_h = 18.32; 
+Aircraft(4).b_h = 152.9/12;   
+Aircraft(4).t_r_h = 7.43/12; 
+Aircraft(4).S_v = 20.05; 
+Aircraft(4).l_v = 18.1;  
+Aircraft(4).b_v = 59.18/12;   
+Aircraft(4).t_r_v = 0.22; 
+Aircraft(4).W_eng = 593;
+Aircraft(4).l_s_m = 4;
 Aircraft(4).W_fw = 390; % no ideaaaaaa need to estimate this
 Aircraft(4).velocity = 472.587; % ft/s
 Aircraft(4).q = calculateDynamicPressure(Aircraft(4).velocity);
+Aircraft(4).WingGroup = Aircraft(4).W_dg * 0.05;  % FILLER VALUE NOT REAL WEIGHT
+
+Aircraft(5).Name = 'Rockwell T39';
+Aircraft(5).K_dw = 1;
+Aircraft(5).K_vs = 1;
+Aircraft(5).W_dg = 16316;
+Aircraft(5).Nz = 6;
+Aircraft(5).S_w = 175;
+Aircraft(5).A = 7.428;
+Aircraft(5).t_c_root = 0.12;
+Aircraft(5).lambda = 0.75;
+Aircraft(5).Lambda = 0;
+Aircraft(5).W_fw = 390;
+Aircraft(5).velocity = 249.333; % ft/s
+Aircraft(5).q = calculateDynamicPressure(Aircraft(3).velocity);
+Aircraft(5).WingGroup = Aircraft(3).W_dg * 0.089;
+Aircraft(5).FuseGroup = Aircraft(3).W_dg * 0.152;
+Aircraft(5).EmpennGroup = Aircraft(3).W_dg * 0.023;
+Aircraft(5).NacelleGroup = Aircraft(3).W_dg * 0.012; 
+Aircraft(5).LG = Aircraft(3).W_dg * 0.042;
 
 %% Calculate Wing Weight for Each Aircraft
 for i = 1:length(Aircraft)
     Aircraft(i).W_wingGARaymer = WingWeightGARaymer(Aircraft(i));
     Aircraft(i).W_wingGA_USAF = WingWeightGA_USAf(Aircraft(i));
     Aircraft(i).W_wingAttackRaymer = WingWeightAttackRaymer(Aircraft(i));
+    Aircraft(i).W_wingCargoRaymer = WingWeightCargoRaymer(Aircraft(i));
 end
-
+W_wing = WingWeightCargoRaymer(Aircraft(2));
 %% Calculate Empannage Weight for Each Aircraft
 %for i = 1:length(Aircraft)
     Aircraft(2).W_EmpUSAF = WeightEmpUSAF(Aircraft(2));
+    Aircraft(4).W_EmpUSAF = WeightEmpUSAF(Aircraft(4));
 %end
 
 %% Calculate Fuselage Weight for Each Aircraft
+    Aircraft(2).W_FusUSAF = WeightFuselageUSAF(Aircraft(2));
     Aircraft(4).W_FusUSAF = WeightFuselageUSAF(Aircraft(4));
 %%
 
-% %% Display Results in Table
-% AircraftNames = {Aircraft.Name}';
-% RaymerGAMethod = [Aircraft.W_wingGARaymer]';
-% RaymerAttackMethod = [Aircraft.W_wingAttackRaymer]';
-% USAF_GAMethod = [Aircraft.W_wingGA_USAF]';
-% ActualWingWeight = [Aircraft.WingGroup]';
-% 
-% USAF_Emp = [Aircraft(2).W_EmpUSAF]';
-% ActualEmpWeight = [Aircraft(2).EmpennGroup]';
-% 
-% USAF_Fuse = [Aircraft(2).W_FusUSAF]';
-% ActualFuseWeight = [Aircraft(2).FuseGroup]';
-% 
-% % Create a wing table
-% WingResultsTable = table(AircraftNames, RaymerGAMethod, RaymerAttackMethod, USAF_GAMethod, ActualWingWeight, ...
-%     'VariableNames', {'Aircraft', 'Raymer_GA_Method_lbs', 'Raymer_Attack_Method_lbs', 'USAF_GA_ Method', 'Actual_Wing_Weight_lbs'});
-% 
-% 
-% % Create a Empannage table
-% EmpResultsTable = table({'Cessna 172'}, USAF_Emp, ActualEmpWeight, ...
-%     'VariableNames', {'Aircraft', 'USAF_GA_ Method', 'Actual_Empannage_Weight_lbs'});
-% 
-% FuseResultsTable = table({'Cessna 172'}, USAF_Fuse, ActualFuseWeight, ...
-%     'VariableNames', {'Aircraft', 'USAF_GA_ Method', 'Actual_Fuselage_Weight_lbs'});
-% 
-% %Display tables
-% disp(WingResultsTable);
-% disp(EmpResultsTable);
-% disp(FuseResultsTable);
+%% Calculate Nacelle Weight for Each Aircraft
+    Aircraft(2).W_NacelleUSAF = WeightNacelleUASF(Aircraft(2));
+    Aircraft(4).W_NacelleUSAF = WeightNacelleUASF(Aircraft(4));
+%% Landing Gear
+    Aircraft(4).W_LGUSAF = WeightLandingGear(Aircraft(4));
 
+%% Display Results in Table
+AircraftNames = {Aircraft.Name}';
+RaymerGAMethod = [Aircraft.W_wingGARaymer]';
+RaymerAttackMethod = [Aircraft.W_wingAttackRaymer]';
+USAF_GAMethod = [Aircraft.W_wingGA_USAF]';
+RaymerCargoMethod = [Aircraft.W_wingCargoRaymer]';
+ActualWingWeight = [Aircraft.WingGroup]';
+
+USAF_Emp = [Aircraft(2).W_EmpUSAF]';
+ActualEmpWeight = [Aircraft(2).EmpennGroup]';
+
+USAF_Fuse = [Aircraft(2).W_FusUSAF]';
+ActualFuseWeight = [Aircraft(2).FuseGroup]';
+
+% Create a wing table
+WingResultsTable = table(AircraftNames, RaymerCargoMethod,RaymerGAMethod, RaymerAttackMethod, USAF_GAMethod, ActualWingWeight, ...
+    'VariableNames', {'Aircraft', 'Raymer Cargo','Raymer_GA_Method_lbs', 'Raymer_Attack_Method_lbs', 'USAF_GA_ Method', 'Actual_Wing_Weight_lbs'});
+
+%{
+% Create a Empannage table
+EmpResultsTable = table({'Cessna 172'}, USAF_Emp, ActualEmpWeight, ...
+    'VariableNames', {'Aircraft', 'USAF_GA_ Method', 'Actual_Empannage_Weight_lbs'});
+
+FuseResultsTable = table({'Cessna 172',}, USAF_Fuse, ActualFuseWeight, ...
+    'VariableNames', {'Aircraft', 'USAF_GA_ Method', 'Actual_Fuselage_Weight_lbs'});
+%}
+%Display tables
+% Create a Empannage table
+% EmpResultsTable = table({'Ours'},Aircraft(4).FuseGroup,  ...
+%  'VariableNames', {'Aircraft', 'USAF_GA_ Method', 'Actual_Empannage_Weight_lbs'});
+% 
+% FuseResultsTable = table({'Ours',}, USAF_Fuse, ActualFuseWeight, ...
+%     'VariableNames', {'Aircraft', 'USAF_GA_ Method', 'Actual_Fuselage_Weight_lbs'});
+
+disp(WingResultsTable);
+disp(EmpResultsTable);
+disp(FuseResultsTable);
 
 %FuselageResultsTable = table(AircraftNames(2), USAF)
 
@@ -234,5 +287,4 @@ function W_fuselageUSAF = WeightFuselageUSAF(Plane)
 
     W_fuselageUSAF = 200 * ( (Plane.W_dg * Plane.Nz/10e5)^0.286 * (Plane.l_f/10)^0.857 ...
         * ((Plane.w_f + Plane.h_f)/10 *(Plane.velocity/100)^0.338) )^1.1;
-
 end

@@ -1,7 +1,7 @@
 function W_LandingGear = WeightLandingGear(plane)
-    plane.W_L = W_L;       %design landing weight in lbs see table 3.3 in part 1
-    plane.n_ult_1 = 5.7;   %ultimate load factor for landing
-    plane.l_s_m = l_s_m;   %shock strut length of main gear
+    W_L = plane.W_dg*0.97;       %design landing weight in lbs see table 3.3 in part 1
+    n_ult_1 = 5.7;   %ultimate load factor for landing
+    l_s_m=plane.l_s_m;   %shock strut length of main gear super tucano
     %plane.l_s_n = l_s_n;   %shock strut length of nose gear
 
     % Compute W_g
