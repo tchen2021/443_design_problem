@@ -36,7 +36,7 @@ function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr
         Vlt_0 = sqrt( (2*WS) / (rho_lt*Cl_lt_0) );  % ft/s
         Vlt_1 = sqrt( (2*WS) / (rho_lt*Cl_lt_1) );  % ft/s
 
-        Vlt = (linspace(Vlt_0,Vlt_1, length(LDlt)))* 0.592484;  % knots
+        Vlt = (linspace(Vlt_0,Vlt_1, length(LDlt)))* 0.592484  % knots
 
         Vcr = 0.592484 * sqrt((2*WS) / (rho_cr*0.4));       % knots0.378788
 
@@ -66,24 +66,7 @@ function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr
     % Propeller Efficiency
         etap = 0.85;
 %% EWF as a function of WS
-    % Empty Weight Fraction
-        %EWF = -0.0032*WS + 0.7146;  % depends on WS  
-        %EWF = 0.0038*WS + 0.3584
-        %EWF = -0.0008*WS + 0.6189;
-%Power
-%EWF = 0.7651*WS^-0.072;
-%EWF = 0.6512*WS^-0.033;
-% no tucano
    EWF =  -0.030 + 1.009*WS^-0.145;
-
-        %EWF = 0.3749*exp(0.0075*WS)
-
-
-% Exponential
-       %EWF = 0.5938*exp-7E-04*WS
-       %y = 0.6228e-0.002x
-
-
 
 %% System of Equations
     % Drag Polar
