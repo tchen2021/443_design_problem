@@ -15,7 +15,7 @@ addpath lift
 addpath downwash
 addpath zeroliftalpha
 addpath lift_slope
-addpath XFoil Results
+
 % Import data file
 DragBuildUp = importfileTEST('DragBuildUp.xlsx');
 % Take individual variables from excel sheet
@@ -29,8 +29,13 @@ airfoil = 'NACA 2412';
 airfoil_tailhorizontal = 'NACA 0012';       %importer tool does not import strings
 airfoil_tailvertical = 'NACA 0012';
 
+%manually adjusting the alpha iteration ranges
+begin = 0;
+ending = 10;
+
 %initialize data structures to store drag values 
 C_L_struct.winglift = zeros(1, (ending-begin)+1);
+
 
 
 for alpha=begin:1:ending 
@@ -206,6 +211,9 @@ C_D(j)= C_D(j)+C_D_Interferance;
 j=j+1;
 end % end of for loop through
 
+%% saving particular results into .mat file for convenience
+save("MainFunctionData.mat", "C_L_struct");
+
 %% finding max range and endurance CL, CD
 %drag buildup: C_L, C_D    1x13
 %competitive analysis: CL, CD 100x4
@@ -367,3 +375,8 @@ ax.LineWidth = 1;        % Set axis line width
 
 %legend('Current','Preliminary (Optimistic)');
 
+
+%% plotting the lift curve slope
+figure
+
+scatter(deg2rad(begin:1:ending), C_L_struct.winglift);

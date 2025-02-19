@@ -1,6 +1,7 @@
 function [value1, value2] = process_XFoil_data(airfoil, lookup_value, Re_target, lookup_type)
+    addpath XFoil_Results
     % Folder where the XFoil results are stored
-    outputFolder = 'XFoil Results';
+    outputFolder = 'XFoil_Results';
     
     % Get list of existing airfoil files
     airfoilFiles = dir(fullfile(outputFolder, ['XFoil_' airfoil '*.mat']));
