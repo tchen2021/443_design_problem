@@ -20,9 +20,9 @@ clc
 % Inputs
     % Wing Loading
         %WS = linspace(30, 100,36);
-        WSLowerLimit = 60;
-        WSUpperLimit = 60;
-        WSInterval = 1;
+        WSLowerLimit = 50;
+        WSUpperLimit = 70;
+        WSInterval = 5;
 
             nWS = 1 + (WSUpperLimit-WSLowerLimit)/WSInterval;
             WS = linspace(WSLowerLimit, WSUpperLimit, nWS)';
@@ -66,7 +66,7 @@ for i = 1:length(WS)
     end
 end
 %% WS and WPL Plots
-%{
+
 % WS and WPL Carpet Plot
 [X1,X2] = meshgrid(WS_WPL.W_PL, WS_WPL.WS);
 figure;
@@ -94,7 +94,7 @@ carpet(X1,X2, WS_WPL.W_TO, 0, nref, 'b', 'r', Linewidth=2)
 
 % Labels        
     ylabel("W_T_O [lb]", FontSize=20);
-
+%{
 % Constant Values
         strLabel = {'\bfRecon\rm',"SFC = 0.5", "EWF = 0.53", "W/S: 48 lb/sqft", "Loiter Time: 4 hr", "Drag Index: 0.25"};
         text(6200, 19500, strLabel, fontsize=18);

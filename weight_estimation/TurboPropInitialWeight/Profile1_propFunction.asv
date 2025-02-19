@@ -30,8 +30,8 @@ function [W_TO, W_E, W_F, EWF, Vcr] = Profile1_propFunction(WS, W_PL, VFRRT, Rcr
         rho_lt = 0.001066;       % slugs/ft^3, 25000ft   
         rho_cr = 0.001756; %0.001066;       % slugs/ft^3, 25000ft
         
-        Cl_lt_0 = 1;     % CL_Endurance_0;                     % Cl loiter at lowest drag configuration
-        Cl_lt_1 = 1;     % CL_Endurance_1;                     % Cl loiter at highest drag configuration
+        Cl_lt_0 = 0.666667;     % CL_Endurance_0;                     % Cl loiter at lowest drag configuration
+        Cl_lt_1 = 0.666667;     % CL_Endurance_1;                     % Cl loiter at highest drag configuration
         Vlt_0 = sqrt( (2*WS) / (rho_lt*Cl_lt_0) );  % ft/s
         Vlt_1 = sqrt( (2*WS) / (rho_lt*Cl_lt_1) );  % ft/s
 
