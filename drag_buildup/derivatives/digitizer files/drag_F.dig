@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE engauge>
+<Document VersionNumber="12.1" AxesPointsRequired="0">
+    <Image Width="560" Height="420"><![CDATA[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eumlgacjRozYvXu32kg5OTk5OTnm4/b29s2bN99///1qI4nq/bx/JLX7ef88anfykPvM559/rnbfjowRUvz98MMPJSUlK1euVB3klNbW1rq6uokTJzY1NdXW1r7yyis6/Fr04Ycfnn322aNGjcrKyvryyy+PHj2qJIbD0fe/gu7u7uAXHQ7HiRMn1EYKOHTokMfjeeCBBy677DK1kZTv5/0jqd3PQ/6p6bCTB+8zyvftyCik+HvuuecmTJjQ3t7u8/n8fn9zc7Py1SwXXnhhbm7uggULRMTpdM6cOXP9+vVqI23atOm///3vunXrFi1aVFlZKSKvvfaa2kgBGRkZ3d3dgacnTpwYFuq+O8n3ySefzJ07d/HixUkeHoXEfj4gHXbyPvuMtvu2SaMoKWPUqFG7du1at26diBw4cMDn851zzjlOp1NhpHPPPTf4aYRfwJPmyJEjl1xySVpamvk0Nzd33759aiMFnHfeeZ9++mng6ZEjR2666SaFeUxbt25dsmTJ8uXLr7/+etVZRNjPo6B8J++/z+i5b5+ielVFivv973+vwyq748ePX3XVVZs2berp6fnuu++uvfbabdu2qY20a9euyy+//Msvv+zp6fn+++9nz5795ptvKsxTX18fvDhq2rRp9fX1PT09u3fvvvzyyw8fPqw20ldffXXFFVds2rTp+EldXV1qIwVTuJ8HR9JhPw/Oo3YnD7nPaLJvh8MIyRbS09NXrVr16KOPVlZWtra23nXXXVdddZXaSJdddtmyZctuv/32iRMnNjc3z5s3b968eWojBTgcjueff/5Pf/rT+PHjm5ubV6xYMXLkSLWR1q1b99NPP913332BV+68886SkhKFkTSk236udicPt8/otm8H446x9vLzzz+feeaZgTkE5U6cOHHs2LGMjAx9IgU7evTo8OHDlc/8YLC02s/13Mn13LcpJACAFvSqRwCAbVFIAAAtUEgAAC1QSAAALVBIAAAtcB4SMESFhYVPPvnkxRdfvGrVqs8//7zPu2lpaS+++GK4n73jjjsqKip+/etfJzgjYCUUEjAU1dXVo0ePvvjii0Xko48+Onjw4NSpU4M3iHzSyR//+MeHH3747bffTmxKwFIoJGDQfv7555dfftm8jJtp8uTJg7pugtle69ev1+tKYoBSHEMCBu3dd9/NycmJccJtzpw5r7/+erwiASmAERIwaBs3brz66quDX/n2228//PDD4FfOP//8Cy64IMKHXH311c8++6zf78/Ozk5ISsBqKCRg0LZt2zZ37tzgV7Zs2dLnXnADXvzU6XSmpaXt3LlzxowZCUkJWA2FBAxOZ2fn8ePHMzMzg1+cM2dORUVF8CsDXrbS4XCceeaZP/30U/wjAtZEIQFx4HA40tPTh/BTiQgDWBT/PQDB9hqkAAABu0lEQVSDk56enpaW9vPPP8f+UceOHesz0gLsjBESMGi/+c1vWlpaZs2aFXjlm2++8fl8fTabPHlyVlZWuA/Zs2dPd3f3+PHjE5USsBoKCRg0l8u1devW4Fe2bdu2bdu2PptVVVX1OVs22AcffDBu3DjDMBIQELAkbtAHDJrf73e5XBs2bMjJyYlm+507d/r9/gkTJowePTrwYn5+/qxZs/Lz8xMWE7AYjiEBg5adnb148eK//e1v0Wz80EMPvfDCCx988IHH41m/fr35Ymtr6759+xYsWJDImIDFMEIChuLo0aO33nprTU3NqFGjImzm8/lWrVr1xhtviMihQ4duvvnm7du3OxyO+++//4477nC5XMnKC1gAhQQM0S+//DJs2LDIF1F95plnNmzYMHHiRPPppk2b3n///ZycnKNHj5599tlJiQlYBosagCHKyMgYcJvhw4dPmTJl6dKlgVfMdd60EdAfx5CABJo+ffqOHTscDkdWVtaBAwdmz57NybBAOIyQgAS68sorFy1adOONN15++eWffvrp008/HXmKD7AzjiEBCXfixIlffvnlrLPOUh0E0BqFBADQwv8D3J8WS71spd4AAAAASUVORK5CYII=]]></Image>
+    <CoordSystem>
+        <General CursorSize="3" ExtraPrecision="1"/>
+        <Coords Type="0" TypeString="Cartesian" Coords="0" ScaleXTheta="0" ScaleXThetaString="Linear" ScaleYRadius="0" ScaleYRadiusString="Linear" UnitsX="0" UnitsXString="Number" UnitsY="0" UnitsYString="Number" UnitsTheta="0" UnitsThetaString="Degrees (DDD.DDDDD)" UnitsRadius="0" UnitsRadiusString="Number" UnitsDate="3" UnitsDateString="YYYY/MM/DD" UnitsTime="2" UnitsTimeString="HH:MM:SS"/>
+        <DigitizeCurve CursorInnerRadius="5" CursorLineWidth="2" CursorSize="1" CursorStandardCross="True"/>
+        <Export PointsSelectionFunctions="0" PointsSelectionFunctionsString="InterpolateAllCurves" PointsIntervalFunctions="10" PointsIntervalUnitsFunctions="1" PointsSelectionRelations="0" PointsSelectionRelationsString="Interpolate" PointsIntervalUnitsRelations="1" PointsIntervalRelations="10" LayoutFunctions="0" LayoutFunctionsString="AllPerLine" Delimiter="0" OverrideCsvTsv="False" DelimiterString="Commas" ExtrapolateOutsideEndpoints="True" Header="1" HeaderString="Simple" XLabel="x">
+            <CurveNamesNotExported/>
+        </Export>
+        <AxesChecker Mode="1" Seconds="3" LineColor="6"/>
+        <GridDisplay Stable="True" DisableX="0" CountX="5" StartX="0" StepX="5" StopX="20" DisableY="0" CountY="7" StartY="1" StepY="0.1" StopY="1.6" Color="0" ColorString="Black"/>
+        <GridRemoval Stable="False" DefinedGridLines="False" CloseDistance="10" CoordDisableX="0" CoordDisableXString="Count" CountX="10" StartX="1.98466" StepX="1.99665" StopX="19.9545" CoordDisableY="0" CoordDisableYString="Count" CountY="5" StartY="1.00099" StepY="0.151858" StopY="1.60842"/>
+        <PointMatch PointSize="48" ColorAccepted="4" ColorAcceptedString="Green" ColorCandidate="7" ColorCandidateString="Yellow" ColorRejected="6" ColorRejectedString="Red"/>
+        <Segments PointSeparation="25" MinLength="2" FillCorners="False" LineWidth="4" LineColor="4" LineColorString="Green"/>
+        <Curve CurveName="Axes">
+            <ColorFilter CurveName="Axes" Mode="2" ModeString="Intensity" IntensityLow="0" IntensityHigh="50" ForegroundLow="0" ForegroundHigh="10" HueLow="180" HueHigh="360" SaturationLow="50" SaturationHigh="100" ValueLow="0" ValueHigh="50"/>
+            <CurveStyle CurveName="Axes">
+                <LineStyle Width="0" Color="8" ColorString="Transparent" ConnectAs="4" ConnectAsString="ConnectSkipForAxisCurve"/>
+                <PointStyle Radius="10" LineWidth="1" Color="6" ColorString="Red" Shape="1" ShapeString="Cross"/>
+            </CurveStyle>
+            <CurvePoints>
+                <Point Identifier="Axes&#9;point&#9;88" Ordinal="1" IsAxisPoint="True" IsXOnly="False" Index="116">
+                    <PositionScreen X="73.5" Y="372.5"/>
+                    <PositionGraph X="2" Y="1"/>
+                </Point>
+                <Point Identifier="Axes&#9;point&#9;90" Ordinal="2" IsAxisPoint="True" IsXOnly="False" Index="116">
+                    <PositionScreen X="507" Y="374"/>
+                    <PositionGraph X="20" Y="1"/>
+                </Point>
+                <Point Identifier="Axes&#9;point&#9;92" Ordinal="3" IsAxisPoint="True" IsXOnly="False" Index="116">
+                    <PositionScreen X="73.5" Y="35.5"/>
+                    <PositionGraph X="2" Y="1.6"/>
+                </Point>
+            </CurvePoints>
+        </Curve>
+        <CurvesGraphs>
+            <Curve CurveName="Curve1">
+                <ColorFilter CurveName="Curve1" Mode="2" ModeString="Intensity" IntensityLow="0" IntensityHigh="50" ForegroundLow="0" ForegroundHigh="10" HueLow="180" HueHigh="360" SaturationLow="50" SaturationHigh="100" ValueLow="0" ValueHigh="50"/>
+                <CurveStyle CurveName="Curve1">
+                    <LineStyle Width="1" Color="1" ColorString="Blue" ConnectAs="0" ConnectAsString="FunctionSmooth"/>
+                    <PointStyle Radius="10" LineWidth="1" Color="1" ColorString="Blue" Shape="1" ShapeString="Cross"/>
+                </CurveStyle>
+                <CurvePoints>
+                    <Point Identifier="Curve1&#9;point&#9;115" Ordinal="0" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="73.7054" Y="35.5928"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;114" Ordinal="1" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="75.5953" Y="61.4212"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;113" Ordinal="2" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="78.7451" Y="104.258"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;112" Ordinal="3" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="83.1548" Y="139.221"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;111" Ordinal="4" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="88.1945" Y="164.105"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;110" Ordinal="5" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="96.384" Y="194.973"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;109" Ordinal="6" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="103.943" Y="219.541"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;108" Ordinal="7" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="114.338" Y="247.26"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;107" Ordinal="8" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="127.882" Y="271.198"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;106" Ordinal="9" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="141.741" Y="292.617"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;105" Ordinal="10" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="151.191" Y="303.326"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;104" Ordinal="11" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="167.569" Y="319.075"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;103" Ordinal="12" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="183.633" Y="331.359"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;102" Ordinal="13" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="211.982" Y="343.643"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;101" Ordinal="14" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="236.235" Y="351.203"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;100" Ordinal="15" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="269.623" Y="359.392"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;99" Ordinal="16" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="303.326" Y="365.062"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;98" Ordinal="17" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="340.809" Y="369.472"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;97" Ordinal="18" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="378.606" Y="372.622"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;96" Ordinal="19" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="412.939" Y="374.512"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;95" Ordinal="20" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="440.657" Y="373.882"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;94" Ordinal="21" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="471.84" Y="374.827"/>
+                    </Point>
+                    <Point Identifier="Curve1&#9;point&#9;93" Ordinal="22" IsAxisPoint="False" IsXOnly="False" Index="116">
+                        <PositionScreen X="505.858" Y="373.567"/>
+                    </Point>
+                </CurvePoints>
+            </Curve>
+        </CurvesGraphs>
+    </CoordSystem>
+</Document>
