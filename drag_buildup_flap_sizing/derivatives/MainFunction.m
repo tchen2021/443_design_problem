@@ -30,7 +30,7 @@ airfoil_tailhorizontal = 'NACA 0012';       %importer tool does not import strin
 airfoil_tailvertical = 'NACA 0012';
 
 %manually adjusting the alpha iteration ranges
-begin = 0;
+begin = 10;
 ending = 10;
 
 %initialize data structures to store drag values 
@@ -93,7 +93,7 @@ k_Horiz=(beta_Horiz*Cl_alpha_Horiz)/(2*pi);
 %%% 7. Find CL_alpha
 % xaxis=(A/K_Wing)*sqrt(beta_Wing^2 + tand(Lambda_half)^2);
 % [CL_alpha_Wing] = B12(xaxis)/A;
-CL_alpha_Horiz= ( (2*pi)/(2+sqrt( ((A^2 * beta_Horiz^2)/2)*(1+ (tand(Lambda_Tail_half)^2)/beta_Horiz^2 )+4))) *A; % Function mentioned on graph 
+CL_alpha_Horiz= ( (2*pi)/(2+sqrt( ((A^2 * beta_Horiz^2)/2)*(1+ (tand(Lambda_Tail_half)^2)/beta_Horiz^2 )+4))) *A_T; % Function mentioned on graph 
 
 %% zero-lift angle of attack
 % alpha_0W_root = deg2rad(-5); %zero lift angle of attack, 2D, at the wing root
