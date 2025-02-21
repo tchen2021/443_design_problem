@@ -10,14 +10,17 @@ clc; clear; close all;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %adding derivatives functions and data
 %addpath derivatives;
-addpath drag
+addpath(genpath('drag'))
 addpath lift
 addpath downwash
 addpath zeroliftalpha
 addpath lift_slope
+addpath XFoil_Results
+
 
 % Import data file
-DragBuildUp = importfileTEST('DragBuildUp.xlsx');
+%DragBuildUp = importfileTEST('DragBuildUp.xlsx');
+DragBuildUp = importfileTEST('DragBuildUp_flapsizing.xlsx');
 % Take individual variables from excel sheet
 for i=1:height(DragBuildUp)
     assignin('base',DragBuildUp{i,2},DragBuildUp{i,3});
@@ -30,8 +33,8 @@ airfoil_tailhorizontal = 'NACA 0012';       %importer tool does not import strin
 airfoil_tailvertical = 'NACA 0012';
 
 %manually adjusting the alpha iteration ranges
-begin = 10;
-ending = 10;
+begin = 15;
+ending = 15;
 
 %initialize data structures to store drag values 
 C_L_struct.winglift = zeros(1, (ending-begin)+1);
