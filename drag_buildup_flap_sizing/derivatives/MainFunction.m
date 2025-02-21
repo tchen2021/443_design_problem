@@ -208,6 +208,25 @@ C_D(j)= C_D(j)+C_D_Interferance;
 %%%%%%%%%%                                                                                                                                             %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Munitions
+%%%% ASSUMING GBU12 500 LB BOMB (actually weights 510 lbs)
+C_D_GBU12=C_D_bombWithPylonNOINTDRAG *(area_GBU12/S); % Calc drag with respect to our wing size to proportion the drag counts
+C_D_WeaponsAttack= C_D_GBU12*bombNumAtt ;
+C_D_WeaponsRecon=C_D_GBU12*bombNumRec;
+
+C_D_250Tank=C_D_dropTank*(area_250DropTank/S);
+C_D_75Tank=C_D_dropTankWing*(area_75DropTank/S);
+
+C_D_FuelAttack= C_D_250Tank;
+C_D_FuelRecon= C_D_250Tank + 2*C_D_75Tank;
+
+% Total extra drag from external stuff - TYSON FOR THE ATTACK AND RECON
+% MISSION JUST ADD THESE ON!!!!
+C_D_Attack=C_D_WeaponsAttack+C_D_FuelAttack;
+C_D_Recon=C_D_WeaponsRecon+C_D_FuelRecon;
+
+%%% TOTAL DRAG 
+C_D(j)= C_D(j)+C_D_Interferance;
 j=j+1;
 end % end of for loop through
 
@@ -219,7 +238,6 @@ save("MainFunctionData.mat", "C_L_struct");
 %competitive analysis: CL, CD 100x4
 
 load old_drag_polar.mat
-
 
 %find the max L/D CL point for drag buildup
 [placeholder, idx_max(1)] = max(C_L(:)./C_D(:));
@@ -303,6 +321,13 @@ scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', purple, 'LineWid
 scatter(CD_endurance(1),CL_endurance(1), sz, 'o','MarkerEdgeColor', purple,  'LineWidth', linethickness) %plot max endurance point
 
 
+% TYSON I NEED YOU HELP HERE. CAN YOU FIGURE OUT HOW TO DO THE SECOND LINE
+% WHERE WE PLOT THE ATTACK CONFIG. IT WILL BE
+
+% C_D+dirtyConfig = ATTACK MISSION
+
+
+
 
 xlabel("C_D");ylabel("C_L");grid on;
 %plot formatting
@@ -311,8 +336,6 @@ fontSize_text = 28;
 fontSize_subtitles = 28;
 offset = 0.03; %offset from the horizontal line
 yLineWidth = 3;
-
-
 
 hold on
 
@@ -324,9 +347,18 @@ plot(CDtot(:,1), CL(:,1), '--', 'Color', red, 'LineWidth', polarWidth) %left pol
 %plot(CDtot(:,2), CL(:,2), '--', 'Color', 'blue', 'LineWidth', polarWidth) %right polar
 % bad case
 hold on;
-plot(CDtot(:,2), CL(:,2), '--', 'Color', blue, 'LineWidth', polarWidth) %left polar
+plot(CDtot(:,2), CL(:,2), '--', 'Color', blue, 'LineWidth', polarWidth) %Our Polar
 %scatter(CD_max(3), CL_max(3), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
 %scatter(CD_endurance(3),CL_endurance(3), sz, 'circle','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DIRTY CONFIG DRAG POLARS (ATTACK AND RECON)
+hold on
+plot(CDtot(:,2)+C_D_Attack, CL(:,2), '--', 'Color', orange, 'LineWidth', polarWidth) % Attack Mission
+
+hold on
+plot(CDtot(:,2)+C_D_Recon, CL(:,2), '--', 'Color', green, 'LineWidth', polarWidth) % Recon Mission
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 plot(CDtot_third, CL_third,'--', 'Color', orange, 'LineWidth', polarWidth) %drag index 0.25 polar
 scatter(CD_max(4), CL_max(4), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
