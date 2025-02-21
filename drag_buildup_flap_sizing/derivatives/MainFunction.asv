@@ -234,7 +234,7 @@ j=j+1;
 end % end of for loop through
 
 %% saving particular results into .mat file for convenience
-%save("MainFunctionData.mat", "C_L_struct");
+save("MainFunctionData.mat", "C_L_struct");
 
 %% finding max range and endurance CL, CD
 %drag buildup: C_L, C_D    1x13
@@ -266,8 +266,7 @@ CL_max(4) = CL_third(idx_max(4));
 CD_max(4) = CDtot_third(idx_max(4));
 LD_max(4) = CL_max(4)/CD_max(4);
 
-%find the max L/D CL point for attack mission drag buildup (limiting case
-%between recon and attack)
+%find the max L/D CL point for recon mission drag buildup
 [placeholder, idx_max(5)] = max(C_L(:)./ (C_D(:)+C_D_Attack));
 CL_max(5) = C_L(idx_max(5));
 CD_max(5) = C_D(idx_max(5)) + C_D_Attack;
@@ -300,12 +299,7 @@ CL_endurance(4) = CL_third(idx_max_endurance(4));
 CD_endurance(4) = CDtot_third(idx_max_endurance(4));
 LD_endurance(4) = CL_endurance(4)/CD_endurance(4);
 
-%find the endurance L/D CL point for attack mission drag buildup (limiting case
-%between recon and attack)
-[placeholder, idx_max_endurance(5)] = max(C_L(:).^1.5./(C_D(:) + C_D_Attack));
-CL_endurance(5) = C_L(idx_max_endurance(5));
-CD_endurance(5) = C_D(idx_max_endurance(5)) + C_D_Attack;
-LD_endurance(5) = CL_endurance(5)/CD_endurance(5);
+
 
 
 %% plotting
@@ -375,8 +369,6 @@ hold on
 % DIRTY CONFIG DRAG POLARS (ATTACK AND RECON)
 plot(C_D+C_D_Attack, C_L, ':', 'Color', orange, 'LineWidth', polarWidth) % Attack Mission
 plot(C_D+C_D_Recon, C_L, '--', 'Color', blue, 'LineWidth', polarWidth) % Recon Mission
-scatter(CD_max(5), CL_max(5), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
-scatter(CD_endurance(5),CL_endurance(5), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -398,7 +390,7 @@ scatter(CD_endurance(5),CL_endurance(5), sz, 'o','MarkerEdgeColor', purple, 'Lin
 
 %plot formatting
 
-xlim([0 0.13]);           % X-axis limit from 0 to 0.2
+xlim([0 0.12]);           % X-axis limit from 0 to 0.2
 ylim([0 1.2]);           % Y-axis limit from 0 to 1.4
 
 % Set major ticks for grid lines
