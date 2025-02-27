@@ -10,13 +10,16 @@ clc; clear; close all;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %adding derivatives functions and data
 %addpath derivatives;
-addpath drag
+addpath(genpath('drag'))
 addpath lift
 addpath downwash
 addpath zeroliftalpha
 addpath lift_slope
-addpath XFoil Results
+addpath XFoil_Results
+
+
 % Import data file
+%DragBuildUp = importfileTEST('DragBuildUp.xlsx');
 DragBuildUp = importfileTEST('DragBuildUp.xlsx');
 % Take individual variables from excel sheet
 for i=1:height(DragBuildUp)
@@ -29,8 +32,13 @@ airfoil = 'NACA 2412';
 airfoil_tailhorizontal = 'NACA 0012';       %importer tool does not import strings
 airfoil_tailvertical = 'NACA 0012';
 
+%manually adjusting the alpha iteration ranges
+begin = -10;
+ending = 20;
+
 %initialize data structures to store drag values 
 C_L_struct.winglift = zeros(1, (ending-begin)+1);
+
 
 
 for alpha=begin:1:ending 
@@ -88,7 +96,7 @@ k_Horiz=(beta_Horiz*Cl_alpha_Horiz)/(2*pi);
 %%% 7. Find CL_alpha
 % xaxis=(A/K_Wing)*sqrt(beta_Wing^2 + tand(Lambda_half)^2);
 % [CL_alpha_Wing] = B12(xaxis)/A;
-CL_alpha_Horiz= ( (2*pi)/(2+sqrt( ((A^2 * beta_Horiz^2)/2)*(1+ (tand(Lambda_Tail_half)^2)/beta_Horiz^2 )+4))) *A; % Function mentioned on graph 
+CL_alpha_Horiz= ( (2*pi)/(2+sqrt( ((A^2 * beta_Horiz^2)/2)*(1+ (tand(Lambda_Tail_half)^2)/beta_Horiz^2 )+4))) *A_T; % Function mentioned on graph 
 
 %% zero-lift angle of attack
 % alpha_0W_root = deg2rad(-5); %zero lift angle of attack, 2D, at the wing root
@@ -203,15 +211,36 @@ C_D(j)= C_D(j)+C_D_Interferance;
 %%%%%%%%%%                                                                                                                                             %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Munitions
+%%%% ASSUMING GBU12 500 LB BOMB (actually weights 510 lbs)
+C_D_GBU12=C_D_bombWithPylonNOINTDRAG *(area_GBU12/S); % Calc drag with respect to our wing size to proportion the drag counts
+C_D_WeaponsAttack= C_D_GBU12*bombNumAtt ;
+C_D_WeaponsRecon=C_D_GBU12*bombNumRec;
+
+C_D_250Tank=C_D_dropTank*(area_250DropTank/S);
+C_D_75Tank=C_D_dropTankWing*(area_75DropTank/S);
+
+C_D_FuelAttack= C_D_250Tank;
+C_D_FuelRecon= C_D_250Tank + 2*C_D_75Tank;
+
+% Total extra drag from external stuff - TYSON FOR THE ATTACK AND RECON
+% MISSION JUST ADD THESE ON!!!!
+C_D_Attack=C_D_WeaponsAttack+C_D_FuelAttack;
+C_D_Recon=C_D_WeaponsRecon+C_D_FuelRecon;
+
+%%% TOTAL DRAG 
+C_D(j)= C_D(j)+C_D_Interferance;
 j=j+1;
 end % end of for loop through
+
+%% saving particular results into .mat file for convenience
+%save("MainFunctionData.mat", "C_L_struct");
 
 %% finding max range and endurance CL, CD
 %drag buildup: C_L, C_D    1x13
 %competitive analysis: CL, CD 100x4
 
 load old_drag_polar.mat
-
 
 %find the max L/D CL point for drag buildup
 [placeholder, idx_max(1)] = max(C_L(:)./C_D(:));
@@ -236,6 +265,13 @@ LD_max(3) = CL_max(3)/CD_max(3);
 CL_max(4) = CL_third(idx_max(4));
 CD_max(4) = CDtot_third(idx_max(4));
 LD_max(4) = CL_max(4)/CD_max(4);
+
+%find the max L/D CL point for attack mission drag buildup (limiting case
+%between recon and attack)
+[placeholder, idx_max(5)] = max(C_L(:)./ (C_D(:)+C_D_Attack));
+CL_max(5) = C_L(idx_max(5));
+CD_max(5) = C_D(idx_max(5)) + C_D_Attack;
+LD_max(5) = CL_max(5)/CD_max(5);
 
 
 %find the max endurance for prop drag buildup
@@ -264,7 +300,12 @@ CL_endurance(4) = CL_third(idx_max_endurance(4));
 CD_endurance(4) = CDtot_third(idx_max_endurance(4));
 LD_endurance(4) = CL_endurance(4)/CD_endurance(4);
 
-
+%find the endurance L/D CL point for attack mission drag buildup (limiting case
+%between recon and attack)
+[placeholder, idx_max_endurance(5)] = max(C_L(:).^1.5./(C_D(:) + C_D_Attack));
+CL_endurance(5) = C_L(idx_max_endurance(5));
+CD_endurance(5) = C_D(idx_max_endurance(5)) + C_D_Attack;
+LD_endurance(5) = CL_endurance(5)/CD_endurance(5);
 
 
 %% plotting
@@ -287,12 +328,21 @@ sz = 500;
 linethickness = 4;
 color = 'magenta';
 color2 = [0.4660 0.6740 0.1880];
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %PLOT THE MUTHAFUCKIN DRAG POLA
 plot(C_D,C_L, 'Color',green, 'LineWidth', 6); hold on; 
 set(groot, 'DefaultAxesFontName', 'Calibri');   % Change axes font
 set(groot, 'DefaultTextFontName', 'Calibri');   % Change text font
 scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
 scatter(CD_endurance(1),CL_endurance(1), sz, 'o','MarkerEdgeColor', purple,  'LineWidth', linethickness) %plot max endurance point
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TYSON I NEED YOU HELP HERE. CAN YOU FIGURE OUT HOW TO DO THE SECOND LINE
+% WHERE WE PLOT THE ATTACK CONFIG. IT WILL BE
+
+% C_D+dirtyConfig = ATTACK MISSION
+
 
 
 
@@ -304,26 +354,38 @@ fontSize_subtitles = 28;
 offset = 0.03; %offset from the horizontal line
 yLineWidth = 3;
 
-
-
 hold on
 
-%loading data from old drag polar
-% Good case
-plot(CDtot(:,1), CL(:,1), '--', 'Color', red, 'LineWidth', polarWidth) %left polar
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Good case (competitve analysis)
+%plot(CDtot(:,1), CL(:,1), '--', 'Color', red, 'LineWidth', polarWidth) %left polar
 %scatter(CD_max(2), CL_max(2), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
 %scatter(CD_endurance(2),CL_endurance(2), sz, 'circle','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
-%plot(CDtot(:,2), CL(:,2), '--', 'Color', 'blue', 'LineWidth', polarWidth) %right polar
-% bad case
-hold on;
-plot(CDtot(:,2), CL(:,2), '--', 'Color', blue, 'LineWidth', polarWidth) %left polar
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%bad case (competitive analysis)
+%%hold on;
+%plot(CDtot(:,2), CL(:,2), '--', 'Color', blue, 'LineWidth', polarWidth) %right polar
 %scatter(CD_max(3), CL_max(3), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
 %scatter(CD_endurance(3),CL_endurance(3), sz, 'circle','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-plot(CDtot_third, CL_third,'--', 'Color', orange, 'LineWidth', polarWidth) %drag index 0.25 polar
-scatter(CD_max(4), CL_max(4), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
-scatter(CD_endurance(4),CL_endurance(4), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DIRTY CONFIG DRAG POLARS (ATTACK AND RECON)
+plot(C_D+C_D_Attack, C_L, ':', 'Color', orange, 'LineWidth', polarWidth) % Attack Mission
+plot(C_D+C_D_Recon, C_L, '--', 'Color', blue, 'LineWidth', polarWidth) % Recon Mission
+scatter(CD_max(5), CL_max(5), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
+scatter(CD_endurance(5),CL_endurance(5), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%drag index 0.25 polar
+
+%plot(CDtot_third, CL_third,'--', 'Color', orange, 'LineWidth', polarWidth) 
+%scatter(CD_max(4), CL_max(4), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
+%scatter(CD_endurance(4),CL_endurance(4), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %labeling the polars
 %text2 = sprintf('Highest Drag Index = 1\n{C_D}_0 = %.3f\ne = %.2f\nA = %.2f', CD0(2), e(2), A(2)); %for highet drag case
@@ -336,7 +398,7 @@ scatter(CD_endurance(4),CL_endurance(4), sz, 'o','MarkerEdgeColor', purple, 'Lin
 
 %plot formatting
 
-xlim([0 0.12]);           % X-axis limit from 0 to 0.2
+xlim([0 0.13]);           % X-axis limit from 0 to 0.2
 ylim([0 1.2]);           % Y-axis limit from 0 to 1.4
 
 % Set major ticks for grid lines
@@ -367,3 +429,8 @@ ax.LineWidth = 1;        % Set axis line width
 
 %legend('Current','Preliminary (Optimistic)');
 
+
+%% plotting the lift curve slope
+figure
+
+scatter(deg2rad(begin:1:ending), C_L_struct.winglift);
