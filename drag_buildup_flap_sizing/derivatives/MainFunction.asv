@@ -343,7 +343,7 @@ color2 = [0.4660 0.6740 0.1880];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %PLOT THE MUTHAFUCKIN DRAG POLA
-plot(C_D,C_L, '--', 'Color',green, 'LineWidth', 4); hold on; 
+plot(C_D,C_L, 'Color',green, 'LineWidth', 6); hold on; 
 set(groot, 'DefaultAxesFontName', 'Calibri');   % Change axes font
 set(groot, 'DefaultTextFontName', 'Calibri');   % Change text font
 scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
@@ -370,23 +370,23 @@ hold on
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Good case (competitve analysis)
-plot(CDtot(:,1), CL(:,1), 'Color', red, 'LineWidth', 6) %left polar
-%scatter(CD_max(2), CL_max(2), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
-%scatter(CD_endurance(2),CL_endurance(2), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+plot(CDtot(:,1), CL(:,1), '--', 'Color', red, 'LineWidth', polarWidth) %left polar
+scatter(CD_max(2), CL_max(2), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
+scatter(CD_endurance(2),CL_endurance(2), sz, 'circle','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %bad case (competitive analysis)
 %hold on;
-plot(CDtot(:,2), CL(:,2), 'Color', red, 'LineWidth', 6) %right polar
-%scatter(CD_max(3), CL_max(3), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
-%scatter(CD_endurance(3),CL_endurance(3), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+plot(CDtot(:,2), CL(:,2), '--', 'Color', blue, 'LineWidth', polarWidth) %right polar
+scatter(CD_max(3), CL_max(3), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
+scatter(CD_endurance(3),CL_endurance(3), sz, 'circle','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DIRTY CONFIG DRAG POLARS (ATTACK AND RECON)
 plot(C_D+C_D_Attack, C_L, ':', 'Color', orange, 'LineWidth', polarWidth) % Attack Mission
-plot(C_D+C_D_Recon, C_L, '--', 'Color', aqua, 'LineWidth', polarWidth) % Recon Mission
+plot(C_D+C_D_Recon, C_L, '--', 'Color', blue, 'LineWidth', polarWidth) % Recon Mission
 scatter(CD_max(5), CL_max(5), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
 scatter(CD_endurance(5),CL_endurance(5), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%

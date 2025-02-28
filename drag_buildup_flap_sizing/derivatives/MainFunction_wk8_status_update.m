@@ -346,8 +346,8 @@ color2 = [0.4660 0.6740 0.1880];
 plot(C_D,C_L, '--', 'Color',green, 'LineWidth', 4); hold on; 
 set(groot, 'DefaultAxesFontName', 'Calibri');   % Change axes font
 set(groot, 'DefaultTextFontName', 'Calibri');   % Change text font
-scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
-scatter(CD_endurance(1),CL_endurance(1), sz, 'o','MarkerEdgeColor', purple,  'LineWidth', linethickness) %plot max endurance point
+%scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
+%scatter(CD_endurance(1),CL_endurance(1), sz, 'o','MarkerEdgeColor', purple,  'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % TYSON I NEED YOU HELP HERE. CAN YOU FIGURE OUT HOW TO DO THE SECOND LINE
@@ -387,8 +387,8 @@ plot(CDtot(:,2), CL(:,2), 'Color', red, 'LineWidth', 6) %right polar
 % DIRTY CONFIG DRAG POLARS (ATTACK AND RECON)
 plot(C_D+C_D_Attack, C_L, ':', 'Color', orange, 'LineWidth', polarWidth) % Attack Mission
 plot(C_D+C_D_Recon, C_L, '--', 'Color', aqua, 'LineWidth', polarWidth) % Recon Mission
-scatter(CD_max(5), CL_max(5), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
-scatter(CD_endurance(5),CL_endurance(5), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+%scatter(CD_max(5), CL_max(5), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
+%scatter(CD_endurance(5),CL_endurance(5), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -410,7 +410,7 @@ scatter(CD_endurance(5),CL_endurance(5), sz, 'o','MarkerEdgeColor', purple, 'Lin
 
 %plot formatting
 
-xlim([0 0.15]);           % X-axis limit from 0 to 0.2
+xlim([0 0.1]);           % X-axis limit from 0 to 0.2
 ylim([0 1.2]);           % Y-axis limit from 0 to 1.4
 
 % Set major ticks for grid lines
