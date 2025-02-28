@@ -229,10 +229,15 @@ C_D_75Tank=C_D_dropTankWing*(area_75DropTank/S);
 C_D_FuelAttack= C_D_250Tank;
 C_D_FuelRecon= C_D_250Tank + 2*C_D_75Tank;
 
+% ISR Camera
+C_D_Camera=C_D_ISR*(area_ISR/S);
+
+
+
 % Total extra drag from external stuff - TYSON FOR THE ATTACK AND RECON
 % MISSION JUST ADD THESE ON!!!!
-C_D_Attack=C_D_WeaponsAttack+C_D_FuelAttack;
-C_D_Recon=C_D_WeaponsRecon+C_D_FuelRecon;
+C_D_Attack=C_D_WeaponsAttack+C_D_FuelAttack+C_D_Camera;
+C_D_Recon=C_D_WeaponsRecon+C_D_FuelRecon+C_D_Camera;
 
 
 %% saving particular results into .mat file for convenience
