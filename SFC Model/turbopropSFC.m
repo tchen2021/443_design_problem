@@ -10,7 +10,7 @@ function SFC = turbopropSFC(SFC0, V, h, dT)
     %   SFC  - Specific Fuel Consumption (lbm/hp/hr)
 
     % Constants
-    V_ref = 300; % Reference airspeed in knots
+    V_ref = 280; % Reference airspeed in knots
     rho0 = 0.002377; % Sea-level air density [slugs/ft^3]
     C1 = 0.05; % Airspeed effect coefficient
     C2 = 0.2; % Altitude effect coefficient
@@ -25,9 +25,15 @@ function SFC = turbopropSFC(SFC0, V, h, dT)
     P = P0 * (1 - (L * h) / T0)^5.2561; % Pressure at altitude [psf]
 
     % Calculate air density (slug/ft^3)
-    R = 1716; % Specific gas constant for air [ft*lbf/(slug*R)]
+    R = 1576; % Specific gas constant for air [ft*lbf/(slug*R)]
     rho = P / (R * T);
+    sqrt_theta = T0/T;
+    gamma = 1.4;
+    a = sqrt(gamma*R*T);
+
+    M = V/a;
 
     % Calculate SFC
-    SFC = SFC0 * (1 + C1 * (V / V_ref) + C2 * (rho0 / rho));
+%     SFC = SFC0 * (1 + C1 * (V / V_ref) + C2 * (rho0 / rho));
+    SFC = (0.3+0.9*M)*sqrt_theta;
 end
