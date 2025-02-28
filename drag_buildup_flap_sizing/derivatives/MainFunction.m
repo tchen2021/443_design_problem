@@ -205,6 +205,12 @@ C_D_Interferance = deltaC_DWf+deltaC_Dwn+deltaC_Dtf+C_D_cooling;
 C_D(j)= C_D(j)+C_D_Interferance;
 
 
+
+
+%%% TOTAL DRAG 
+C_D(j)= C_D(j)+C_D_Interferance;
+j=j+1;
+end % end of for loop through
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%                                                                                                                                             %%%%%%%%%%
 %%%%%%%%%%                                                          Landing gear, external armaments, flaps                                                                       %%%%%%%%%%
@@ -228,10 +234,6 @@ C_D_FuelRecon= C_D_250Tank + 2*C_D_75Tank;
 C_D_Attack=C_D_WeaponsAttack+C_D_FuelAttack;
 C_D_Recon=C_D_WeaponsRecon+C_D_FuelRecon;
 
-%%% TOTAL DRAG 
-C_D(j)= C_D(j)+C_D_Interferance;
-j=j+1;
-end % end of for loop through
 
 %% saving particular results into .mat file for convenience
 %save("MainFunctionData.mat", "C_L_struct");
@@ -306,6 +308,8 @@ LD_endurance(4) = CL_endurance(4)/CD_endurance(4);
 CL_endurance(5) = C_L(idx_max_endurance(5));
 CD_endurance(5) = C_D(idx_max_endurance(5)) + C_D_Attack;
 LD_endurance(5) = CL_endurance(5)/CD_endurance(5);
+
+
 
 
 %% plotting
