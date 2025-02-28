@@ -226,8 +226,10 @@ C_D_WeaponsRecon=C_D_GBU12*bombNumRec;
 C_D_250Tank=C_D_dropTank*(area_250DropTank/S);
 C_D_75Tank=C_D_dropTankWing*(area_75DropTank/S);
 
-C_D_FuelAttack= C_D_250Tank;
-C_D_FuelRecon= C_D_250Tank + 2*C_D_75Tank;
+C_D_120Tank=C_D_dropTank*(area120DropTank/S);
+
+C_D_FuelAttack= 0;
+C_D_FuelRecon= C_D_120Tank;
 
 % ISR Camera
 C_D_Camera=C_D_ISR*(area_ISR/S);
