@@ -120,15 +120,15 @@ C_LB = fuselift(lf_D, alpha, alpha_0B, S, D, S_P_x0, M, la, lf);
 
 %%% Wing body lift %%%
 a_W = CL_alpha_Wing;
-C_LWB = wingbodylift(C_LB, a_W, alpha, alpha_0W, Se_S, D_b); %alpha in rad
+C_LW = wingbodylift(C_LB, a_W, alpha, alpha_0W, Se_S, D_b); %alpha in rad
 
 %%% horizontal tail lift %%%
 a1 = CL_alpha_Horiz;          %lift slope of the tail
 C_LT = a1 .* ((deg2rad(alpha)*(1-delepsilondelalpha)) - (epsilon_0 + i_T))* (S_T/S); % Calculate with alpha in rads
 
 %total lift
-C_L_struct.winglift(j) = C_LWB-C_LB;
-C_L(j) = C_LWB + C_LT;
+C_L_struct.winglift(j) = C_LW-C_LB;
+C_L(j) = C_LW + C_LT;
 % end % end of test for loop
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%                                                                                                                                             %%%%%%%%%%
@@ -141,7 +141,7 @@ S_i=[S1,S2,S3,S4];
 cbarbari=[cbarbar1,cbarbar2,cbarbar3,cbarbar4];
 
 C_D0W(j) = iterator(airfoil,alpha,iprime_r, epsilon,cbarbari, S_i,V,rho,Se,S,h);
-[C_DiW(j), C_DiW_delta1(j), C_DiW_delta2(j)] = C_DiWfun(lambda, Lambda_quarter, C_LWB-C_LB, AR);
+C_DiW(j) = C_DiWfun(lambda, Lambda_quarter, C_LW-C_LB, AR);
 
 %Tail
 alpha_T = alpha + i_T - delepsilondelalpha .* alpha;   %the angle of attack of horizontal tail

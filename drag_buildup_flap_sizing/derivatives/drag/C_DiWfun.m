@@ -1,4 +1,4 @@
-function C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LW, AR)
+function [C_DiW, delta1, delta2] = C_DiWfun(lambda, Lambda_quarter, C_LW, AR)
     % Import data sets
     data1 = importfiledragdelta1("drag_delta1"); % Call function to get first data set
     data2 = importfiledragdelta2("drag_delta2"); % Call function to get second data set
@@ -18,12 +18,14 @@ function C_DiW = C_DiWfun(lambda, Lambda_quarter, C_LW, AR)
     y1_8_interp = interp1(x1, y1_8, lambda, 'linear', 'extrap');
 
     % Linearly interpolate between the three curves based on AR
-    if AR <= 6  %assume AR between 4 and 6
+    if AR <= 6 && AR >=4  %assume AR between 4 and 6
         % Interpolate between curve 4 and curve 6
         delta1 = y1_4_interp + (y1_6_interp - y1_4_interp) * (AR - 4) / 2;
-    else        %assume AR between 6 and 8
+    elseif AR>6 && AR<=8       %assume AR between 6 and 8
         % Interpolate between curve 6 and curve 8
         delta1 = y1_6_interp + (y1_8_interp - y1_6_interp) * (AR - 6) / 2;
+    else
+        error('AR must be between 4 and 8');
     end
     % Perform interpolation for the second data set using Delta_quarter as the query point
     delta2 = interp1(x2, y2, Lambda_quarter, 'linear', 'extrap');
