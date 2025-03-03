@@ -367,13 +367,9 @@ LD_endurance(6) = CL_endurance(6)/CD_endurance(6);
 %displaying results
 %Displaying Results
 disp('Drag Buildup L/D Results')
-fprintf('\nBEST RANGE L/D:\nL/D (CLEAN): %4.2f\nC_L: %5.4f\nC_D: %5.4f', LD_max(1), CL_max(1), CD_max(1));
+fprintf('\nBEST RANGE L/D:L/D (CLEAN): %4.2f\nC_L: %5.4f\nC_D: %5.4f', LD_max(1), CL_max(1), CD_max(1));
 fprintf('\n\nL/D (ATTACK): %4.2f\nC_L: %5.4f\nC_D: %5.4f', LD_max(5), CL_max(5), CD_max(5));
 fprintf('\n\nL/D (Recon): %4.2f\nC_L: %5.4f\nC_D: %5.4f', LD_max(6), CL_max(6), CD_max(6));
-
-fprintf('\n\n\nBEST ENDURANCE L/D:\nL/D (CLEAN): %4.2f\nC_L: %5.4f\nC_D: %5.4f', LD_endurance(1), CL_endurance(1), CD_endurance(1));
-fprintf('\n\nL/D (ATTACK): %4.2f\nC_L: %5.4f\nC_D: %5.4f', LD_endurance(5), CL_endurance(5), CD_endurance(5));
-fprintf('\n\nL/D (Recon): %4.2f\nC_L: %5.4f\nC_D: %5.4f', LD_endurance(6), CL_endurance(6), CD_endurance(6));
 
 %% plotting
 
