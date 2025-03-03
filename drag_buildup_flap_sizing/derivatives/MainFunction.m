@@ -352,13 +352,6 @@ scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', purple, 'LineWid
 scatter(CD_endurance(1),CL_endurance(1), sz, 'o','MarkerEdgeColor', purple,  'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% TYSON I NEED YOU HELP HERE. CAN YOU FIGURE OUT HOW TO DO THE SECOND LINE
-% WHERE WE PLOT THE ATTACK CONFIG. IT WILL BE
-
-% C_D+dirtyConfig = ATTACK MISSION
-
-
-
 
 xlabel("C_D");ylabel("C_L");grid on;
 %plot formatting

@@ -39,7 +39,7 @@ ending = 20;
 %initialize data structures to store drag values 
 C_L_struct.winglift = zeros(1, (ending-begin)+1);
 
-CD0_index = find(begin:1:ending == 0);  %returns the index for the CD0 value for later use
+
 
 for alpha=begin:1:ending 
 
@@ -208,6 +208,9 @@ C_D_Interferance(j) = deltaC_DWf(j)+deltaC_Dwn(j)+deltaC_Dtf(j)+C_D_cooling(j);
 C_D(j)= C_D(j)+C_D_Interferance(j);
 j=j+1;
 end % end of for loop through
+
+[~,CD0_index] =min(abs(C_L));  %returns the index for the CD0 value for later use
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%                                                                                                                                             %%%%%%%%%%
 %%%%%%%%%%                                                          Landing gear, external armaments, flaps                                                                       %%%%%%%%%%
@@ -222,9 +225,11 @@ C_D_WeaponsRecon=C_D_GBU12*bombNumRec;
 
 C_D_250Tank=C_D_dropTank*(area_250DropTank/S);
 C_D_75Tank=C_D_dropTankWing*(area_75DropTank/S);
+C_D_120Tank=C_D_dropTank*(area120DropTank/S);
 
-C_D_FuelAttack= C_D_250Tank;
-C_D_FuelRecon= C_D_250Tank + 2*C_D_75Tank;
+C_D_FuelAttack= 0;
+% C_D_FuelRecon= 0;
+C_D_FuelRecon= C_D_120Tank;
 
 % ISR Camera
 C_D_Camera=C_D_ISR*(area_ISR/S);
@@ -379,14 +384,6 @@ set(groot, 'DefaultTextFontName', 'Calibri');   % Change text font
 %scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
 %scatter(CD_endurance(1),CL_endurance(1), sz, 'o','MarkerEdgeColor', purple,  'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% TYSON I NEED YOU HELP HERE. CAN YOU FIGURE OUT HOW TO DO THE SECOND LINE
-% WHERE WE PLOT THE ATTACK CONFIG. IT WILL BE
-
-% C_D+dirtyConfig = ATTACK MISSION
-
-
-
 
 xlabel("C_D");ylabel("C_L");grid on;
 %plot formatting
