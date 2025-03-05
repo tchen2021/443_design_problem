@@ -1,0 +1,36 @@
+
+
+
+
+%% directional control
+Cndeltar = -ar*Vv*((VF/V)^2);% moment produced by rudder rudder powerr
+
+ar = ; %rudder effectivness huh?
+
+
+Beta = (-Cndeltar/CnBeta) * deltar ;%side slip angle and cross winf as a function of rudder deflection
+Vv = V* tand(Beta);
+
+
+%% rudder free directional stability
+
+%b1 and b2 are hinge moment derivatives for the rudder
+deltarfree = -(b1/b2) * alphaF;% floating angle of rudder
+
+
+
+% contribution of the vertical tail for the yam moment derivative
+CnbetaFfree = Vv*af*((VF/V)^2) *(1-(deltasigma/deltabeta))*(1-((ar/aF)*(b1/b2)))
+
+
+%% rudder force
+
+
+Pr = G*(rho/2)* (VF^2)* Sr*Cr*[b1*(Cndeltar/Cnbeta)*deltar*(1-(deltasigma/deltabeta))+b2*deltar]
+
+
+
+
+
+
+
