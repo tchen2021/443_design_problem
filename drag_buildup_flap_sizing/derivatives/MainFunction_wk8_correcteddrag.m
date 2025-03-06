@@ -15,8 +15,11 @@ addpath lift
 addpath downwash
 addpath zeroliftalpha
 addpath lift_slope
+%addpath (genpath('airfoil_data'))
+% addpath (genpath('6A_Airfoil_Data_Mat'))
+% addpath (genpath('XFoil_Results'))
+addpath 6A_Airfoil_Data_Mat
 addpath XFoil_Results
-
 
 % Import data file
 %DragBuildUp = importfileTEST('DragBuildUp.xlsx');
@@ -29,6 +32,7 @@ end
 j=1;
 %%% ITERATOR for CL CD 
 airfoil = 'NACA 2412';
+airfoil_new = '63A416';
 airfoil_tailhorizontal = 'NACA 0012';       %importer tool does not import strings
 airfoil_tailvertical = 'NACA 0012';
 
@@ -140,7 +144,8 @@ C_L(j) = C_LWB + C_LT;
 S_i=[S1,S2,S3,S4];
 cbarbari=[cbarbar1,cbarbar2,cbarbar3,cbarbar4];
 
-C_D0W(j) = iterator(airfoil,alpha,iprime_r, epsilon,cbarbari, S_i,V,rho,Se,S,h);
+%C_D0W(j) = iterator(airfoil,alpha,iprime_r, epsilon,cbarbari, S_i,V,rho,Se,S,h,4);
+C_D0W(j) = iterator_6series(airfoil_new,alpha,iprime_r, epsilon,cbarbari, S_i,V,rho,Se,S,h,6);
 [C_DiW(j), C_DiW_delta1(j), C_DiW_delta2(j)] = C_DiWfun(lambda, Lambda_quarter, C_LWB-C_LB, AR);
 
 %Tail
@@ -151,8 +156,8 @@ S_i_horizontal = [S1_horizontal S2_horizontal S3_horizontal S4_horizontal];
 cbarbari_vertical = [cbarbar1_vertical cbarbar2_vertical cbarbar3_vertical cbarbar4_vertical];
 S_i_vertical = [S1_vertical S2_vertical S3_vertical S4_vertical];
 % C_D0T = 2.* ((sum(C_DTi .* S_Ti)) / (sum(S_Ti))) * (S_Te/S);   %subscript T refers to the tail (horizontal or vertical)
-C_D0T(j)= iterator(airfoil_tailhorizontal, alpha, i_T, epsilon_0, cbarbari_horizontal, S_i_horizontal, V,rho, STe, S, h); % drag caused by horizontal tail WE AINT DOING THIS YET
-C_D0TV(j)= iterator(airfoil_tailvertical, 0, 0, 0, cbarbari_vertical, S_i_vertical, V,rho, STe_V, S, h); % drag caused by vertical tail WE AINT DOING THIS YET
+C_D0T(j)= iterator(airfoil_tailhorizontal, alpha, i_T, epsilon_0, cbarbari_horizontal, S_i_horizontal, V,rho, STe, S, h,4); % drag caused by horizontal tail WE AINT DOING THIS YET
+C_D0TV(j)= iterator(airfoil_tailvertical, 0, 0, 0, cbarbari_vertical, S_i_vertical, V,rho, STe_V, S, h,4); % drag caused by vertical tail WE AINT DOING THIS YET
 %deltaC_D0T =               %additional drag due to deflection of the
 %elevator not accounted for now
 
