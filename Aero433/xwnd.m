@@ -4,7 +4,7 @@ clc;clear;close all;format short;
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Constraint Diagram %%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Pick which loading Method you desire
     % load planeData
-    fileLocation="C:\Users\olive\Documents\Aero\Aero433\planeData.xlsx";
+    fileLocation="C:\Users\16266\OneDrive - Cal Poly\Documents\GitHub\443_design_problem\Aero433\planeData.xlsx";
     planeData = importplaneData(fileLocation, "Sheet1", [2, Inf]);
     jetplaneData = importplaneData(fileLocation, "Jet", [2, Inf]);
     %%% Classify Data  %%%
@@ -36,12 +36,14 @@ clc;clear;close all;format short;
 %% Assumptions  Overview
 h=0;% altitude range [ft]
 W_S =linspace(1, 100, 100); % lb/ft^2 wing loading
-C_D_0 = 0.025;%assuming this for all of them can change
+% C_D_0 = .0174;%assuming this for all of them can change  Clean
+% C_D_0 = .026;%assuming this for all of them can change Attack
+C_D_0 = .0263;%assuming this for all of them can change Recon
 
 %%% Standard Atmo Values %%%
 [p0, T0, rho0, a0] = atmosphere(0); % Calculate standard atmosphere values at sea level
 [p, T, rho, a] = atmosphere(h);% Calculate standard atmosphere values at variable height
-[~, ~, rhospeed, ~] = atmosphere(19000);% Calculate standard atmosphere values at variable height
+[~, ~, rhospeed, ~] = atmosphere(25000);% Calculate standard atmosphere values at variable height
 
 % Correct for non standard atmosphere
 sigma=rho./rho0;
@@ -77,7 +79,7 @@ k2 =ip*((1/10)^(1/3)) ;    %proppeller disk loading range from 10-30
 % mu_G = .3;     % Ground friction coefficient soft ground worst case
 % mu_G_med=.08;
 
-mu_Gmin=.027;%change
+mu_Gmin=.03; %change
 
 
 % Calculate (X/W)_TO
@@ -146,22 +148,29 @@ WS= ((rho*Cl_maxL*V_a^2)/2)/WeightRatio;
 % min cruise speed should be greater than 280 knotts
 % values most likely needed q dynamic density at sea level, W_S wing loading, 
 % assuming a AR, and e rn
+K_clean = .0828;
+K_Loiter = .0828;
+K_Attack = 0.0828;
+K = 0.0828;
+% e = 1/(pi*AR*K);
+
+% Assuming no parasitic drag
 
 %jets have not done yet
 W_S =linspace(1, 100, 100); % lb/ft^2 wing loading
 
  V_cr = 472.587;%ft/s
  A = 7;%assumption from competitor - average of comp assesment
- e =0.7; % assumption for all of them
+ e =0.65; % assumption for all of them
  q= (1/2)*rhospeed*V_cr^2;%same q for all of them
-C_D_0 = 0.025;%assuming this for all of them can change
+%assuming this for all of them can change
 TOverW = @(W_S) (C_D_0*q./(W_S)+W_S*1./(q*pi*A*e));%jets
 TOverW_Speed = TOverW(W_S);
 
 
 
 % proppeler
-np = 0.80;%michaels value
+np = 0.85;%michaels value
 
 
 WshaftverP = @(W_S) (((C_D_0*q./(W_S)+(W_S)*1./(q*pi*A*e)))*V_cr)./(550*np);
@@ -179,7 +188,7 @@ hceil = 25000;%aircrfats above 25000 feet are suppose to be pressurized
 %ceiling at 25000 ft
 sigmaceil = rhoceil/rho; %at sea level
 Vv =  1.667;% ft/s obtiained from gudmunson no clue were they got pg 59
-CDmin = .025; %value obtained fromchart in gudmunson pg 59
+CDmin = C_D_0; %value obtained fromchart in gudmunson pg 59
 k = 1./(pi*A*e);
 P_wceil = @(W_S) (((Vv./(sqrt(((2/rhoceil).*(W_S)).*sqrt(k/(3*CDmin))))) + (4*sqrt((k*CDmin)/3)))*V_cr)/(550*np);
 Psh_Wceil = P_wceil(W_S);
@@ -212,18 +221,18 @@ plot(W_S,Psh_Wceil,'k'); hatchedline(W_S,Psh_Wceil,'k',theta,.24,-0.007,.025);ho
 % % yt(yt == 0.05) = ; % Remove the 0.05 tick
 % % yticks(yt); % Set the updated y-axis ticks
 % 
-file_path = 'cooked2.txt';
+file_path = 'Wto_WS_35225.txt';
 
 % Read the file
 idk = load(file_path);
 
-%hello 
+% hello
 
 
-wingload = idk(:,1);
-powerweight = idk(:,2);
+wingload = idk(:,2);
+powerweight = 1600*.95./idk(:,1);
 
- plot(wingload, powerweight, 'm', 'LineWidth', 1.1); hold on
+plot(wingload, powerweight, 'm', 'LineWidth', 1.1); hold on
 
 
 % 
