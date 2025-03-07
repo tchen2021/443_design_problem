@@ -223,8 +223,25 @@ end % end of for loop through
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Munitions
-%%%% ASSUMING GBU12 500 LB BOMB (actually weights 510 lbs)
+
+%%% Ground Attack %%%
+% ASSUMING GBU12 500 LB BOMB (actually weights 510 lbs)
 C_D_GBU12=C_D_bombWithPylonNOINTDRAG *(area_GBU12/S); % Calc drag with respect to our wing size to proportion the drag counts
+% Maverick AGM-65 % Treating it as a 500lb object
+C_D_AGM65=C_D_bombWithPylonNOINTDRAG* (area_AGM65/S);
+
+% GBU12 Paveway % ANTI VEHICLE
+C_D_GBU12=C_D_bombWithPylonNOINTDRAG *(area_GBU12/S); % Calc drag with respect to our wing size to proportion the drag counts
+
+% AGM-114 Hellfire % ANTI VEHICLE/Personell
+% d_AGM114=7; %in
+C_D_AGM114=C_D_bombWithPylonNOINTDRAG* (area_AGM114/S);
+
+%%% Air to Air %%%
+%AIM-9 Sidewinder % AIR TO AIR
+C_D_AIM9=C_D_bombWithPylonNOINTDRAG* (area_AIM9/S);
+
+%%
 C_D_WeaponsAttack= C_D_GBU12*bombNumAtt ;
 C_D_WeaponsRecon=C_D_GBU12*bombNumRec;
 
