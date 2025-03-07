@@ -28,7 +28,7 @@ if strcmpi(lookup_type, 'alpha')
     
     for i=1:length(S_arr)
     Re_i = (V* rho * cbarbari(i) )/ mu + 5e6;
-    disp(Re_i);
+    %disp(Re_i);
     alpha_i = alpha + iprime_r(i) + epsilon(i);     %should be in degrees
     [~, CD0W_arr(i)] = process_XFoil_data(airfoil, alpha_i, Re_i, 'alpha', series);
     %disp(['Closest CL: ', num2str(CD0W(i)), ', Closest CD: ', num2str(result2)]);

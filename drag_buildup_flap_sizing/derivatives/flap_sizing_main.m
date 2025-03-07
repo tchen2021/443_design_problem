@@ -303,7 +303,7 @@ function [delta3] = delta3fun(bf_b, lambda)
 %
     % Import data sets
     data = importfileGeneral("delta3.csv",5); % Call function to get first data set
-    
+       
 
     % Extract x and y data from the first data set
     % Assume data has four columns: x, y for curve 1, y for curve 2, y for curve 3
