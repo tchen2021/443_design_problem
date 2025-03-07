@@ -380,6 +380,17 @@ fprintf('\n\n\nBEST ENDURANCE L/D:\nL/D (CLEAN): %4.2f\nC_L: %5.4f\nC_D: %5.4f',
 fprintf('\n\nL/D (ATTACK): %4.2f\nC_L: %5.4f\nC_D: %5.4f', LD_endurance(5), CL_endurance(5), CD_endurance(5));
 fprintf('\n\nL/D (Recon): %4.2f\nC_L: %5.4f\nC_D: %5.4f', LD_endurance(6), CL_endurance(6), CD_endurance(6));
 
+
+%% calculating the oswald factor
+p_clean = polyfit(C_L.^2, C_D, 1); %first term is K, second term is CD0
+p_attack = polyfit(C_L.^2, C_D+C_D_Attack, 1);
+p_recon = polyfit(C_L.^2, C_D+C_D_Recon, 1);
+
+%% Saving the polar arrays
+C_D_recon = C_D + C_D_Recon; 
+C_D_attack = C_D + C_D_Attack;
+
+
 %% plotting
 
 blue = '#2E5F7F';
