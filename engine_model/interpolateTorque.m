@@ -59,5 +59,48 @@ valid_indices = find(abs(z_interpolated - altitude) <= margin);
 idx_interpolation = valid_indices(min_idx);
 
 torque_percent = y_interpolated(idx_interpolation);
+
+%% plotting 
+blue = '#2E5F7F';
+plot(y_interpolated, z_interpolated./1e3, 'LineWidth', 3, 'Color',blue);
+hold on
+yline(12.5, '--', 'LineWidth', 2.5)
+xlabel("% Torque");ylabel("Altitude [ft x 1000]");grid on;
+fontSize_axes = 26;
+fontSize_text = 28;
+fontSize_subtitles = 28;
+offset = 0.03; %offset from the horizontal line
+yLineWidth = 3;
+
+xlim([55 100]);           % X-axis limit from 0 to 0.2
+ylim([0 35]);           % Y-axis limit from 0 to 1.4
+
+% Set major ticks for grid lines
+xticks(55:5:100);      % Major ticks every 0.02 on X-axis
+yticks(0:5:35);       % Major ticks every 0.2 on Y-axis
+
+% Enable grid only at major ticks
+grid on;                 % Enable grid lines at major ticks
+ax = gca;                % Get current axes
+ax.GridLineStyle = '-';  % Solid line for major grid
+
+% Set minor ticks without grid lines
+ax.XMinorTick = 'on';           % Enable minor ticks on X-axis
+ax.YMinorTick = 'on';           % Enable minor ticks on Y-axis
+ax.MinorGridLineStyle = 'none'; % Turn off minor grid lines
+
+% Define minor tick intervals
+ax.XAxis.MinorTickValues = 55:1:100;  % Minor ticks every 0.005 on X-axis
+ax.YAxis.MinorTickValues = 0:1:35;   % Minor ticks every 0.05 on Y-axis
+
+% Label axes
+%xlabel('C_D');           % Label for X-axis
+%ylabel('C_L', Rotation= 0);           % Label for Y-axis
+
+% Set font size and other formatting adjustments to match style
+ax.FontSize = fontSize_axes;        % Adjust font size
+ax.LineWidth = 1;        % Set axis line width
+
+
 end
 
