@@ -66,6 +66,10 @@ bf_b = 0.75;                    %input ratio of flap span to wing span
 
 
 %% analysis section (interpolating data, solving for chord ratio
+flap_type = 'p'; %plain flap
+%flap_type = 'f'; %fowler flap
+%flap_type = "sl"; %slotted flap
+%flap_type = "sp"; %split flap
 
 deflection_start = 30;       %degrees
 deflection_end = 50;        %degrees
@@ -80,10 +84,10 @@ FA_F6 = FA_F6fun(A);
                       %iterator index
 for j=1:length(deflections)
 
-    lambda2(j) = lambda2fun(deflections(j), t_c);
+    lambda2(j) = lambda2fun(deflections(j), t_c, flap_type);
     lambda3(j) = lambda3fun(bf_b);
     %delta1(j) = delta1fun
-    delta2(j) = delta2fun(deflections(j), t_c);
+    delta2(j) = delta2fun(deflections(j), t_c, flap_type);
     %delta3(j) = delta3fun(bf_b);
     %mu1(j) = mu1fun
     mu2(j) = mu2fun(bf_b);
@@ -92,7 +96,7 @@ for j=1:length(deflections)
     %calculate cf_c flap chord ratio
     lambda1(j) = deltaCL / (FA_F6 * lambda2(j) * lambda3(j));
     cf_c(j) = cf_cfun(lambda1(j));
-    delta1(j) = delta1fun(cf_c(j), t_c);
+    delta1(j) = delta1fun(cf_c(j), t_c, flap_type);
     deltaCD0(j) = (delta1(j) * delta2(j)) * (delta3fun(bf_b, lambda)-delta3fun(0, lambda));
     deltaCDi(j) = K(j) * deltaCL^2 / (pi*A);
     deltaCM(j) = -mu1fun(cf_c(j), t_c) * (mu2fun(j)-mu2fun(0)) * deltaCL; 
@@ -102,11 +106,12 @@ end
 
 %% functions for interpolation
 
-function [lambda2] = lambda2fun(deflection, t_c)
+function [lambda2] = lambda2fun(deflection, t_c, type)
 %
+if type == 'p' || type == "sp"
     % Import data sets
     data = importfileGeneral("lambda2.csv",4); % Call function to get first data set
-    
+
 
     % Extract x and y data from the first data set
     % Assume data has four columns: x, y for curve 1, y for curve 2, y for curve 3
@@ -114,7 +119,7 @@ function [lambda2] = lambda2fun(deflection, t_c)
     y1_1 = data(:, 2); % Second column is y data for curve 1
     y1_2 = data(:, 3); % Third column is y data for curve 2
     y1_3 = data(:, 4); % Fourth column is y data for curve 3
-  
+
     % Perform interpolation for the first data set using C_LT as the query point
     y1_1_interp = interp1(x1, y1_1, deflection, 'linear', 'extrap');
     y1_2_interp = interp1(x1, y1_2, deflection, 'linear', 'extrap');
@@ -122,16 +127,68 @@ function [lambda2] = lambda2fun(deflection, t_c)
 
     % Linearly interpolate between the three curves based on t_c
 
-    if t_c >=0.12 && t_c<=0.21
-        % Interpolate between curve 1 and curve 2
-        lambda2 = y1_1_interp + (y1_2_interp - y1_1_interp) * t_c / 0.5;
-    elseif t_c<0.12 || t_c >0.3
-        error("t/c must be between 0.12 and 0.3");
+    if type == "sp"
+        if t_c >=0.12 && t_c<=0.21
+            % Interpolate between curve 1 and curve 2
+            lambda2 = y1_1_interp + (y1_2_interp - y1_1_interp) * t_c / 0.5;
+        elseif t_c<0.12 || t_c >0.3
+            error("t/c must be between 0.12 and 0.3");
+        else
+            % Interpolate between curve 2 and curve 3
+            lambda2 = y1_2_interp + (y1_3_interp - y1_2_interp) * (t_c - 0.5) / 0.5;
+        end
+        % Output the interpolated results
     else
-        % Interpolate between curve 2 and curve 3
-        lambda2 = y1_2_interp + (y1_3_interp - y1_2_interp) * (t_c - 0.5) / 0.5;
+        lambda2 = y1_1_interp; %plain flap interpolation
     end
-    % Output the interpolated results
+end
+
+if type == "sl"
+    % Import data sets
+    data = importfileGeneral("lambda2_slotted.csv",4); % Call function to get first data set
+
+
+    % Extract x and y data from the first data set
+    % Assume data has four columns: x, y for curve 1, y for curve 2, y for curve 3
+    x1 = data(:, 1); % First column is x data
+    y1_1 = data(:, 2); % 0.21 Second column is y data for curve 1
+    y1_2 = data(:, 3); % 0.30 Third column is y data for curve 2
+    y1_3 = data(:, 4); % 0.12 Fourth column is y data for curve 3
+
+    % Perform interpolation for the first data set using C_LT as the query point
+    y1_1_interp = interp1(x1, y1_1, deflection, 'linear', 'extrap');
+    y1_2_interp = interp1(x1, y1_2, deflection, 'linear', 'extrap');
+    y1_3_interp = interp1(x1, y1_3, deflection, 'linear', 'extrap');
+
+    % Linearly interpolate between the three curves based on t_c
+    if deflection >=30
+        if t_c >=0.21 && t_c<=0.30
+            % Interpolate between curve 1 and curve 2
+            lambda2 = y1_1_interp + (y1_2_interp - y1_1_interp) * t_c / 0.5;
+        elseif t_c<0.12 || t_c >0.3
+            error("t/c must be between 0.12 and 0.3");
+        else
+            % Interpolate between curve 2 and curve 3
+            lambda2 = y1_2_interp + (y1_3_interp - y1_2_interp) * (t_c - 0.5) / 0.5;
+        end
+        % Output the interpolated results
+
+    else
+
+        if t_c >=0.12 && t_c<=0.21
+            % Interpolate between curve 1 and curve 3
+            lambda2 = y1_1_interp + (y1_3_interp - y1_1_interp) * t_c / 0.5;
+        elseif t_c<0.12 || t_c >0.3
+            error("t/c must be between 0.12 and 0.3");
+        else
+            % Interpolate between curve 2 and curve 3
+            lambda2 = y1_3_interp + (y1_2_interp - y1_3_interp) * (t_c - 0.5) / 0.5;
+        end
+
+    end
+
+end
+
 end
 
 function [lambda3] = lambda3fun(bf_b)
@@ -152,10 +209,11 @@ function [lambda3] = lambda3fun(bf_b)
 end
 
 
-function [delta2] = delta2fun(deflection, t_c)
+function [delta2] = delta2fun(deflection, t_c, type)
 %
+if type == "sp" || type == "p"
     % Import data sets
-    data = importfileGeneral("delta2.csv",4); % Call function to get first data set
+    data = importfileGeneral("delta2.csv",5); % Call function to get first data set
     
 
     % Extract x and y data from the first data set
@@ -164,24 +222,66 @@ function [delta2] = delta2fun(deflection, t_c)
     y1_1 = data(:, 2); % Second column is y data for curve 1
     y1_2 = data(:, 3); % Third column is y data for curve 2
     y1_3 = data(:, 4); % Fourth column is y data for curve 3
+    y1_4 = data(:, 5); % Fifth column in y data for curve 4 (plain flap)
   
     % Perform interpolation for the first data set using C_LT as the query point
     y1_1_interp = interp1(x1, y1_1, deflection, 'linear', 'extrap');
     y1_2_interp = interp1(x1, y1_2, deflection, 'linear', 'extrap');
     y1_3_interp = interp1(x1, y1_3, deflection, 'linear', 'extrap');
+    y1_4_interp = interp1(x1, y1_4, deflection, 'linear', 'extrap');
+
+    if type == "sp"
+        % Linearly interpolate between the three curves based on t_c
+
+        if t_c >=0.21 && t_c<=0.30
+            % Interpolate between curve 1 and curve 2
+            delta2 = y1_1_interp + (y1_2_interp - y1_1_interp) * t_c / 0.5;
+        elseif t_c<0.12 || t_c >0.3
+            error("t/c must be between 0.12 and 0.3");
+        else
+            % Interpolate between curve 2 and curve 3
+            delta2 = y1_2_interp + (y1_3_interp - y1_2_interp) * (t_c - 0.5) / 0.5;
+        end
+        % Output the interpolated results
+    end
+    
+    if type == 'p'
+        delta2 = y1_4_interp;
+    end
+end
+
+if type == "sl"
+    % Import data sets
+    data = importfileGeneral("delta2_slotted.csv",4); % Call function to get first data set
+    
+
+    % Extract x and y data from the first data set
+    % Assume data has four columns: x, y for curve 1, y for curve 2, y for curve 3
+    x1 = data(:, 1); % First column is x data
+    y1_1 = data(:, 2); % Second column is y data for curve 1
+    y1_2 = data(:, 3); % Third column is y data for curve 2
+    y1_3 = data(:, 4); % Fourth column is y data for curve 3
+    
+    % Perform interpolation for the first data set using C_LT as the query point
+    y1_1_interp = interp1(x1, y1_1, deflection, 'linear', 'extrap');
+    y1_2_interp = interp1(x1, y1_2, deflection, 'linear', 'extrap');
+    y1_3_interp = interp1(x1, y1_3, deflection, 'linear', 'extrap');
+    
 
     % Linearly interpolate between the three curves based on t_c
 
-    if t_c >=0.21 && t_c<=0.30
-        % Interpolate between curve 1 and curve 2
-        delta2 = y1_1_interp + (y1_2_interp - y1_1_interp) * t_c / 0.5;
-    elseif t_c<0.12 || t_c >0.3
-        error("t/c must be between 0.12 and 0.3");
-    else
-        % Interpolate between curve 2 and curve 3
-        delta2 = y1_2_interp + (y1_3_interp - y1_2_interp) * (t_c - 0.5) / 0.5;
-    end
-    % Output the interpolated results
+        if t_c >=0.12 && t_c<=0.21
+            % Interpolate between curve 1 and curve 2
+            delta2 = y1_1_interp + (y1_2_interp - y1_1_interp) * t_c / 0.5;
+        elseif t_c<0.12 || t_c >0.3
+            error("t/c must be between 0.12 and 0.3");
+        else
+            % Interpolate between curve 2 and curve 3
+            delta2 = y1_2_interp + (y1_3_interp - y1_2_interp) * (t_c - 0.5) / 0.5;
+        end
+        % Output the interpolated results
+
+end
 end
 
 % function [delta3] = delta3fun(bf_b)
@@ -268,7 +368,9 @@ function cf_c = cf_cfun(lambda1)
 
 end
 
-function [delta1] = delta1fun(cf_c, t_c)
+function [delta1] = delta1fun(cf_c, t_c, type)
+
+if type == "p" || type == "sp"
 %
     % Import data sets
     data = importfileGeneral("delta1.csv",4); % Call function to get first data set
@@ -298,6 +400,30 @@ function [delta1] = delta1fun(cf_c, t_c)
         delta1 = y1_2_interp + (y1_3_interp - y1_2_interp) * (t_c - 0.5) / 0.5;
     end
     % Output the interpolated results
+
+end
+
+if type == "sl"
+    % Import data sets
+    data = importfileGeneral("delta1_slotted.csv",3); % Call function to get first data set
+    % Extract x and y data from the first data set
+    % Assume data has four columns: x, y for curve 1, y for curve 2, y for curve 3
+    x1 = data(:, 1); % First column is x data
+    y1_1 = data(:, 2); % Second column is y data for curve 1
+    y1_2 = data(:, 3); % Third column is y data for curve 2
+
+ % Perform interpolation for the first data set using C_LT as the query point
+    y1_1_interp = interp1(x1, y1_1, cf_c, 'linear', 'extrap');
+    y1_2_interp = interp1(x1, y1_2, cf_c, 'linear', 'extrap');
+
+
+     if t_c >=0.12 && t_c<=0.30
+        % Interpolate between curve 1 and curve 2
+        delta1 = y1_1_interp + (y1_2_interp - y1_1_interp) * t_c / 0.5;
+     else
+        error("thickness ratio must be between 0.12 and 0.30");
+     end
+end
 end
 function [delta3] = delta3fun(bf_b, lambda)
 %

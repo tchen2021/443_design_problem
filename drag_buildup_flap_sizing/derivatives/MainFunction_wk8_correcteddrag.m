@@ -413,11 +413,12 @@ C_D_attack = C_D + C_D_Attack;
 blue = '#2E5F7F';
 red = '#A03232';
 green = '#33692F';
-orange = '#D97843';
+orange = '#D87941 ';
 aqua = '#499CD0';
 cp_gold = '#BD8B13';
-cp_green = '#154734';
-purple = '#ff00ff';
+cp_olive = '#B38E33';
+cp_green = '154734';
+purple = '#D27DDA';
 
 % Check the data
 % Plot CL vs Alpha
@@ -426,12 +427,10 @@ purple = '#ff00ff';
 polarWidth = 4;
 sz = 500;
 linethickness = 4;
-color = 'magenta';
-color2 = [0.4660 0.6740 0.1880];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %PLOT THE MUTHAFUCKIN DRAG POLA
-plot(C_D,C_L, '--', 'Color',green, 'LineWidth', 4); hold on; 
+%plot(C_D,C_L, '--', 'Color',green, 'LineWidth', 4); hold on; 
 set(groot, 'DefaultAxesFontName', 'Calibri');   % Change axes font
 set(groot, 'DefaultTextFontName', 'Calibri');   % Change text font
 %scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
@@ -450,33 +449,40 @@ hold on
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Good case (competitve analysis)
-plot(CDtot(:,1), CL(:,1), 'Color', red, 'LineWidth', 6) %left polar
-%scatter(CD_max(2), CL_max(2), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
-%scatter(CD_endurance(2),CL_endurance(2), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+% plot(CDtot(:,1), CL(:,1), 'Color', blue, 'LineWidth', 6) %left polar
+% scatter(CD_max(2), CL_max(2), sz, 'square',  'MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max range point
+% scatter(CD_endurance(2),CL_endurance(2), sz, 'o','MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %bad case (competitive analysis)
 %hold on;
-plot(CDtot(:,2), CL(:,2), 'Color', red, 'LineWidth', 6) %right polar
-%scatter(CD_max(3), CL_max(3), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
-%scatter(CD_endurance(3),CL_endurance(3), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+% plot(CDtot(:,2), CL(:,2), 'Color', red, 'LineWidth', 6) %right polar
+% scatter(CD_max(3), CL_max(3), sz,  'square',  'MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max range point
+% scatter(CD_endurance(3),CL_endurance(3), sz, 'o','MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DIRTY CONFIG DRAG POLARS (ATTACK AND RECON)
 plot(C_D+C_D_Attack, C_L, ':', 'Color', orange, 'LineWidth', polarWidth) % Attack Mission
 plot(C_D+C_D_Recon, C_L, '--', 'Color', aqua, 'LineWidth', polarWidth) % Recon Mission
-%scatter(CD_max(5), CL_max(5), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
-%scatter(CD_endurance(5),CL_endurance(5), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+scatter(CD_max(5), CL_max(5), sz,  'square',  'MarkerEdgeColor', cp_gold, 'LineWidth', linethickness) %plot max range point
+scatter(CD_endurance(5),CL_endurance(5), sz, 'o','MarkerEdgeColor', cp_gold, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%drag index 0.25 polar
 
-%plot(CDtot_third, CL_third,'--', 'Color', orange, 'LineWidth', polarWidth) 
-%scatter(CD_max(4), CL_max(4), sz,  'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
-%scatter(CD_endurance(4),CL_endurance(4), sz, 'o','MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max endurance point
+plot(CDtot_third, CL_third,'-', 'Color', green, 'LineWidth', polarWidth) 
+scatter(CD_max(4), CL_max(4), sz,  'square',  'MarkerEdgeColor', cp_gold, 'LineWidth', linethickness) %plot max range point
+scatter(CD_endurance(4),CL_endurance(4), sz, 'o','MarkerEdgeColor', cp_gold, 'LineWidth', linethickness) %plot max endurance point
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%plotting the ylines to match the max range & endurance CLs at different
+%%configurations
+%yline(CL_max(4), '--', 'Color', 'k', 'LineWidth', linethickness); %range line
+%yline(CL_endurance(4), '--', 'Color', 'k', 'LineWidth', linethickness); %endurnace
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %labeling the polars
@@ -490,12 +496,12 @@ plot(C_D+C_D_Recon, C_L, '--', 'Color', aqua, 'LineWidth', polarWidth) % Recon M
 
 %plot formatting
 
-xlim([0 0.1]);           % X-axis limit from 0 to 0.2
+xlim([0 0.13]);           % X-axis limit from 0 to 0.2
 ylim([0 1.2]);           % Y-axis limit from 0 to 1.4
 
 % Set major ticks for grid lines
-xticks(0:0.02:0.2);      % Major ticks every 0.02 on X-axis
-yticks(0:0.2:1.4);       % Major ticks every 0.2 on Y-axis
+xticks(0:0.02:0.13);      % Major ticks every 0.02 on X-axis
+yticks(0:0.2:1.2);       % Major ticks every 0.2 on Y-axis
 
 % Enable grid only at major ticks
 grid on;                 % Enable grid lines at major ticks
@@ -508,8 +514,8 @@ ax.YMinorTick = 'on';           % Enable minor ticks on Y-axis
 ax.MinorGridLineStyle = 'none'; % Turn off minor grid lines
 
 % Define minor tick intervals
-ax.XAxis.MinorTickValues = 0:0.005:0.2;  % Minor ticks every 0.005 on X-axis
-ax.YAxis.MinorTickValues = 0:0.05:1.4;   % Minor ticks every 0.05 on Y-axis
+ax.XAxis.MinorTickValues = 0:0.005:0.13;  % Minor ticks every 0.005 on X-axis
+ax.YAxis.MinorTickValues = 0:0.05:1.2;   % Minor ticks every 0.05 on Y-axis
 
 % Label axes
 xlabel('C_D');           % Label for X-axis
