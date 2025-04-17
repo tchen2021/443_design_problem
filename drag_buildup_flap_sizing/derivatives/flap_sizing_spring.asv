@@ -68,10 +68,10 @@ bf_b = 0.75;                    %input ratio of flap span to wing span
 %% analysis section (interpolating data, solving for chord ratio
 flap_type = 'p'; %plain flap
 %flap_type = 'f'; %fowler flap
-%flap_type = 'sl'; %slotted flap
-%flap_type = 'sp'; %split flap
+%flap_type = "sl"; %slotted flap
+%flap_type = "sp"; %split flap
 
-deflection_start = 30;       %degrees
+deflection_start = 0;       %degrees
 deflection_end = 50;        %degrees
 deflection_interval = 5;   %degrees
 
@@ -87,7 +87,7 @@ for j=1:length(deflections)
     lambda2(j) = lambda2fun(deflections(j), t_c, flap_type);
     lambda3(j) = lambda3fun(bf_b);
     %delta1(j) = delta1fun
-    delta2(j) = delta2fun(deflections(j), t_c);
+    delta2(j) = delta2fun(deflections(j), t_c, flap_type);
     %delta3(j) = delta3fun(bf_b);
     %mu1(j) = mu1fun
     mu2(j) = mu2fun(bf_b);
@@ -96,12 +96,102 @@ for j=1:length(deflections)
     %calculate cf_c flap chord ratio
     lambda1(j) = deltaCL / (FA_F6 * lambda2(j) * lambda3(j));
     cf_c(j) = cf_cfun(lambda1(j));
-    delta1(j) = delta1fun(cf_c(j), t_c);
+    delta1(j) = delta1fun(cf_c(j), t_c, flap_type);
     deltaCD0(j) = (delta1(j) * delta2(j)) * (delta3fun(bf_b, lambda)-delta3fun(0, lambda));
     deltaCDi(j) = K(j) * deltaCL^2 / (pi*A);
     deltaCM(j) = -mu1fun(cf_c(j), t_c) * (mu2fun(j)-mu2fun(0)) * deltaCL; 
 end
 
+%% Plotting the drag polars accounting for flaps
+%importing drag polar from drag buildup DI=0.25 (CDtot_third and CL_third)
+load dragpolar_025_edwards.mat
+
+%define CL ranges for takeoff and landing
+CL_landing = [0.8 2.0]; %estimates for STOL LTA
+CL_takeoff = [0.3 1.8];
+
+%plotting takeoff drag polar
+target_index = 9; %flap deflection of 40deg, cf/c=0.17
+deflection_landing = deflections(target_index);
+deflection_takeoff = 19;
+deltaCD0_landing = deltaCD0(target_index);
+deltaCDi_landing = deltaCDi(target_index);
+deltaCD_landing = deltaCD0_landing + deltaCDi_landing;
+
+deltaCD0_takeoff = deltaCD0_landing * deflection_takeoff/deflection_landing;
+deltaCDi_takeoff = deltaCDi_landing * (0.9)^2;
+deltaCD_takeoff = deltaCDi_takeoff + deltaCD0_takeoff;
+
+CD_landing = CDtot_third + deltaCD_landing;
+CL_landing = CL_third + deltaCL;
+
+CD_takeoff = CDtot_third + deltaCD_takeoff;
+CL_takeoff = CL_third + deltaCL-0.2;
+
+%finding elements in the takeoff range
+idx_takeoff = CL_takeoff >= 0.3 & CL_takeoff <= 1.8;  % Logical index of values within range
+CL_takeoff_subset = CL_takeoff(idx_takeoff);          % x values in the range
+CD_takeoff_subset = CD_takeoff(idx_takeoff);          % Corresponding y values
+
+%finding elements in the landing range
+idx_landing = CL_landing >= 0.8 & CL_landing <= 2.0;  % Logical index of values within range
+CL_landing_subset = CL_landing(idx_landing);          % x values in the range
+CD_landing_subset = CD_landing(idx_landing);          % Corresponding y values
+
+%plotting
+figure; hold on;
+
+blue = '#2E5F7F';
+red = '#A03232';
+green = '#33692F';
+orange = '#D87941 ';
+aqua = '#499CD0';
+cp_gold = '#BD8B13';
+cp_olive = '#B38E33';
+cp_green = '154734';
+purple = '#ff00ff';
+
+polarWidth = 4;
+sz = 500;
+linethickness = 4;
+
+grid on;
+%plot formatting
+fontSize_axes = 26;
+fontSize_text = 28;
+fontSize_subtitles = 28;
+offset = 0.03; %offset from the horizontal line
+yLineWidth = 3;
+
+plot(CDtot_third, CL_third, 'LineWidth', polarWidth);
+plot(CD_takeoff_subset, CL_takeoff_subset, 'LineWidth', polarWidth);
+plot(CD_landing_subset, CL_landing_subset, 'LineWidth', polarWidth);
+
+xticks(0:0.02:0.24);      % Major ticks every 0.02 on X-axis
+yticks(0:0.2:2.2);       % Major ticks every 0.2 on Y-axis
+
+% Enable grid only at major ticks
+ax = gca;                % Get current axes
+ax.GridLineStyle = '-';  % Solid line for major grid
+
+% Set minor ticks without grid lines
+ax.XMinorTick = 'on';           % Enable minor ticks on X-axis
+ax.YMinorTick = 'on';           % Enable minor ticks on Y-axis
+ax.MinorGridLineStyle = 'none'; % Turn off minor grid lines
+
+% Define minor tick intervals
+ax.XAxis.MinorTickValues = 0:0.005:0.13;  % Minor ticks every 0.005 on X-axis
+ax.YAxis.MinorTickValues = 0:0.05:1.2;   % Minor ticks every 0.05 on Y-axis
+
+% Label axes
+xlabel('C_D');           % Label for X-axis
+ylabel('C_L', Rotation= 0);           % Label for Y-axis
+
+% Set font size and other formatting adjustments to match style
+ax.FontSize = fontSize_axes;        % Adjust font size
+ax.LineWidth = 1;        % Set axis line width
+
+% for shape of drag polar confirmation check Takahashi p. 135
 
 
 %% functions for interpolation
@@ -228,7 +318,7 @@ if type == "sp" || type == "p"
     y1_1_interp = interp1(x1, y1_1, deflection, 'linear', 'extrap');
     y1_2_interp = interp1(x1, y1_2, deflection, 'linear', 'extrap');
     y1_3_interp = interp1(x1, y1_3, deflection, 'linear', 'extrap');
-    y1_4_interp = interp1(x1, y1_4, deflection, 'lienar', 'extrap');
+    y1_4_interp = interp1(x1, y1_4, deflection, 'linear', 'extrap');
 
     if type == "sp"
         % Linearly interpolate between the three curves based on t_c
