@@ -1,4 +1,4 @@
-function C_LB = fuselift(lf_D, alpha, alpha_0B, S, D, S_P_x0, M, l_A, l_f)
+function [C_LB, cdc] = fuselift(lf_D, alpha, alpha_0B, S, D, S_P_x0, M, l_A, l_f)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -51,5 +51,12 @@ data_K = importfilefuseliftK("fuselift_K.csv");
 %%    
 
 C_LB = (deg2rad(alpha-alpha_0B) ./ S) .* ( ((K.*pi.*D.^2) / (2)) + eta.*cdc .*(deg2rad(alpha)-deg2rad(alpha_0B)).*S_P_x0 ); %lift of a fuse
+
+%% displaying results
+disp("S_p_x0: "+S_P_x0)
+disp("eta: " + eta)
+disp("C_DC: " + cdc)
+disp("K: "+ K)
+
 end
 

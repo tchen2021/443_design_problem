@@ -107,7 +107,7 @@ CL_alpha_Horiz= ( (2*pi)/(2+sqrt( ((A^2 * beta_Horiz^2)/2)*(1+ (tand(Lambda_Tail
 % iprime_r = deg2rad(-3);      %geometric incidence of the wing at the root
 %J = ;             %empirical factor
 
-alpha_0W = zeroliftalpha(iprime_r, epsilon, alpha_0W_root, AR, lambda);
+alpha_0W(j) = zeroliftalpha(iprime_r, epsilon, alpha_0W_root, AR, lambda);
 
 %% Downwash
 delepsilondelalpha = downwash(Lambda_quarter, AR, lambda, tailfactor, armfactor,h_H,b,l_H); % how the wake effects of the wing affect the flow of the tail
@@ -120,19 +120,19 @@ delepsilondelalpha = downwash(Lambda_quarter, AR, lambda, tailfactor, armfactor,
 
 
 % Solve Lift value for lift body
-C_LB = fuselift(lf_D, alpha, alpha_0B, S, D, S_P_x0, M, la, lf);
+[C_LB, cdc(j)] = fuselift(lf_D, alpha, alpha_0B, S, D, S_P_x0, M, la, lf);
 
 %%% Wing body lift %%%
 a_W = CL_alpha_Wing;
-C_LWB = wingbodylift(C_LB, a_W, alpha, alpha_0W, Se_S, D_b); %alpha in rad
+C_LWB(j) = wingbodylift(C_LB, a_W, alpha, alpha_0W(j), Se_S, D_b); %alpha in rad
 
 %%% horizontal tail lift %%%
 a1 = CL_alpha_Horiz;          %lift slope of the tail
 C_LT = a1 .* ((deg2rad(alpha)*(1-delepsilondelalpha)) - (epsilon_0 + i_T))* (S_T/S); % Calculate with alpha in rads
 
 %total lift
-C_L_struct.winglift(j) = C_LWB-C_LB;
-C_L(j) = C_LWB + C_LT;
+C_L_struct.winglift(j) = C_LWB(j)-C_LB;
+C_L(j) = C_LWB(j) + C_LT;
 % end % end of test for loop
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%                                                                                                                                             %%%%%%%%%%
@@ -146,7 +146,7 @@ cbarbari=[cbarbar1,cbarbar2,cbarbar3,cbarbar4];
 
 %C_D0W(j) = iterator(airfoil,alpha,iprime_r, epsilon,cbarbari, S_i,V,rho,Se,S,h,4);
 C_D0W(j) = iterator_6series(airfoil_new,alpha,iprime_r, epsilon,cbarbari, S_i,V,rho,Se,S,h,6);
-[C_DiW(j), C_DiW_delta1(j), C_DiW_delta2(j)] = C_DiWfun(lambda, Lambda_quarter, C_LWB-C_LB, AR);
+[C_DiW(j), C_DiW_delta1(j), C_DiW_delta2(j)] = C_DiWfun(lambda, Lambda_quarter, C_LWB(j)-C_LB, AR);
 
 %Tail
 alpha_T = alpha + i_T - delepsilondelalpha .* alpha;   %the angle of attack of horizontal tail
@@ -430,7 +430,7 @@ linethickness = 4;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %PLOT THE MUTHAFUCKIN DRAG POLA
-%plot(C_D,C_L, '--', 'Color',green, 'LineWidth', 4); hold on; 
+plot(C_D,C_L, '--', 'Color',green, 'LineWidth', 4); hold on; 
 set(groot, 'DefaultAxesFontName', 'Calibri');   % Change axes font
 set(groot, 'DefaultTextFontName', 'Calibri');   % Change text font
 %scatter(CD_max(1), CL_max(1), sz, 'square',  'MarkerEdgeColor', purple, 'LineWidth', linethickness) %plot max range point
@@ -449,7 +449,7 @@ hold on
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Good case (competitve analysis)
-plot(CDtot(:,1), CL(:,1), 'Color', blue, 'LineWidth', 6) %left polar
+%plot(CDtot(:,1), CL(:,1), 'Color', blue, 'LineWidth', 6) %left polar
 scatter(CD_max(2), CL_max(2), sz, 'square',  'MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max range point
 scatter(CD_endurance(2),CL_endurance(2), sz, 'o','MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -457,7 +457,7 @@ scatter(CD_endurance(2),CL_endurance(2), sz, 'o','MarkerEdgeColor', orange, 'Lin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %bad case (competitive analysis)
 %hold on;
-plot(CDtot(:,2), CL(:,2), 'Color', red, 'LineWidth', 6) %right polar
+%plot(CDtot(:,2), CL(:,2), 'Color', red, 'LineWidth', 6) %right polar
 scatter(CD_max(3), CL_max(3), sz,  'square',  'MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max range point
 scatter(CD_endurance(3),CL_endurance(3), sz, 'o','MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -473,9 +473,9 @@ scatter(CD_endurance(3),CL_endurance(3), sz, 'o','MarkerEdgeColor', orange, 'Lin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%drag index 0.25 polar
 
-plot(CDtot_third, CL_third,'--', 'Color', green, 'LineWidth', polarWidth) 
-scatter(CD_max(4), CL_max(4), sz,  'square',  'MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max range point
-scatter(CD_endurance(4),CL_endurance(4), sz, 'o','MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max endurance point
+%plot(CDtot_third, CL_third,'--', 'Color', green, 'LineWidth', polarWidth) 
+%scatter(CD_max(4), CL_max(4), sz,  'square',  'MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max range point
+%scatter(CD_endurance(4),CL_endurance(4), sz, 'o','MarkerEdgeColor', orange, 'LineWidth', linethickness) %plot max endurance point
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -36,7 +36,7 @@ addpath(genpath('digitizer_files'))
 DragBuildUp = importfileTEST('DragBuildUp.xlsx');
 
 %importing CL data to get deltaCL
-load MainFunctionData.mat;
+load drag_polar.mat;
 
 % Take individual variables from excel sheet
 for i=1:11      %Plane property section
@@ -140,13 +140,17 @@ deltaCD_takeoff = deltaCDi_takeoff + deltaCD0_takeoff;
 % CD_landing_subset = CD_landing(idx_landing);          % Corresponding y values
 
 %extrapolating the CL and CD polars to account for flaps
-drag_polar_clean = polyfit(CL_third, CDtot_third, 2); %drag polar of clean
+drag_polar_clean = polyfit(C_L, C_D, 2); %drag polar of clean
 
 CL_takeoff = linspace(1.26, CL_takeoff_range(2));
 CD_takeoff = polyval(drag_polar_clean,CL_takeoff) + deltaCD_takeoff + CD0_landing_gear;
+K_takeoff_arr = polyfit(CL_takeoff,CD_takeoff,2);
+K_takeoff = K_takeoff_arr(1);
 
 CL_landing = linspace(1.26, CL_landing_range(2));
 CD_landing = polyval(drag_polar_clean, CL_landing) + deltaCD_landing + CD0_landing_gear;
+K_landing_arr = polyfit(CL_landing,CD_landing,2);
+K_landing = K_landing_arr(1);
 
 %plotting
 figure; hold on;
@@ -173,7 +177,7 @@ fontSize_subtitles = 28;
 offset = 0.03; %offset from the horizontal line
 yLineWidth = 3;
 
-plot(CDtot_third, CL_third, 'LineWidth', polarWidth);
+plot(C_D, C_L, 'LineWidth', polarWidth);
 plot(CD_takeoff, CL_takeoff, 'LineWidth', polarWidth);
 plot(CD_landing, CL_landing, 'LineWidth', polarWidth);
 
@@ -202,6 +206,8 @@ ylabel('C_L', Rotation= 0);           % Label for Y-axis
 % Set font size and other formatting adjustments to match style
 ax.FontSize = fontSize_axes;        % Adjust font size
 ax.LineWidth = 1;        % Set axis line width
+
+ylim([0 2]);
 
 % for shape of drag polar confirmation check Takahashi p. 135
 
